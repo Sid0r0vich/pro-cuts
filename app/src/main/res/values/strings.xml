@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">ProCuts</string>
+    <string name="tab_home">Home</string>
+    <string name="tab_profile">Profile</string>
+    <string name="default_user_name">user</string>
+    <string name="icon_search">search</string>
+    <string name="icon_info">info</string>
+    <string name="search_placeholder">search</string>
+    <string name="study_cut">Study\ncut</string>
+    <string name="study_care">Study\ncare</string>
+    <string name="icon_notifications">notifications</string>
+    <string name="icon_add_client">add client</string>
+    <string name="client_tab_app_bar">Client passport</string>
+    <string name="button_back">back</string>
+    <string name="default_client_name">client</string>
+    <string name="client_ava">client avatar</string>
+    <string name="cuts">Cuts</string>
+    <string name="cares">Cares</string>
+    <string name="clients">Clients</string>
+</resources>
