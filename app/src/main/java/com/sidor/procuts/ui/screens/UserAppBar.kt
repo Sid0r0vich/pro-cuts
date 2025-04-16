@@ -38,7 +38,7 @@ fun UserAppBar(
     modifier: Modifier = Modifier,
     userName: String = stringResource(R.string.default_user_name),
 ) {
-    CenterAlignedTopAppBar(
+    DefaultTopAppBar(
         title = {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -72,9 +72,6 @@ fun UserAppBar(
                 Spacer(modifier = Modifier.padding(horizontal = 7.dp))
             }
         },
-        colors=TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
     )
 }
 

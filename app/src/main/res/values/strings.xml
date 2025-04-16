@@ -17,4 +17,7 @@
     <string name="cuts">Cuts</string>
     <string name="cares">Cares</string>
     <string name="clients">Clients</string>
+    <string name="cut_tab_app_bar">Cut</string>
+    <string name="default_cut_name">Classic</string>
+    <string name="no_found_cut_name">Cut is no found</string>
 </resources>

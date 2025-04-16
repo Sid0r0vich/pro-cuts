@@ -10,17 +10,17 @@ import androidx.compose.ui.Modifier
 @Composable
 fun ClientAppBar(
     title: String,
-    navigationIconContent: @Composable () -> Unit,
+    navigationIcon: @Composable () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    MyTopAppBar (
+    DefaultTopAppBar (
         title = {
             Text(
                 text = title,
                 style = MaterialTheme.typography.headlineSmall,
             )
         },
-        navigationIconContent = navigationIconContent,
+        navigationIcon = navigationIcon,
         modifier = modifier,
     )
 }

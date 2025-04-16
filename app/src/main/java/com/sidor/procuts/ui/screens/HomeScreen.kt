@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sidor.procuts.R
+import com.sidor.procuts.data.Cut
 import com.sidor.procuts.data.defaultCliensList
 import com.sidor.procuts.ui.ClientItem
 import com.sidor.procuts.ui.LocalGridPadding
@@ -40,8 +40,18 @@ fun HomeRoute(
             }
         )
         HomeScreenType.Client -> ClientScreen(
-            title = uiState.clientName ?: stringResource(R.string.default_client_name),
-            onBack = { viewModel.navigateHome() }
+            clientName = uiState.clientName ?: stringResource(R.string.default_client_name),
+            onBack = { viewModel.navigateHome() },
+            onCutClick = { cut: Cut ->
+                viewModel.setCutName(cut.cutName)
+                viewModel.setCutImgId(cut.cutImg)
+                viewModel.navigateCut()
+            }
+        )
+        HomeScreenType.Cut -> CutScreen(
+            cutName = uiState.cutName ?: stringResource(R.string.default_cut_name),
+            imgId = uiState.cutImgId ?: 0,
+            onBack = { viewModel.navigateClient() }
         )
     }
 }

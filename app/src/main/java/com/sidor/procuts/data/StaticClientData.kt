@@ -1,8 +1,7 @@
 package com.sidor.procuts.data
 
+import com.sidor.procuts.R
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.util.Date
 
 var defaultCliensList = listOf(
     "Jason Statham",
@@ -17,14 +16,23 @@ var defaultCliensList = listOf(
     "Client",
     "Client"
 )
+
+val allCuts = mapOf(
+    0 to Cut(0, "Classic", R.drawable.classic),
+    1 to Cut(1, "Undercut", R.drawable.undercut),
+    2 to Cut(2, "Shores", R.drawable.shores),
+    3 to Cut(3, "Bold", R.drawable.bold)
+)
+
 var dateFormat = SimpleDateFormat("dd-MM-yyyy")
 
-var cutsList = listOf(
+var cutDatesList = listOf(
     "31-12-2022",
     "31-12-2023",
     "28-11-2024",
     "31-12-2025"
 ).map { date -> dateFormat.parse(date)!! }
+    .map { date -> CutDate(allCuts.toList().random().second.cutId, date) }
 
 var caresList = listOf(
     "29-12-2022",

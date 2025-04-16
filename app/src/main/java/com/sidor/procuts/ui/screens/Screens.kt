@@ -37,13 +37,14 @@ fun PaddingProviderScreen(
 @Composable
 fun PaddingScreen(
     modifier: Modifier = Modifier,
-
+    verticalSpaceCount: Int = 2,
+    horizontalSpaceCount: Int = 2,
     content: @Composable () -> Unit = {}
 ) {
     Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = LocalGridPadding.current * 2)
+            .padding(horizontal = LocalGridPadding.current * horizontalSpaceCount, vertical = LocalGridPadding.current * verticalSpaceCount)
     ) {
         content()
     }

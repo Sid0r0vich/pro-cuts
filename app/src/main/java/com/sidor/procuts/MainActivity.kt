@@ -18,7 +18,7 @@ import com.sidor.procuts.ui.theme.ProCutsTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        //enableEdgeToEdge()
         setContent {
             ProCutsTheme {
                 MyApp(
