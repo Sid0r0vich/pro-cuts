@@ -17,10 +17,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sidor.procuts.R
 import com.sidor.procuts.data.Cut
+import com.sidor.procuts.data.CutDate
 import com.sidor.procuts.data.defaultCliensList
-import com.sidor.procuts.ui.ClientItem
+import com.sidor.procuts.ui.TextWithPlusButton
+import com.sidor.procuts.ui.screens.items.ClientItem
 import com.sidor.procuts.ui.LocalGridPadding
-import com.sidor.procuts.ui.StudyCard
+import com.sidor.procuts.ui.screens.cards.StudyCard
+import com.sidor.procuts.ui.screens.topbars.UserTopAppBar
 import com.sidor.procuts.ui.viewmodels.HomeScreenType
 import com.sidor.procuts.ui.viewmodels.HomeViewModel
 
@@ -42,16 +45,22 @@ fun HomeRoute(
         HomeScreenType.Client -> ClientScreen(
             clientName = uiState.clientName ?: stringResource(R.string.default_client_name),
             onBack = { viewModel.navigateHome() },
+            onVisitClick = { cutDate: CutDate ->
+                viewModel.setVisit(cutDate)
+                viewModel.navigateVisit()
+            }
+        )
+        HomeScreenType.Visit -> VisitScreen(
+            visit = uiState.visit!!,
+            onBack = { viewModel.navigateClient() },
             onCutClick = { cut: Cut ->
-                viewModel.setCutName(cut.cutName)
-                viewModel.setCutImgId(cut.cutImg)
+                viewModel.setCut(cut)
                 viewModel.navigateCut()
             }
         )
         HomeScreenType.Cut -> CutScreen(
-            cutName = uiState.cutName ?: stringResource(R.string.default_cut_name),
-            imgId = uiState.cutImgId ?: 0,
-            onBack = { viewModel.navigateClient() }
+            cut = uiState.cut!!,
+            onBack = { viewModel.navigateVisit() }
         )
     }
 }
@@ -60,9 +69,10 @@ fun HomeRoute(
 fun HomeScreen(
     modifier: Modifier = Modifier,
     onClientClick: (String) -> Unit,
+    onAddClientClick: () -> Unit = {}
 ) {
     TopAppBarScreen(
-        topBar = { UserAppBar() },
+        topBar = { UserTopAppBar() },
     ) { LazyPaddingScreen {
             item {
                 Row(
@@ -81,10 +91,9 @@ fun HomeScreen(
             }
             item {
                 DefaultSpacer(2)
-                Text(
+                TextWithPlusButton(
                     text = stringResource(R.string.clients),
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.titleLarge,
+                    onClick = onAddClientClick,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = LocalGridPadding.current * 2),
@@ -93,10 +102,10 @@ fun HomeScreen(
 
             defaultCliensList.map { client ->
                 item {
-                    Spacer(modifier = Modifier.height(LocalGridPadding.current * 2))
+                    Spacer(modifier = Modifier.height(LocalGridPadding.current * 1))
                     ClientItem(
                         modifier = Modifier.padding(horizontal = LocalGridPadding.current * 2),
-                        text = client,
+                        name = client,
                         onClick = { onClientClick(client) }
                     )
                 }

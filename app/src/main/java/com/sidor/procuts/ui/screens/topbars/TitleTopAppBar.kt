@@ -1,4 +1,4 @@
-package com.sidor.procuts.ui.screens
+package com.sidor.procuts.ui.screens.topbars
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack

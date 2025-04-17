@@ -8,7 +8,8 @@ data class CutDate(
 )
 
 data class Cut(
-    val cutId: Int,
-    val cutName: String,
-    val cutImg: Int
+    val id: Int,
+    val name: String,
+    val description: String,
+    val imgId: Int
 )

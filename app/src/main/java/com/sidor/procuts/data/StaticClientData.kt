@@ -18,25 +18,26 @@ var defaultCliensList = listOf(
 )
 
 val allCuts = mapOf(
-    0 to Cut(0, "Classic", R.drawable.classic),
-    1 to Cut(1, "Undercut", R.drawable.undercut),
-    2 to Cut(2, "Shores", R.drawable.shores),
-    3 to Cut(3, "Bold", R.drawable.bold)
+    0 to Cut(0, "Classic", "Классическая модельная стрижка представляет собой длину волос около пяти сантиметров, при этом присутствуют в основном ровные линии. Такая стрижка выглядит сдержанно и аккуратно, отлично подходит деловым мужчинам и тем, которые не хотят чрезмерного внимания к своему внешнему виду.", R.drawable.classic),
+    1 to Cut(1, "Undercut", "Для стрижки характерна почти одинаковая длина волос по всей поверхности головы. Классический варианта – это выбритые виски и немного удлиненные волосы на верхней части. Андеркат в таком исполнении подходит практически всем. Он придаст образу мужественности и делового стиля.", R.drawable.undercut),
+    2 to Cut(2, "Curtains", "Мужская стрижка, предполагающая прямой центральный пробор и симметричные пряди по обеим сторонам. При этом длина стрижки, наличие или отсутствие челки, градуировка никаким образом не регламентированы — здесь у нас с вами полная свобода.", R.drawable.curtains),
+    3 to Cut(3, "Bold", "Цель данной стрижки — полностью обнажить кожу головы, сбрив все волосы. Стрижка под 0 способствует созданию образа уверенного и сильного человека, своему обладателю придает максимум мужественности, помогает почувствовать себя увереннее и подчеркнуть индивидуальность.", R.drawable.bold)
 )
 
-var dateFormat = SimpleDateFormat("dd-MM-yyyy")
+val readableDMYDateFormat = SimpleDateFormat("dd MMMM yyyy")
+var DMYDateFormat = SimpleDateFormat("dd-MM-yyyy")
 
 var cutDatesList = listOf(
     "31-12-2022",
     "31-12-2023",
     "28-11-2024",
     "31-12-2025"
-).map { date -> dateFormat.parse(date)!! }
-    .map { date -> CutDate(allCuts.toList().random().second.cutId, date) }
+).map { date -> DMYDateFormat.parse(date)!! }
+    .map { date -> CutDate(allCuts.toList().random().second.id, date) }
 
 var caresList = listOf(
     "29-12-2022",
     "24-12-2023",
     "15-11-2024",
     "13-12-2025"
-).map { date -> dateFormat.parse(date)!! }
+).map { date -> DMYDateFormat.parse(date)!! }

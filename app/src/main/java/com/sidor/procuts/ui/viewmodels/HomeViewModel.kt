@@ -1,12 +1,15 @@
 package com.sidor.procuts.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
+import com.sidor.procuts.data.Cut
+import com.sidor.procuts.data.CutDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 enum class HomeScreenType {
     Home,
     Client,
+    Visit,
     Cut
 }
 
@@ -14,8 +17,8 @@ open class HomeViewModel : ViewModel() {
     data class UiState(
         val screenType: HomeScreenType,
         val clientName: String? = null,
-        val cutName: String? = null,
-        val cutImgId: Int? = null
+        val visit: CutDate? = null,
+        val cut: Cut? = null
     )
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState(HomeScreenType.Home))
@@ -25,12 +28,12 @@ open class HomeViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(clientName = clientName)
     }
 
-    fun setCutName(cutName: String) {
-        _uiState.value = _uiState.value.copy(cutName = cutName)
+    fun setVisit(visit: CutDate) {
+        _uiState.value = _uiState.value.copy(visit = visit)
     }
 
-    fun setCutImgId(imgId: Int) {
-        _uiState.value = _uiState.value.copy(cutImgId = imgId)
+    fun setCut(cut: Cut) {
+        _uiState.value = _uiState.value.copy(cut = cut)
     }
 
     fun navigateHome() {
@@ -39,6 +42,10 @@ open class HomeViewModel : ViewModel() {
 
     fun navigateClient() {
         _uiState.value = _uiState.value.copy(screenType = HomeScreenType.Client)
+    }
+
+    fun navigateVisit() {
+        _uiState.value = _uiState.value.copy(screenType = HomeScreenType.Visit)
     }
 
     fun navigateCut() {

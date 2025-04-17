@@ -20,4 +20,7 @@
     <string name="cut_tab_app_bar">Cut</string>
     <string name="default_cut_name">Classic</string>
     <string name="no_found_cut_name">Cut is no found</string>
+    <string name="visit_tab_app_bar">Visit</string>
+    <string name="cut_card">Cut card</string>
+    <string name="add_button">add</string>
 </resources>
