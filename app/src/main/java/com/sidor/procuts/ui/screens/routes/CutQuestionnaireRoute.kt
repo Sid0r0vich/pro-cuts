@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sidor.procuts.ui.screens.CutQuestionnaireFirstScreen
 import com.sidor.procuts.ui.screens.CutQuestionnaireSecondScreen
+import com.sidor.procuts.ui.screens.CutQuestionnaireThirdScreen
 import com.sidor.procuts.ui.viewmodels.CutQuestionnaireScreenType
 import com.sidor.procuts.ui.viewmodels.CutQuestionnaireViewModel
 
@@ -47,15 +48,34 @@ fun CutQuestionnaireRoute(
                 onBack = {
                     isNavigatingForward = false
                     onBack()
-                }
+                },
+                onDateChange = { date -> viewModel.setDate(date) },
+                onNameChange = { cutName -> viewModel.setCutName(cutName) }
             )
 
             CutQuestionnaireScreenType.Parameters -> CutQuestionnaireSecondScreen(
-                onNext = { isNavigatingForward = true },
+                onNext = {
+                    isNavigatingForward = true
+                    viewModel.navigateAdd()
+                },
                 onBack = {
                     isNavigatingForward = false
                     viewModel.navigateDateName()
-                }
+                },
+                onCutFrequencyChange = { cutFrequency -> viewModel.setCutFrequency(cutFrequency) }
+            )
+
+            CutQuestionnaireScreenType.Add -> CutQuestionnaireThirdScreen(
+                onBack = {
+                    isNavigatingForward = false
+                    viewModel.navigateParameters()
+                },
+                onAddCut = {
+                    viewModel.addCut()
+                    isNavigatingForward = true
+                    onBack()
+                    viewModel.navigateDateName()
+                },
             )
         }
     }

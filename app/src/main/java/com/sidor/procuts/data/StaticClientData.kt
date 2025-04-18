@@ -43,3 +43,10 @@ var caresList = listOf(
     "15-11-2024",
     "13-12-2025"
 ).map { date -> DMYDateFormat.parse(date)!! }
+
+val cutFrequencyList = listOf(
+    R.string.weekly,
+    R.string.evere_two_weeks,
+    R.string.monthly,
+    R.string.more_rarely
+)

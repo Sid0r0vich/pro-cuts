@@ -47,4 +47,10 @@
     <string name="description_field">Description</string>
     <string name="date_field">Date</string>
     <string name="cut_name">Cut name</string>
+    <string name="cut_frequency">Cut frequency</string>
+    <string name="weekly">Weekly</string>
+    <string name="evere_two_weeks">Every two weeks</string>
+    <string name="monthly">Monthly</string>
+    <string name="more_rarely">More rarely</string>
+    <string name="question_cut_frequency">How often do you get your hair cut?</string>
 </resources>

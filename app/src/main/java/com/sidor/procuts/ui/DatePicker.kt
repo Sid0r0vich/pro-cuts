@@ -48,7 +48,8 @@ fun convertMillisToDate(millis: Long): String {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerDocked(
-    selectedDate: MutableState<Date>,
+    selectedDate: Date,
+    onDateChange: (Date) -> Unit
 ) {
     var showDatePicker by remember { mutableStateOf(false) }
 
@@ -56,7 +57,7 @@ fun DatePickerDocked(
         modifier = Modifier.fillMaxWidth()
     ) {
         OutlinedTextField(
-            value = readableDMYDateFormat.format(selectedDate.value),
+            value = readableDMYDateFormat.format(selectedDate),
             onValueChange = { },
             label = { Text(stringResource(R.string.date)) },
             readOnly = true,
@@ -76,7 +77,9 @@ fun DatePickerDocked(
         if (showDatePicker) {
             DatePickerModal(
                 onDateSelected = { millis ->
-                    selectedDate.value = DMYDateFormat.parse(convertMillisToDate(millis ?: 0)) ?: Date()
+                    onDateChange(
+                        DMYDateFormat.parse(convertMillisToDate(millis ?: 0)) ?: Date()
+                    )
                 },
                 onDismiss = { showDatePicker = false }
             )

@@ -1,5 +1,6 @@
 package com.sidor.procuts.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,6 +19,7 @@ import com.sidor.procuts.R
 import com.sidor.procuts.data.allCuts
 import com.sidor.procuts.data.cutNamesToId
 import com.sidor.procuts.ui.DatePickerDocked
+import com.sidor.procuts.ui.QuestionnaireDropdownMenu
 import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
 import java.util.Date
 
@@ -26,68 +28,36 @@ import java.util.Date
 fun CutQuestionnaireFirstScreen(
     onBack: () -> Unit,
     onNext: () -> Unit,
+    onDateChange: (Date) -> Unit,
+    onNameChange: (String) -> Unit
 ) {
-    var date = remember { mutableStateOf<Date>(Date()) }
+    var date by remember { mutableStateOf<Date>(Date()) }
+    onDateChange(date)
 
     var cutName by remember { mutableStateOf(allCuts[0]?.name ?: "") }
-    var expanded by remember { mutableStateOf(false) }
+    onNameChange(cutName)
 
-    TopAppBarScreen(
-        topBar = {
-            TitleTopAppBar(
-                title = stringResource(R.string.add_haircut_tab_app_bar),
-                onBack = onBack
-            )
-        },
+    DefaultCutQuestionnaireScreen(
+        onBack = onBack,
+        onNext = onNext
     ) {
-        DefaultPaddingScreenWithQuestionnaireButtons(
-            onNext = onNext,
-            onBack = onBack,
-            horizontalSpaceCount = 2,
-            verticalSpaceCount = 2,
-        ) {
-            ExposedDropdownMenuBox(
-                expanded = expanded,
-                onExpandedChange = {
-                    expanded = !expanded
-                },
-            ) {
-                TextField(
-                    readOnly = true,
-                    value = cutName,
-                    onValueChange = { },
-                    label = { Text(text = stringResource(R.string.cut_name)) },
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(
-                            expanded = expanded
-                        )
-                    },
-                    colors = ExposedDropdownMenuDefaults.textFieldColors(),
-                    modifier = Modifier.fillMaxWidth().menuAnchor()
-                )
-                ExposedDropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = {
-                        expanded = false
-                    }
-                ) {
-                    cutNamesToId.keys.sorted().forEach { option ->
-                        DropdownMenuItem(
-                            text = { Text(text = option) },
-                            onClick = {
-                                cutName = option
-                                expanded = false
-                            }
-                        )
-                    }
-                }
-            }
+        QuestionnaireDropdownMenu(
+            name = stringResource(R.string.cut_name),
+            value = cutName,
+            onValueChanged = {
+                cutName = it
+                onNameChange(it)
+            },
+            menuList = cutNamesToId.keys.sorted()
+        )
 
-            DefaultSpacer()
-            DatePickerDocked(
-                selectedDate = date
-            )
+        DefaultSpacer()
+        DatePickerDocked(
+            selectedDate = date
+        ) {
+            onDateChange(date)
         }
+
     }
 }
 
