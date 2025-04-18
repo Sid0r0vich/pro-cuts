@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -90,6 +91,9 @@ fun AddClientScreen(
                             noMiddleName = it
                             if (it) middleName = ""
                         },
+                        colors = CheckboxDefaults.colors(
+                            checkedColor = Color.Black
+                        )
                     )
                     Text(text = stringResource(R.string.no_middle_name))
                 }

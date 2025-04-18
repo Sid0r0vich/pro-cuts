@@ -7,90 +7,24 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.text.style.TextAlign
 import com.sidor.procuts.R
-import com.sidor.procuts.data.Client
-import com.sidor.procuts.data.Cut
-import com.sidor.procuts.data.CutDate
 import com.sidor.procuts.data.cliensList
-import com.sidor.procuts.ui.CareForm
-import com.sidor.procuts.ui.CutForm
-import com.sidor.procuts.ui.TextWithPlusButton
-import com.sidor.procuts.ui.screens.items.ClientItem
 import com.sidor.procuts.ui.LocalGridPadding
+import com.sidor.procuts.ui.TextWithPlusButton
 import com.sidor.procuts.ui.screens.cards.StudyCard
+import com.sidor.procuts.ui.screens.items.ClientItem
 import com.sidor.procuts.ui.screens.topbars.UserTopAppBar
-import com.sidor.procuts.ui.viewmodels.HomeScreenType
-import com.sidor.procuts.ui.viewmodels.HomeViewModel
 
-@Composable
-fun HomeRoute(
-    modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = viewModel(),
-) {
-    val uiState = viewModel.uiState.collectAsState().value
-
-    when (uiState.screenType) {
-        HomeScreenType.Home -> HomeScreen(
-            modifier = modifier,
-            onClientClick = { clientName: String ->
-                viewModel.setClientName(clientName)
-                viewModel.navigateClient()
-            },
-            onAddClientClick = { viewModel.navigateAddClient() }
-        )
-        HomeScreenType.Client -> ClientScreen(
-            clientName = uiState.clientName ?: stringResource(R.string.default_client_name),
-            onBack = { viewModel.navigateHome() },
-            onVisitClick = { cutDate: CutDate ->
-                viewModel.setVisit(cutDate)
-                viewModel.navigateVisit()
-            },
-            onAddCutClick = {
-                viewModel.navigateAddCut()
-            },
-            onAddCareClick = {
-                viewModel.navigateAddCare()
-            }
-        )
-        HomeScreenType.AddClient -> AddClientScreen(
-            onBack = { viewModel.navigateHome() },
-            onAddClient = {
-                client: Client -> viewModel.addClient(client)
-                viewModel.navigateHome()
-            }
-        )
-        HomeScreenType.AddCut -> AddCutScreen(
-            onBack = { viewModel.navigateClient() },
-            onAddCut = { cutForm: CutForm ->
-                viewModel.addCut(cutForm)
-                viewModel.navigateClient()
-            }
-        )
-        HomeScreenType.AddCare -> AddCareScreen(
-            onBack = { viewModel.navigateClient() },
-            onAddCare = { careForm: CareForm ->
-                // TODO
-            }
-        )
-        HomeScreenType.Visit -> VisitScreen(
-            visit = uiState.visit!!,
-            onBack = { viewModel.navigateClient() },
-            onCutClick = { cut: Cut ->
-                viewModel.setCut(cut)
-                viewModel.navigateCut()
-            }
-        )
-        HomeScreenType.Cut -> CutScreen(
-            cut = uiState.cut!!,
-            onBack = { viewModel.navigateVisit() }
-        )
-    }
-}
 
 @Composable
 fun HomeScreen(
@@ -98,8 +32,13 @@ fun HomeScreen(
     onClientClick: (String) -> Unit,
     onAddClientClick: () -> Unit
 ) {
+    var searchText by remember { mutableStateOf("") }
+
     TopAppBarScreen(
-        topBar = { UserTopAppBar() },
+        topBar = { UserTopAppBar(
+            searchText = searchText,
+            onSearchTextChange = { searchText = it }
+        ) },
     ) { LazyPaddingScreen {
             item {
                 Row(
@@ -127,14 +66,31 @@ fun HomeScreen(
                 )
             }
 
-            cliensList.map { client ->
-                val clientName: String = "${client.firstName} ${client.middleName ?: ""} ${client.lastName}"
+            val filteredClientNameList = cliensList
+                .map { client -> "${client.firstName} ${client.middleName ?: ""} ${client.lastName}" }
+                .filter { clientName -> if (searchText.isNotEmpty()) clientName.lowercase().contains(searchText.lowercase()) else true }
+
+            filteredClientNameList
+                .sorted()
+                .forEach { clientName ->
+                    item {
+                        Spacer(modifier = Modifier.height(LocalGridPadding.current * 1))
+                        ClientItem(
+                            modifier = Modifier.padding(horizontal = LocalGridPadding.current * 2),
+                            name = clientName,
+                            onClick = { onClientClick(clientName) }
+                        )
+                    }
+                }
+
+            if (filteredClientNameList.isEmpty()) {
                 item {
-                    Spacer(modifier = Modifier.height(LocalGridPadding.current * 1))
-                    ClientItem(
-                        modifier = Modifier.padding(horizontal = LocalGridPadding.current * 2),
-                        name = clientName,
-                        onClick = { onClientClick(clientName) }
+                    DefaultSpacer(19)
+                    Text(
+                        text = stringResource(R.string.client_no_found),
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.titleLarge
                     )
                 }
             }

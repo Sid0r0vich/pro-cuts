@@ -21,48 +21,48 @@ fun ClientScreen(
     onAddCutClick: () -> Unit,
     onAddCareClick: () -> Unit
 ) {
-        TopAppBarScreen(
-            topBar = {
-                TitleTopAppBar(
-                    title = stringResource(R.string.client_tab_app_bar),
-                    onBack = onBack
-                )
-            },
+    TopAppBarScreen(
+        topBar = {
+            TitleTopAppBar(
+                title = stringResource(R.string.client_tab_app_bar),
+                onBack = onBack
+            )
+        },
+    ) {
+        LazyPaddingScreen(
+            horizontalSpaceCount = 4,
+            verticalSpaceCount = 2,
         ) {
-            LazyPaddingScreen(
-                horizontalSpaceCount = 4,
-                verticalSpaceCount = 2,
-            ) {
+            item {
+                DefaultSpacer(1)
+                ClientCard(clientName)
+            }
+            item {
+                DefaultSpacer(2)
+                TextWithPlusButton(
+                    text = stringResource(R.string.cuts),
+                    onClick = onAddCutClick
+                )
+            }
+            cutDatesList.forEach { date ->
                 item {
                     DefaultSpacer(1)
-                    ClientCard(clientName)
+                    VisitItem(date = date.date, onClick = { onVisitClick(date) })
                 }
+            }
+            item {
+                DefaultSpacer(2)
+                TextWithPlusButton(
+                    text = stringResource(R.string.cares),
+                    onClick = onAddCareClick
+                )
+            }
+            caresList.forEach { date ->
                 item {
-                    DefaultSpacer(2)
-                    TextWithPlusButton(
-                        text = stringResource(R.string.cuts),
-                        onClick = onAddCutClick
-                    )
-                }
-                cutDatesList.forEach { date ->
-                    item {
-                        DefaultSpacer(1)
-                        VisitItem(date = date.date, onClick = { onVisitClick(date) })
-                    }
-                }
-                item {
-                    DefaultSpacer(2)
-                    TextWithPlusButton(
-                        text = stringResource(R.string.cares),
-                        onClick = onAddCareClick
-                    )
-                }
-                caresList.forEach { date ->
-                    item {
-                        DefaultSpacer(1)
-                        VisitItem(date = date, onClick = {})
-                    }
+                    DefaultSpacer(1)
+                    VisitItem(date = date, onClick = {})
                 }
             }
         }
+    }
 }

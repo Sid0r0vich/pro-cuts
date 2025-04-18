@@ -13,6 +13,7 @@ import com.sidor.procuts.data.CutDate
 import com.sidor.procuts.data.allCuts
 import com.sidor.procuts.data.DMYDateFormat
 import com.sidor.procuts.data.readableDMYDateFormat
+import com.sidor.procuts.ui.TextWithBoldField
 import com.sidor.procuts.ui.screens.items.CutItem
 import com.sidor.procuts.ui.screens.items.VisitItem
 import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
@@ -38,9 +39,9 @@ fun VisitScreen(
         ) {
             item {
                 Column {
-                    Text(
-                        text = "Date: ${readableDMYDateFormat.format(visit.date)}",
-                        fontWeight = FontWeight.Bold,
+                    TextWithBoldField(
+                        field = stringResource(R.string.date_field),
+                        value = readableDMYDateFormat.format(visit.date),
                         style = MaterialTheme.typography.titleLarge,
                     )
                     DefaultSpacer(1)

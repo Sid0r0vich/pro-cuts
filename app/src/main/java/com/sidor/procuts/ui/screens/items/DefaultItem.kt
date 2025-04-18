@@ -27,7 +27,6 @@ fun DefaultItem(
         Box(modifier = Modifier.padding(10.dp).fillMaxWidth()) {
             Text(
                 text = text,
-                fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.align(Alignment.Center),
                 textAlign = TextAlign.Center,

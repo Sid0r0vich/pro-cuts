@@ -11,3 +11,8 @@ import com.sidor.procuts.ui.LocalGridPadding
 fun DefaultSpacer(spaceCount: Int = 1) {
     Spacer(modifier = Modifier.size((spaceCount * LocalGridPadding.current.value).dp))
 }
+
+@Composable
+fun DpSpacer(dpCount: Int = 1) {
+    Spacer(modifier = Modifier.size(dpCount.dp))
+}

@@ -12,7 +12,9 @@ var cliensList = mutableListOf(
     Client(firstName = "Евгений", lastName =  "Туаев"),
     Client(firstName = "Роберт", lastName = "Смайт"),
     Client(firstName = "Павел", lastName = "Скаков"),
-    Client(firstName = "Client"),
+    Client(firstName = "Мистер", lastName = "Бист"),
+    Client(firstName = "Иван", lastName = "Иванов"),
+    Client(firstName = "Иван", lastName = "Петрухин"),
 )
 
 val allCuts = mapOf(

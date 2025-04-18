@@ -17,7 +17,7 @@ import com.sidor.procuts.ui.navigation.BottomNavigationBar
 import com.sidor.procuts.ui.navigation.NavigationActions
 import com.sidor.procuts.ui.navigation.Route
 import com.sidor.procuts.ui.screens.PaddingProviderScreen
-import com.sidor.procuts.ui.screens.HomeRoute
+import com.sidor.procuts.ui.screens.routes.HomeRoute
 
 @Composable
 fun MyApp(modifier: Modifier) {

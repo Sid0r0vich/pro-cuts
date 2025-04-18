@@ -1,18 +1,31 @@
 package com.sidor.procuts.ui.screens
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.sidor.procuts.R
 import com.sidor.procuts.ui.LocalBoardPadding
 import com.sidor.procuts.ui.LocalGridPadding
 
@@ -39,15 +52,82 @@ fun PaddingScreen(
     modifier: Modifier = Modifier,
     verticalSpaceCount: Int = 2,
     horizontalSpaceCount: Int = 2,
-    content: @Composable () -> Unit = {}
+    verticalArrangement: Arrangement.Vertical = Arrangement.Top,
+    content: @Composable ColumnScope.() -> Unit = {},
 ) {
     Box(
         modifier = modifier
             .fillMaxSize()
             .padding(horizontal = LocalGridPadding.current * horizontalSpaceCount, vertical = LocalGridPadding.current * verticalSpaceCount)
     ) {
-        content()
+        Column(
+            verticalArrangement = verticalArrangement,
+            modifier = Modifier.fillMaxHeight()
+        ) {
+            content()
+        }
     }
+}
+
+@Composable
+fun PaddingScreenWithQuestionnaireButtons(
+    questionnaireButtons: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+    verticalSpaceCount: Int = 2,
+    horizontalSpaceCount: Int = 2,
+    verticalArrangement: Arrangement.Vertical = Arrangement.SpaceBetween,
+    content: @Composable ColumnScope.() -> Unit = {}
+) {
+    PaddingScreen(
+        modifier = modifier,
+        verticalSpaceCount = verticalSpaceCount,
+        horizontalSpaceCount = horizontalSpaceCount,
+        verticalArrangement = verticalArrangement,
+    ) {
+        Column(
+        ) {
+            content()
+        }
+        questionnaireButtons()
+    }
+}
+
+@Composable
+fun DefaultPaddingScreenWithQuestionnaireButtons(
+    onNext: () -> Unit,
+    onBack: () -> Unit,
+    modifier: Modifier = Modifier,
+    verticalSpaceCount: Int = 2,
+    horizontalSpaceCount: Int = 2,
+    content: @Composable ColumnScope.() -> Unit = {}
+) {
+    PaddingScreenWithQuestionnaireButtons(
+        questionnaireButtons = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+            ) {
+                Button(
+                    onClick = onNext,
+                    shape = RectangleShape,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(text = stringResource(R.string.next))
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                            contentDescription = null,
+                            modifier = Modifier.padding(start = 4.dp)
+                        )
+                    }
+                }
+            }
+        },
+        modifier = modifier,
+        verticalSpaceCount = verticalSpaceCount,
+        horizontalSpaceCount = horizontalSpaceCount,
+        content = content,
+    )
 }
 
 @Composable
