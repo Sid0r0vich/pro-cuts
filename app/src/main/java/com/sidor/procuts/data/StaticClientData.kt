@@ -3,18 +3,16 @@ package com.sidor.procuts.data
 import com.sidor.procuts.R
 import java.text.SimpleDateFormat
 
-var defaultCliensList = listOf(
-    "Jason Statham",
-    "Dwayne Douglas Johnson",
-    "Илья Игоревич Муромцев",
-    "Дмитрий Сергеевич Шалымов",
-    "Владимир Путин",
-    "Евгений Туаев",
-    "Роберт Смайт",
-    "Павел Скаков",
-    "Client",
-    "Client",
-    "Client"
+var cliensList = mutableListOf(
+    Client(firstName = "Jason", lastName = "Statham"),
+    Client(firstName = "Dwayne", middleName =  "Douglas", lastName =  "Johnson"),
+    Client(firstName = "Илья", middleName = "Игоревич", lastName =  "Муромцев"),
+    Client(firstName = "Дмитрий", middleName = "Сергеевич", lastName = "Шалымов"),
+    Client(firstName = "Владимир", lastName = "Путин"),
+    Client(firstName = "Евгений", lastName =  "Туаев"),
+    Client(firstName = "Роберт", lastName = "Смайт"),
+    Client(firstName = "Павел", lastName = "Скаков"),
+    Client(firstName = "Client"),
 )
 
 val allCuts = mapOf(
@@ -24,16 +22,18 @@ val allCuts = mapOf(
     3 to Cut(3, "Bold", "Цель данной стрижки — полностью обнажить кожу головы, сбрив все волосы. Стрижка под 0 способствует созданию образа уверенного и сильного человека, своему обладателю придает максимум мужественности, помогает почувствовать себя увереннее и подчеркнуть индивидуальность.", R.drawable.bold)
 )
 
+var cutNamesToId = allCuts.entries.associate { (key, value) -> value.name to key }
+
 val readableDMYDateFormat = SimpleDateFormat("dd MMMM yyyy")
 var DMYDateFormat = SimpleDateFormat("dd-MM-yyyy")
 
-var cutDatesList = listOf(
+var cutDatesList: MutableList<CutDate> = mutableListOf(
     "31-12-2022",
     "31-12-2023",
     "28-11-2024",
     "31-12-2025"
 ).map { date -> DMYDateFormat.parse(date)!! }
-    .map { date -> CutDate(allCuts.toList().random().second.id, date) }
+    .map { date -> CutDate(allCuts.toList().random().second.id, date) } as MutableList<CutDate>
 
 var caresList = listOf(
     "29-12-2022",

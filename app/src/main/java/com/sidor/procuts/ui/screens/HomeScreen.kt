@@ -7,18 +7,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sidor.procuts.R
+import com.sidor.procuts.data.Client
 import com.sidor.procuts.data.Cut
 import com.sidor.procuts.data.CutDate
-import com.sidor.procuts.data.defaultCliensList
+import com.sidor.procuts.data.cliensList
+import com.sidor.procuts.ui.CareForm
+import com.sidor.procuts.ui.CutForm
 import com.sidor.procuts.ui.TextWithPlusButton
 import com.sidor.procuts.ui.screens.items.ClientItem
 import com.sidor.procuts.ui.LocalGridPadding
@@ -40,7 +40,8 @@ fun HomeRoute(
             onClientClick = { clientName: String ->
                 viewModel.setClientName(clientName)
                 viewModel.navigateClient()
-            }
+            },
+            onAddClientClick = { viewModel.navigateAddClient() }
         )
         HomeScreenType.Client -> ClientScreen(
             clientName = uiState.clientName ?: stringResource(R.string.default_client_name),
@@ -48,6 +49,32 @@ fun HomeRoute(
             onVisitClick = { cutDate: CutDate ->
                 viewModel.setVisit(cutDate)
                 viewModel.navigateVisit()
+            },
+            onAddCutClick = {
+                viewModel.navigateAddCut()
+            },
+            onAddCareClick = {
+                viewModel.navigateAddCare()
+            }
+        )
+        HomeScreenType.AddClient -> AddClientScreen(
+            onBack = { viewModel.navigateHome() },
+            onAddClient = {
+                client: Client -> viewModel.addClient(client)
+                viewModel.navigateHome()
+            }
+        )
+        HomeScreenType.AddCut -> AddCutScreen(
+            onBack = { viewModel.navigateClient() },
+            onAddCut = { cutForm: CutForm ->
+                viewModel.addCut(cutForm)
+                viewModel.navigateClient()
+            }
+        )
+        HomeScreenType.AddCare -> AddCareScreen(
+            onBack = { viewModel.navigateClient() },
+            onAddCare = { careForm: CareForm ->
+                // TODO
             }
         )
         HomeScreenType.Visit -> VisitScreen(
@@ -69,7 +96,7 @@ fun HomeRoute(
 fun HomeScreen(
     modifier: Modifier = Modifier,
     onClientClick: (String) -> Unit,
-    onAddClientClick: () -> Unit = {}
+    onAddClientClick: () -> Unit
 ) {
     TopAppBarScreen(
         topBar = { UserTopAppBar() },
@@ -100,13 +127,14 @@ fun HomeScreen(
                 )
             }
 
-            defaultCliensList.map { client ->
+            cliensList.map { client ->
+                val clientName: String = "${client.firstName} ${client.middleName ?: ""} ${client.lastName}"
                 item {
                     Spacer(modifier = Modifier.height(LocalGridPadding.current * 1))
                     ClientItem(
                         modifier = Modifier.padding(horizontal = LocalGridPadding.current * 2),
-                        name = client,
-                        onClick = { onClientClick(client) }
+                        name = clientName,
+                        onClick = { onClientClick(clientName) }
                     )
                 }
             }

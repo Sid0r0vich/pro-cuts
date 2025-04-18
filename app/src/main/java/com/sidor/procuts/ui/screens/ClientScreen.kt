@@ -18,7 +18,8 @@ fun ClientScreen(
     clientName: String,
     onBack: () -> Unit,
     onVisitClick: (CutDate) -> Unit,
-    onAddCutClick: () -> Unit = {}
+    onAddCutClick: () -> Unit,
+    onAddCareClick: () -> Unit
 ) {
         TopAppBarScreen(
             topBar = {
@@ -53,7 +54,7 @@ fun ClientScreen(
                     DefaultSpacer(2)
                     TextWithPlusButton(
                         text = stringResource(R.string.cares),
-                        onClick = onAddCutClick
+                        onClick = onAddCareClick
                     )
                 }
                 caresList.forEach { date ->

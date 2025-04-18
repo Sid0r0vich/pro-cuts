@@ -1,16 +1,25 @@
 package com.sidor.procuts.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
+import com.sidor.procuts.data.Client
 import com.sidor.procuts.data.Cut
 import com.sidor.procuts.data.CutDate
+import com.sidor.procuts.data.allCuts
+import com.sidor.procuts.data.cliensList
+import com.sidor.procuts.data.cutDatesList
+import com.sidor.procuts.data.cutNamesToId
+import com.sidor.procuts.ui.CutForm
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 enum class HomeScreenType {
     Home,
     Client,
+    AddClient,
+    Cut,
+    AddCut,
+    AddCare,
     Visit,
-    Cut
 }
 
 open class HomeViewModel : ViewModel() {
@@ -36,20 +45,29 @@ open class HomeViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(cut = cut)
     }
 
-    fun navigateHome() {
-        _uiState.value = _uiState.value.copy(screenType = HomeScreenType.Home)
+    fun navigate(screenType: HomeScreenType) {
+        _uiState.value = _uiState.value.copy(screenType = screenType)
     }
 
-    fun navigateClient() {
-        _uiState.value = _uiState.value.copy(screenType = HomeScreenType.Client)
+    fun navigateHome() = navigate(HomeScreenType.Home)
+    fun navigateClient() = navigate(HomeScreenType.Client)
+    fun navigateAddClient() = navigate(HomeScreenType.AddClient)
+    fun navigateVisit() = navigate(HomeScreenType.Visit)
+    fun navigateCut() = navigate(HomeScreenType.Cut)
+    fun navigateAddCut() = navigate(HomeScreenType.AddCut)
+    fun navigateAddCare() = navigate(HomeScreenType.AddCare)
+
+    fun addClient(client: Client) {
+        cliensList.add(client)
     }
 
-    fun navigateVisit() {
-        _uiState.value = _uiState.value.copy(screenType = HomeScreenType.Visit)
-    }
+    fun addCut(cutForm: CutForm): Boolean {
+        cutNamesToId[cutForm.name]?.let { cutId ->
+            cutDatesList.add(CutDate(cutId = cutId, date = cutForm.date))
+            return true
+        }
 
-    fun navigateCut() {
-        _uiState.value = _uiState.value.copy(screenType = HomeScreenType.Cut)
+        return false
     }
 
     companion object {
