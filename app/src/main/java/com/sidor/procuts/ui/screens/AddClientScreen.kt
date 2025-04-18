@@ -1,6 +1,7 @@
 package com.sidor.procuts.ui.screens
 
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -29,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sidor.procuts.R
 import com.sidor.procuts.data.Client
+import com.sidor.procuts.ui.ImagePicker
 import com.sidor.procuts.ui.RectangleTextField
 import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
 
@@ -42,8 +44,7 @@ fun AddClientScreen(
     var firstName by remember { mutableStateOf("") }
     var middleName by remember { mutableStateOf("") }
     var noMiddleName by remember { mutableStateOf(false) }
-
-    var photo: Painter? by remember { mutableStateOf(null) }
+    var clientPhoto by remember { mutableStateOf<ByteArray?>(null) }
 
     TopAppBarScreen(
         topBar = {
@@ -103,29 +104,7 @@ fun AddClientScreen(
                 DefaultSpacer(2)
                 Text(text = stringResource(R.string.photo))
                 DefaultSpacer()
-                Box(
-                    modifier = Modifier
-                        .clickable {}
-                        .size(100.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (photo != null) {
-                        Image(
-                            painter = photo!!,
-                            contentDescription = stringResource(R.string.client_photo),
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    } else {
-                        Surface(
-                            color = Color.LightGray,
-                            modifier = Modifier.fillMaxSize(),
-                        ) {
-                            Box(contentAlignment = Alignment.Center) {
-                                Text("+", style = MaterialTheme.typography.titleLarge, color=Color.DarkGray)
-                            }
-                        }
-                    }
-                }
+                ImagePicker { clientPhoto = it }
             }
 
             item {
@@ -135,7 +114,8 @@ fun AddClientScreen(
                         Client(
                             firstName = firstName,
                             lastName = lastName,
-                            middleName = middleName
+                            middleName = middleName,
+                            photo = clientPhoto
                         )
                     ) },
                     modifier = Modifier.fillMaxWidth(),

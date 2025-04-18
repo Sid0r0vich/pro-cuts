@@ -30,14 +30,14 @@ fun HomeRoute(
     when (uiState.screenType) {
         HomeScreenType.Home -> HomeScreen(
             modifier = modifier,
-            onClientClick = { clientName: String ->
-                viewModel.setClientName(clientName)
+            onClientClick = { client: Client ->
+                viewModel.setClient(client)
                 viewModel.navigateClient()
             },
             onAddClientClick = { viewModel.navigateAddClient() }
         )
         HomeScreenType.Client -> ClientScreen(
-            clientName = uiState.clientName ?: stringResource(R.string.default_client_name),
+            client = uiState.client,
             onBack = { viewModel.navigateHome() },
             onVisitClick = { cutDate: CutDate ->
                 viewModel.setVisit(cutDate)

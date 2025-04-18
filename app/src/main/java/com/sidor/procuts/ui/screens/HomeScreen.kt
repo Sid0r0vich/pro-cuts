@@ -18,18 +18,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.sidor.procuts.R
+import com.sidor.procuts.data.Client
 import com.sidor.procuts.data.cliensList
 import com.sidor.procuts.ui.LocalGridPadding
 import com.sidor.procuts.ui.TextWithPlusButton
 import com.sidor.procuts.ui.screens.cards.StudyCard
 import com.sidor.procuts.ui.screens.items.ClientItem
 import com.sidor.procuts.ui.screens.topbars.UserTopAppBar
+import kotlin.comparisons.compareBy
 
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    onClientClick: (String) -> Unit,
+    onClientClick: (Client) -> Unit,
     onAddClientClick: () -> Unit
 ) {
     var searchText by remember { mutableStateOf("") }
@@ -67,18 +69,17 @@ fun HomeScreen(
             }
 
             val filteredClientNameList = cliensList
-                .map { client -> "${client.firstName} ${client.middleName ?: ""} ${client.lastName}" }
-                .filter { clientName -> if (searchText.isNotEmpty()) clientName.lowercase().contains(searchText.lowercase()) else true }
+                .filter { client -> if (searchText.isNotEmpty()) client.getFullName().lowercase().contains(searchText.lowercase()) else true }
 
             filteredClientNameList
-                .sorted()
-                .forEach { clientName ->
+                .sortedWith (compareBy { it.getFullName() } )
+                .forEach { client ->
                     item {
                         Spacer(modifier = Modifier.height(LocalGridPadding.current * 1))
                         ClientItem(
                             modifier = Modifier.padding(horizontal = LocalGridPadding.current * 2),
-                            name = clientName,
-                            onClick = { onClientClick(clientName) }
+                            name = client.getFullName(),
+                            onClick = { onClientClick(client) }
                         )
                     }
                 }
@@ -87,7 +88,7 @@ fun HomeScreen(
                 item {
                     DefaultSpacer(19)
                     Text(
-                        text = stringResource(R.string.client_no_found),
+                        text = stringResource(R.string.client_not_found),
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.titleLarge

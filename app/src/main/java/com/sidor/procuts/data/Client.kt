@@ -1,7 +1,12 @@
 package com.sidor.procuts.data
 
-data class Client(
+class Client(
     val firstName: String,
     val lastName: String = "",
-    val middleName: String? = null
-)
+    val middleName: String? = null,
+    val photo: ByteArray? = null
+) {
+    fun getFullName(): String {
+        return "$firstName ${middleName ?: ""} $lastName"
+    }
+}

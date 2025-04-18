@@ -25,7 +25,7 @@ enum class HomeScreenType {
 open class HomeViewModel : ViewModel() {
     data class UiState(
         val screenType: HomeScreenType,
-        val clientName: String? = null,
+        val client: Client? = null,
         val visit: CutDate? = null,
         val cut: Cut? = null
     )
@@ -33,8 +33,8 @@ open class HomeViewModel : ViewModel() {
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState(HomeScreenType.Home))
     val uiState: StateFlow<UiState> get() = _uiState
 
-    fun setClientName(clientName: String) {
-        _uiState.value = _uiState.value.copy(clientName = clientName)
+    fun setClient(client: Client) {
+        _uiState.value = _uiState.value.copy(client = client)
     }
 
     fun setVisit(visit: CutDate) {

@@ -40,7 +40,7 @@
     <string name="cancel">Cancel</string>
     <string name="add_care_tab_app_bar">Add care</string>
     <string name="select_cut">Select cut</string>
-    <string name="client_no_found">No found for request…</string>
+    <string name="client_not_found">Not found for request…</string>
     <string name="back">Back</string>
     <string name="next">Next</string>
     <string name="cut_field">Cut</string>

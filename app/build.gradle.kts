@@ -62,4 +62,5 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended-android:1.7.8")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
     implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("io.coil-kt:coil-compose:2.7.0")
 }

@@ -1,5 +1,8 @@
 package com.sidor.procuts.ui.screens.cards
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,30 +13,42 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.sidor.procuts.R
+import com.sidor.procuts.data.Client
 
 @Composable
 fun ClientCard(
-    clientName: String
+    client: Client
 ) {
+    val defaultPhoto = painterResource(R.drawable.default_user_avatar)
+    val clientPhoto: Painter = if (client.photo != null) {
+        val bitmap: Bitmap? = BitmapFactory.decodeByteArray(client.photo, 0, client.photo.size)
+        bitmap?.asImageBitmap()?.let { imageBitmap ->
+            BitmapPainter(imageBitmap)
+        } ?: defaultPhoto
+    } else defaultPhoto
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
     ) {
         Image(
-            painter = painterResource(R.drawable.default_user_avatar),
+            painter = clientPhoto,
             contentDescription = stringResource(R.string.client_ava),
             modifier = Modifier
                 .weight(2f)
         )
         Spacer(modifier = Modifier.width(10.dp))
         Text(
-            text = clientName,
+            text = client.getFullName(),
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.titleLarge,
             textAlign = TextAlign.Center,
