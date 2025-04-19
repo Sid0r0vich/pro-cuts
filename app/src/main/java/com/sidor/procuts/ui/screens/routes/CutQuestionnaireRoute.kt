@@ -87,7 +87,7 @@ fun CutQuestionnaireRoute(
                     onValueChange = { value ->
                         viewModel.setParam(CutQuestionnaireViewModel.paramNames[index], value)
                     },
-                    valuesList = paramsList[index].map { stringResource(it) }
+                    valuesList = paramsList[index].map { stringResource(it) },
                 )
             }
         }

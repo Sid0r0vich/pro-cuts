@@ -37,7 +37,8 @@ fun CutQuestionnaireFirstScreen(
 
     DefaultCutQuestionnaireScreen(
         onBack = onBack,
-        onNext = onNext
+        onNext = onNext,
+        enabled = cutNamesToId.contains(cutName)
     ) {
         QuestionnaireDropdownMenu(
             name = stringResource(R.string.cut_name),

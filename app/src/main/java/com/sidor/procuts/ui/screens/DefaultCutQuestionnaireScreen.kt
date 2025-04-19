@@ -23,6 +23,7 @@ import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
 fun DefaultCutQuestionnaireScreen(
     onBack: () -> Unit,
     onNext: () -> Unit,
+    enabled: Boolean = true,
     content: @Composable (ColumnScope.() -> Unit) = {}
 ) {
     TopAppBarScreen(
@@ -38,8 +39,9 @@ fun DefaultCutQuestionnaireScreen(
             onBack = onBack,
             horizontalSpaceCount = 2,
             verticalSpaceCount = 2,
+            enabled = enabled
         ) {
-                content()
+            content()
         }
     }
 }
@@ -59,7 +61,8 @@ fun CutQuestionnaireScreenWithSeveralAnswerOption(
 
     DefaultCutQuestionnaireScreen(
         onBack = onBack,
-        onNext = onNext
+        onNext = onNext,
+        enabled = value != ""
     ) {
         Text(
             text = text,

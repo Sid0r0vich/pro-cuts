@@ -8,6 +8,8 @@ import com.sidor.procuts.data.cutNamesToId
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.Date
+import kotlin.math.max
+import kotlin.math.min
 
 enum class CutQuestionnaireScreenType {
     DateName,
@@ -52,13 +54,12 @@ open class CutQuestionnaireViewModel : ViewModel() {
     }
 
     fun navigateNext() {
-        val next = (_uiState.value.screenType.ordinal + 1) % CutQuestionnaireScreenType.entries.size
+        val next = min(_uiState.value.screenType.ordinal + 1, CutQuestionnaireScreenType.entries.size - 1)
         navigate(CutQuestionnaireScreenType.entries[next])
     }
 
     fun navigateBack() {
-        var next = (_uiState.value.screenType.ordinal - 1) % CutQuestionnaireScreenType.entries.size
-        if (next < 0) next += CutQuestionnaireScreenType.entries.size
+        var next = max(_uiState.value.screenType.ordinal - 1, 0)
         navigate(CutQuestionnaireScreenType.entries[next])
     }
 

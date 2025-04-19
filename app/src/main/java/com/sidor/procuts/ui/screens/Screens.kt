@@ -99,6 +99,7 @@ fun DefaultPaddingScreenWithQuestionnaireButtons(
     modifier: Modifier = Modifier,
     verticalSpaceCount: Int = 2,
     horizontalSpaceCount: Int = 2,
+    enabled: Boolean = true,
     content: @Composable ColumnScope.() -> Unit = {}
 ) {
     PaddingScreenWithQuestionnaireButtons(
@@ -110,7 +111,8 @@ fun DefaultPaddingScreenWithQuestionnaireButtons(
                 Button(
                     onClick = onNext,
                     shape = RectangleShape,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = enabled
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(text = stringResource(R.string.next))
