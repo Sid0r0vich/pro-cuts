@@ -11,16 +11,21 @@ import java.util.Date
 
 enum class CutQuestionnaireScreenType {
     DateName,
-    Parameters,
+    Age,
+    CutFrequency,
+    HeadForm,
+    HairStruct,
+    HairThickness,
+    HairLen,
+    ScalpType,
     Add
 }
 
 open class CutQuestionnaireViewModel : ViewModel() {
     data class UiState(
         val screenType: CutQuestionnaireScreenType,
-        val cutName: String? = null,
-        val date: Date? = null,
-        val cutFrequency: String? = null
+        val date: Date = Date(),
+        val paramsMap: MutableMap<String, String> = mutableMapOf()
     )
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState(CutQuestionnaireScreenType.DateName))
@@ -30,27 +35,49 @@ open class CutQuestionnaireViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(date = date)
     }
 
-    fun setCutName(cutName: String) {
-        _uiState.value = _uiState.value.copy(cutName = cutName)
+    fun getDate(): Date {
+        return _uiState.value.date
     }
 
-    fun setCutFrequency(cutFrequency: String) {
-        _uiState.value = _uiState.value.copy(cutFrequency = cutFrequency)
+    fun setParam(name: String, value: String) {
+        _uiState.value.paramsMap[name] = value
+    }
+
+    fun getParam(name: String): String {
+        return _uiState.value.paramsMap[name] ?: ""
     }
 
     fun navigate(screenType: CutQuestionnaireScreenType) {
         _uiState.value = _uiState.value.copy(screenType = screenType)
     }
 
-    fun navigateDateName() = navigate(CutQuestionnaireScreenType.DateName)
-    fun navigateParameters() = navigate(CutQuestionnaireScreenType.Parameters)
-    fun navigateAdd() = navigate(CutQuestionnaireScreenType.Add)
+    fun navigateNext() {
+        val next = (_uiState.value.screenType.ordinal + 1) % CutQuestionnaireScreenType.entries.size
+        navigate(CutQuestionnaireScreenType.entries[next])
+    }
+
+    fun navigateBack() {
+        var next = (_uiState.value.screenType.ordinal - 1) % CutQuestionnaireScreenType.entries.size
+        if (next < 0) next += CutQuestionnaireScreenType.entries.size
+        navigate(CutQuestionnaireScreenType.entries[next])
+    }
 
     fun addCut() {
-        val cutId = cutNamesToId[uiState.value.cutName]
-        Log.d("A", "$cutId ${uiState.value.date}")
-        if (cutId != null && uiState.value.date != null) {
-            cutDatesList.add(CutDate(cutId = cutId, date = uiState.value.date!!))
+        val cutId = cutNamesToId[getParam("cutName")]
+        if (cutId != null) {
+            cutDatesList.add(CutDate(cutId = cutId, date = uiState.value.date))
         }
+    }
+
+    companion object {
+        val paramNames = listOf(
+            "cutFrequency",
+            "age",
+            "headForm",
+            "hairStruct",
+            "hairThickness",
+            "hairLen",
+            "scalpType"
+        )
     }
 }

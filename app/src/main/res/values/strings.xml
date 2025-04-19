@@ -53,4 +53,86 @@
     <string name="monthly">Monthly</string>
     <string name="more_rarely">More rarely</string>
     <string name="question_cut_frequency">How often do you get your hair cut?</string>
+    <string name="cut_head_form">Head form</string>
+    <string name="question_head_form">Какая у клиента форма головы?</string>
+
+    <string name="circle">Circle</string>
+    <string name="oval">Oval</string>
+    <string name="square">Square</string>
+    <string name="heart">Heart</string>
+    <string name="triangle">Triangle</string>
+    <string name="diamond">Diamond</string>
+    <string name="oblong">Oblong</string>
+
+    <string name="straight">Straight</string>
+    <string name="wavy">Wavy</string>
+    <string name="curly">Curly</string>
+    <string name="spiral">Spiral</string>
+
+    <string name="low">Low</string>
+    <string name="medium">Medium</string>
+    <string name="high">High</string>
+
+    <string name="short_len">Short</string>
+    <string name="medium_len">Medium</string>
+    <string name="long_len">Long</string>
+
+    <string name="dry">Dry</string>
+    <string name="normal">Normal</string>
+    <string name="oily">Oily</string>
+    <string name="sensitive">Sensitive</string>
+
+    <string name="healthy">Healthy</string>
+    <string name="slightly_damaged">Slightly Damaged</string>
+    <string name="severely_damaged">Severely Damaged</string>
+
+    <string name="coloring">Coloring</string>
+    <string name="highlighting">Highlighting</string>
+    <string name="straightening">Straightening</string>
+    <string name="none">None</string>
+
+    <string name="daily">Daily</string>
+    <string name="every_other_day">Every Other Day</string>
+    <string name="two_to_three_times_a_week">2–3 Times a Week</string>
+    <string name="less_frequently">Less Frequently</string>
+
+    <string name="hair_dryer">Hair Dryer</string>
+    <string name="flat_iron">Flat Iron</string>
+    <string name="curling_iron">Curling Iron</string>
+    <string name="brush">Brush</string>
+
+    <string name="sport">Sporty</string>
+    <string name="business">Business</string>
+    <string name="calm">Calm</string>
+    <string name="creative">Creative</string>
+
+    <string name="experimentalist">Experimentalist</string>
+    <string name="minimalist">Minimalist</string>
+    <string name="conservative">Conservative</string>
+
+    <string name="blonde">Blonde</string>
+    <string name="brunette">Brunette</string>
+    <string name="black_haired">Black</string>
+    <string name="ginger">Ginger</string>
+
+    <string name="thin">Thin</string>
+    <string name="average">Average</string>
+    <string name="sporty">Sporty</string>
+    <string name="plump">Plump</string>
+    <string name="question_age_group">What the client age?</string>
+    <string name="client_age_group">Age</string>
+    <string name="question_hair_struct">What is the hair struct?</string>
+    <string name="cut_hair_struct">Hair struct</string>
+    <string name="question_hair_thickness">What is the hair thickness</string>
+    <string name="cut_hair_thickness">Hair thickness</string>
+    <string name="question_hair_len">What is the hair len?</string>
+    <string name="cut_hair_len">Hair len</string>
+    <string name="question_scalp_type">What is the scalp type?</string>
+    <string name="cut_scalp_type">Scalp type</string>
+    <string name="age_0_12">0-12</string>
+    <string name="age_13_17">13-17</string>
+    <string name="age_18_25">18-25</string>
+    <string name="age_26_35">26-35</string>
+    <string name="age_36_45">36-45</string>
+    <string name="age_46_">46+</string>
 </resources>

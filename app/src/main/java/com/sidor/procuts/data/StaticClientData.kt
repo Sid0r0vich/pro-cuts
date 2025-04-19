@@ -44,9 +44,146 @@ var caresList = listOf(
     "13-12-2025"
 ).map { date -> DMYDateFormat.parse(date)!! }
 
+
+val ageGroupList = listOf(
+    R.string.age_0_12,
+    R.string.age_13_17,
+    R.string.age_18_25,
+    R.string.age_26_35,
+    R.string.age_36_45,
+    R.string.age_46_,
+)
+
 val cutFrequencyList = listOf(
     R.string.weekly,
     R.string.evere_two_weeks,
     R.string.monthly,
     R.string.more_rarely
+)
+
+val headFormList = listOf(
+    R.string.circle,
+    R.string.oval,
+    R.string.square,
+    R.string.heart,
+    R.string.triangle,
+    R.string.diamond,
+    R.string.oblong
+)
+
+val hairStructList = listOf(
+    R.string.straight,
+    R.string.wavy,
+    R.string.curly,
+    R.string.spiral
+)
+
+val hairThicknessList = listOf(
+    R.string.low,
+    R.string.medium,
+    R.string.high
+)
+
+val hairLenList = listOf(
+    R.string.short_len,
+    R.string.medium,
+    R.string.long_len
+)
+
+val scalpTypeList = listOf(
+    R.string.dry,
+    R.string.normal,
+    R.string.oily,
+    R.string.sensitive
+)
+
+val hairDamageLevelList = listOf(
+    R.string.healthy,
+    R.string.slightly_damaged,
+    R.string.severely_damaged
+)
+
+val chemicalProceduresList = listOf(
+    R.string.coloring,
+    R.string.highlighting,
+    R.string.straightening,
+    R.string.none
+)
+
+val washingFrequencyList = listOf(
+    R.string.daily,
+    R.string.every_other_day,
+    R.string.two_to_three_times_a_week,
+    R.string.less_frequently
+)
+
+val averageStylingTimeList = listOf(
+    R.string.blonde,
+    R.string.brunette,
+    R.string.black_haired,
+    R.string.ginger
+)
+
+val stylingToolsList = listOf(
+    R.string.hair_dryer,
+    R.string.flat_iron,
+    R.string.curling_iron,
+    R.string.brush
+)
+
+val lifestyleList = listOf(
+    R.string.sporty,
+    R.string.business,
+    R.string.calm,
+    R.string.creative
+)
+
+val temperamentStyleList = listOf(
+    R.string.experimentalist,
+    R.string.minimalist,
+    R.string.conservative
+)
+
+val hairColorList = listOf(
+    R.string.blonde,
+    R.string.brunette,
+    R.string.black_haired,
+    R.string.ginger
+)
+
+val bodyTypeList = listOf(
+    R.string.thin,
+    R.string.average,
+    R.string.sporty,
+    R.string.plump
+)
+
+val paramNameList = listOf(
+    R.string.client_age_group,
+    R.string.cut_frequency,
+    R.string.cut_head_form,
+    R.string.cut_hair_struct,
+    R.string.cut_hair_thickness,
+    R.string.cut_hair_len,
+    R.string.cut_scalp_type
+)
+
+val questionList = listOf(
+    R.string.question_age_group,
+    R.string.question_cut_frequency,
+    R.string.question_head_form,
+    R.string.question_hair_struct,
+    R.string.question_hair_thickness,
+    R.string.question_hair_len,
+    R.string.question_scalp_type
+)
+
+val paramsList = listOf(
+    ageGroupList,
+    cutFrequencyList,
+    headFormList,
+    hairStructList,
+    hairThicknessList,
+    hairLenList,
+    scalpTypeList
 )

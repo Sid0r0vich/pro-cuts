@@ -12,10 +12,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.sidor.procuts.data.paramNameList
+import com.sidor.procuts.data.paramsList
+import com.sidor.procuts.data.questionList
 import com.sidor.procuts.ui.screens.CutQuestionnaireFirstScreen
-import com.sidor.procuts.ui.screens.CutQuestionnaireSecondScreen
-import com.sidor.procuts.ui.screens.CutQuestionnaireThirdScreen
+import com.sidor.procuts.ui.screens.CutQuestionnaireLastScreen
+import com.sidor.procuts.ui.screens.CutQuestionnaireScreenWithSeveralAnswerOption
 import com.sidor.procuts.ui.viewmodels.CutQuestionnaireScreenType
 import com.sidor.procuts.ui.viewmodels.CutQuestionnaireViewModel
 
@@ -39,44 +43,53 @@ fun CutQuestionnaireRoute(
             }
         }
     ) { screenType ->
+        val onNextQuestion = {
+            isNavigatingForward = true
+            viewModel.navigateNext()
+        }
+        val onBackQuestion = {
+            isNavigatingForward = false
+            viewModel.navigateBack()
+        }
+
+
         when (screenType) {
             CutQuestionnaireScreenType.DateName -> CutQuestionnaireFirstScreen(
-                onNext = {
-                    isNavigatingForward = true
-                    viewModel.navigateParameters()
-                         },
-                onBack = {
-                    isNavigatingForward = false
-                    onBack()
-                },
+                onNext = onNextQuestion,
+                onBack = onBack,
                 onDateChange = { date -> viewModel.setDate(date) },
-                onNameChange = { cutName -> viewModel.setCutName(cutName) }
+                onNameChange = { cutName -> viewModel.setParam("cutName", cutName) },
+                value = viewModel.getParam("cutName"),
+                date = viewModel.getDate()
             )
 
-            CutQuestionnaireScreenType.Parameters -> CutQuestionnaireSecondScreen(
-                onNext = {
-                    isNavigatingForward = true
-                    viewModel.navigateAdd()
-                },
+            CutQuestionnaireScreenType.Add -> CutQuestionnaireLastScreen(
                 onBack = {
                     isNavigatingForward = false
-                    viewModel.navigateDateName()
-                },
-                onCutFrequencyChange = { cutFrequency -> viewModel.setCutFrequency(cutFrequency) }
-            )
-
-            CutQuestionnaireScreenType.Add -> CutQuestionnaireThirdScreen(
-                onBack = {
-                    isNavigatingForward = false
-                    viewModel.navigateParameters()
+                    viewModel.navigateBack()
                 },
                 onAddCut = {
                     viewModel.addCut()
                     isNavigatingForward = true
                     onBack()
-                    viewModel.navigateDateName()
+                    viewModel.navigateNext()
                 },
             )
+
+            else -> {
+                val index = screenType.ordinal - 1
+                CutQuestionnaireScreenWithSeveralAnswerOption(
+                    onBack = onBackQuestion,
+                    onNext = onNextQuestion,
+                    text = stringResource(questionList[index]),
+                    name = stringResource(paramNameList[index]),
+                    defaultValue = viewModel.getParam(CutQuestionnaireViewModel.paramNames[index]),
+                    onValueChange = { value ->
+                        viewModel.setParam(CutQuestionnaireViewModel.paramNames[index], value)
+                    },
+                    valuesList = paramsList[index].map { stringResource(it) }
+                )
+            }
         }
     }
 }
