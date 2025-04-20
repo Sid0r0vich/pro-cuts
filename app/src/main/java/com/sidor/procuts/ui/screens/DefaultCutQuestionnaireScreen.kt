@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sidor.procuts.R
+import com.sidor.procuts.ui.PaddingSpaces
 import com.sidor.procuts.ui.QuestionnaireDropdownMenu
 import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
 
@@ -36,9 +37,7 @@ fun DefaultCutQuestionnaireScreen(
     ) {
         DefaultPaddingScreenWithQuestionnaireButtons(
             onNext = onNext,
-            onBack = onBack,
-            horizontalSpaceCount = 2,
-            verticalSpaceCount = 2,
+            paddingSpaces = PaddingSpaces(horizontal = 2, top = 2, bottom = 1),
             enabled = enabled
         ) {
             content()

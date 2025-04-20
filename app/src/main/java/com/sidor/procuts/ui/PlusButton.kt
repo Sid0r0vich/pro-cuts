@@ -34,7 +34,8 @@ fun PlusButton(
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
-        shape = RectangleShape
+        shape = RectangleShape,
+        elevation = ButtonDefaults.buttonElevation(4.dp)
     ) {
         Icon(
             imageVector = Icons.Default.Add,

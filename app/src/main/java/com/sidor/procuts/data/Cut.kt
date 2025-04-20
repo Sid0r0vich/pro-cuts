@@ -5,6 +5,7 @@ import java.util.Date
 data class CutDate(
     val cutId: Int,
     val date: Date,
+    val cutParams: Map<String, String>
 )
 
 data class Cut(

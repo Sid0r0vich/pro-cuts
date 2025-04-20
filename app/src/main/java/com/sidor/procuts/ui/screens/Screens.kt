@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.sidor.procuts.R
 import com.sidor.procuts.ui.LocalBoardPadding
-import com.sidor.procuts.ui.LocalGridPadding
+import com.sidor.procuts.ui.PaddingSpaces
 
 @Composable
 fun PaddingProviderScreen(
@@ -35,9 +35,9 @@ fun PaddingProviderScreen(
     content: @Composable () -> Unit = {}
 ) {
     val gridPadding: Dp = 10.dp
-    val boardPadding: Dp = 20.dp
+    val boardPadding: Dp = 10.dp
 
-    CompositionLocalProvider(LocalGridPadding provides gridPadding, LocalBoardPadding provides boardPadding) {
+    CompositionLocalProvider(LocalBoardPadding provides gridPadding, LocalBoardPadding provides boardPadding) {
         Box(
             modifier = modifier
                 .fillMaxSize()
@@ -50,15 +50,14 @@ fun PaddingProviderScreen(
 @Composable
 fun PaddingScreen(
     modifier: Modifier = Modifier,
-    verticalSpaceCount: Int = 2,
-    horizontalSpaceCount: Int = 2,
+    paddingSpaces: PaddingSpaces,
     verticalArrangement: Arrangement.Vertical = Arrangement.Top,
     content: @Composable ColumnScope.() -> Unit = {},
 ) {
     Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = LocalGridPadding.current * horizontalSpaceCount, vertical = LocalGridPadding.current * verticalSpaceCount)
+            .padding(paddingSpaces.toPaddingValues(LocalBoardPadding.current))
     ) {
         Column(
             verticalArrangement = verticalArrangement,
@@ -70,64 +69,54 @@ fun PaddingScreen(
 }
 
 @Composable
-fun PaddingScreenWithQuestionnaireButtons(
-    questionnaireButtons: @Composable () -> Unit,
+fun PaddingScreenWithBottomButtons(
+    buttons: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    verticalSpaceCount: Int = 2,
-    horizontalSpaceCount: Int = 2,
+    paddingSpaces: PaddingSpaces,
     verticalArrangement: Arrangement.Vertical = Arrangement.SpaceBetween,
     content: @Composable ColumnScope.() -> Unit = {}
 ) {
     PaddingScreen(
         modifier = modifier,
-        verticalSpaceCount = verticalSpaceCount,
-        horizontalSpaceCount = horizontalSpaceCount,
+        paddingSpaces = paddingSpaces,
         verticalArrangement = verticalArrangement,
     ) {
         Column(
         ) {
             content()
         }
-        questionnaireButtons()
+        buttons()
     }
 }
 
 @Composable
 fun DefaultPaddingScreenWithQuestionnaireButtons(
     onNext: () -> Unit,
-    onBack: () -> Unit,
     modifier: Modifier = Modifier,
-    verticalSpaceCount: Int = 2,
-    horizontalSpaceCount: Int = 2,
+    paddingSpaces: PaddingSpaces,
     enabled: Boolean = true,
     content: @Composable ColumnScope.() -> Unit = {}
 ) {
-    PaddingScreenWithQuestionnaireButtons(
-        questionnaireButtons = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
+    PaddingScreenWithBottomButtons(
+        buttons = {
+            Button(
+                onClick = onNext,
+                shape = RectangleShape,
+                modifier = Modifier.fillMaxWidth(),
+                enabled = enabled
             ) {
-                Button(
-                    onClick = onNext,
-                    shape = RectangleShape,
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = enabled
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = stringResource(R.string.next))
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                            contentDescription = null,
-                            modifier = Modifier.padding(start = 4.dp)
-                        )
-                    }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(text = stringResource(R.string.next))
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                        contentDescription = null,
+                        modifier = Modifier.padding(start = 4.dp)
+                    )
                 }
             }
         },
         modifier = modifier,
-        verticalSpaceCount = verticalSpaceCount,
-        horizontalSpaceCount = horizontalSpaceCount,
+        paddingSpaces = paddingSpaces,
         content = content,
     )
 }
@@ -159,19 +148,12 @@ fun LazyScreen(
 
 @Composable
 fun LazyPaddingScreen(
-    verticalSpaceCount: Int = 2,
-    horizontalSpaceCount: Int = 2,
+    paddingSpaces: PaddingSpaces = PaddingSpaces(0),
     content: LazyListScope.() -> Unit = {}
 ) {
     LazyColumn(
-        contentPadding = PaddingValues(horizontal = LocalGridPadding.current * horizontalSpaceCount)
+        contentPadding = paddingSpaces.toPaddingValues(LocalBoardPadding.current)
     ) {
-        item {
-            DefaultSpacer(verticalSpaceCount)
-        }
         content()
-        item {
-            DefaultSpacer(verticalSpaceCount)
-        }
     }
 }

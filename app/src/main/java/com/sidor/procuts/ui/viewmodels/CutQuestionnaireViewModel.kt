@@ -5,23 +5,12 @@ import androidx.lifecycle.ViewModel
 import com.sidor.procuts.data.CutDate
 import com.sidor.procuts.data.cutDatesList
 import com.sidor.procuts.data.cutNamesToId
+import com.sidor.procuts.ui.screens.screentypes.CutQuestionnaireScreenType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.Date
 import kotlin.math.max
 import kotlin.math.min
-
-enum class CutQuestionnaireScreenType {
-    DateName,
-    Age,
-    CutFrequency,
-    HeadForm,
-    HairStruct,
-    HairThickness,
-    HairLen,
-    ScalpType,
-    Add
-}
 
 open class CutQuestionnaireViewModel : ViewModel() {
     data class UiState(
@@ -53,32 +42,21 @@ open class CutQuestionnaireViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(screenType = screenType)
     }
 
-    fun navigateNext() {
-        val next = min(_uiState.value.screenType.ordinal + 1, CutQuestionnaireScreenType.entries.size - 1)
-        navigate(CutQuestionnaireScreenType.entries[next])
+    fun getNextScreen(cutQuestionnaireScreenType: CutQuestionnaireScreenType): CutQuestionnaireScreenType {
+        val next = (cutQuestionnaireScreenType.ordinal + 1) % CutQuestionnaireScreenType.entries.size
+        return CutQuestionnaireScreenType.entries[next]
     }
 
-    fun navigateBack() {
-        var next = max(_uiState.value.screenType.ordinal - 1, 0)
-        navigate(CutQuestionnaireScreenType.entries[next])
+    fun getPrevScreen(cutQuestionnaireScreenType: CutQuestionnaireScreenType): CutQuestionnaireScreenType {
+        var next = cutQuestionnaireScreenType.ordinal - 1
+        if (next < 0) next += CutQuestionnaireScreenType.entries.size
+        return CutQuestionnaireScreenType.entries[next]
     }
 
     fun addCut() {
         val cutId = cutNamesToId[getParam("cutName")]
         if (cutId != null) {
-            cutDatesList.add(CutDate(cutId = cutId, date = uiState.value.date))
+            cutDatesList[cutDatesList.size] = CutDate(cutId = cutId, date = uiState.value.date, cutParams = uiState.value.paramsMap)
         }
-    }
-
-    companion object {
-        val paramNames = listOf(
-            "cutFrequency",
-            "age",
-            "headForm",
-            "hairStruct",
-            "hairThickness",
-            "hairLen",
-            "scalpType"
-        )
     }
 }

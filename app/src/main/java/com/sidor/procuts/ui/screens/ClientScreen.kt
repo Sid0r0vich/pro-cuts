@@ -9,6 +9,7 @@ import com.sidor.procuts.data.Client
 import com.sidor.procuts.data.CutDate
 import com.sidor.procuts.data.caresList
 import com.sidor.procuts.data.cutDatesList
+import com.sidor.procuts.ui.PaddingSpaces
 import com.sidor.procuts.ui.TextWithPlusButton
 import com.sidor.procuts.ui.screens.cards.ClientCard
 import com.sidor.procuts.ui.screens.items.VisitItem
@@ -19,7 +20,7 @@ import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
 fun ClientScreen(
     client: Client?,
     onBack: () -> Unit,
-    onVisitClick: (CutDate) -> Unit,
+    onVisitClick: (Pair<Int, CutDate>) -> Unit,
     onAddCutClick: () -> Unit,
     onAddCareClick: () -> Unit
 ) {
@@ -32,8 +33,7 @@ fun ClientScreen(
         },
     ) {
         LazyPaddingScreen(
-            horizontalSpaceCount = 4,
-            verticalSpaceCount = 2,
+            paddingSpaces = PaddingSpaces(2)
         ) {
             if (client != null) {
                 item {
@@ -47,10 +47,10 @@ fun ClientScreen(
                         onClick = onAddCutClick
                     )
                 }
-                cutDatesList.forEach { date ->
+                cutDatesList.forEach { (cutId, date) ->
                     item {
                         DefaultSpacer(1)
-                        VisitItem(date = date.date, onClick = { onVisitClick(date) })
+                        VisitItem(date = date.date, onClick = { onVisitClick(Pair(cutId, date)) })
                     }
                 }
                 item {

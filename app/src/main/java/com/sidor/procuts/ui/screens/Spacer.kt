@@ -5,11 +5,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.sidor.procuts.ui.LocalGridPadding
+import com.sidor.procuts.ui.LocalBoardPadding
 
 @Composable
 fun DefaultSpacer(spaceCount: Int = 1) {
-    Spacer(modifier = Modifier.size((spaceCount * LocalGridPadding.current.value).dp))
+    Spacer(modifier = Modifier.size((spaceCount * LocalBoardPadding.current.value).dp))
 }
 
 @Composable

@@ -3,6 +3,7 @@ package com.sidor.procuts.ui.screens
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -14,8 +15,11 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import com.sidor.procuts.R
 import com.sidor.procuts.data.cutNamesToId
+import com.sidor.procuts.data.nameToLabelId
 import com.sidor.procuts.ui.DatePickerDocked
+import com.sidor.procuts.ui.PaddingSpaces
 import com.sidor.procuts.ui.QuestionnaireDropdownMenu
+import com.sidor.procuts.ui.TextWithBoldField
 import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
 import java.util.Date
 
@@ -64,7 +68,8 @@ fun CutQuestionnaireFirstScreen(
 @Composable
 fun CutQuestionnaireLastScreen(
     onBack: () -> Unit,
-    onAddCut: () -> Unit
+    onAddCut: () -> Unit,
+    cutParams: Map<String, String>
 ) {
     TopAppBarScreen(
         topBar = {
@@ -74,17 +79,27 @@ fun CutQuestionnaireLastScreen(
             )
         },
     ) {
-        PaddingScreen(
-            horizontalSpaceCount = 4,
-            verticalSpaceCount = 2,
+        LazyPaddingScreen(
+            paddingSpaces = PaddingSpaces(2)
         ) {
-            DefaultSpacer(2)
-            Button(
-                onClick = onAddCut,
-                modifier = Modifier.fillMaxWidth(),
-                shape = RectangleShape
-            ) {
-                Text(stringResource(R.string.create_haircut))
+            cutParams.forEach { (param, value) ->
+                item {
+                    TextWithBoldField(
+                        field = stringResource(nameToLabelId[param] ?: R.string.none),
+                        value = value,
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                }
+            }
+            item {
+                DefaultSpacer(2)
+                Button(
+                    onClick = onAddCut,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RectangleShape
+                ) {
+                    Text(stringResource(R.string.create_haircut))
+                }
             }
         }
     }

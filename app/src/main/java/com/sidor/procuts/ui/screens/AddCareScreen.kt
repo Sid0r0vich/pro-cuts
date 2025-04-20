@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.sidor.procuts.R
 import com.sidor.procuts.ui.CareForm
+import com.sidor.procuts.ui.PaddingSpaces
 import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -22,8 +23,7 @@ fun AddCareScreen(
         },
     ) {
         LazyPaddingScreen(
-            horizontalSpaceCount = 4,
-            verticalSpaceCount = 2,
+            paddingSpaces = PaddingSpaces(vertical = 2)
         ) {
 
         }

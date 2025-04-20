@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.sidor.procuts.R
 import com.sidor.procuts.data.Cut
+import com.sidor.procuts.ui.PaddingSpaces
 import com.sidor.procuts.ui.screens.cards.CutCard
 import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
 
@@ -23,8 +24,7 @@ fun CutScreen(
             },
     ) {
         LazyPaddingScreen(
-            horizontalSpaceCount = 2,
-            verticalSpaceCount = 2,
+            paddingSpaces = PaddingSpaces(2)
         ) {
             item {
                 CutCard(cut)

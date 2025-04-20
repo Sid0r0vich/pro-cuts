@@ -29,13 +29,16 @@ var cutNamesToId = allCuts.entries.associate { (key, value) -> value.name to key
 val readableDMYDateFormat = SimpleDateFormat("dd MMMM yyyy")
 var DMYDateFormat = SimpleDateFormat("dd-MM-yyyy")
 
-var cutDatesList: MutableList<CutDate> = mutableListOf(
+var cutDatesList = mutableListOf(
     "31-12-2022",
     "31-12-2023",
     "28-11-2024",
     "19-04-2025"
-).map { date -> DMYDateFormat.parse(date)!! }
-    .map { date -> CutDate(allCuts.toList().random().second.id, date) } as MutableList<CutDate>
+)
+    .map { date -> DMYDateFormat.parse(date)!! }
+    .withIndex()
+    .associate { (index, date) -> index to CutDate(allCuts.toList().random().second.id, date, mapOf()) }
+    .toMutableMap()
 
 var caresList = listOf(
     "29-12-2022",
@@ -46,144 +49,146 @@ var caresList = listOf(
 
 
 val ageGroupList = listOf(
-    R.string.age_0_12,
-    R.string.age_13_17,
-    R.string.age_18_25,
-    R.string.age_26_35,
-    R.string.age_36_45,
-    R.string.age_46_,
+    R.string.age_group_0_12,
+    R.string.age_group_13_17,
+    R.string.age_group_18_25,
+    R.string.age_group_26_35,
+    R.string.age_group_36_45,
+    R.string.age_group_46_plus
 )
 
 val cutFrequencyList = listOf(
-    R.string.weekly,
-    R.string.evere_two_weeks,
-    R.string.monthly,
-    R.string.more_rarely
+    R.string.cut_frequency_weekly,
+    R.string.cut_frequency_every_two_weeks,
+    R.string.cut_frequency_monthly,
+    R.string.cut_frequency_more_rarely
 )
 
 val headFormList = listOf(
-    R.string.circle,
-    R.string.oval,
-    R.string.square,
-    R.string.heart,
-    R.string.triangle,
-    R.string.diamond,
-    R.string.oblong
+    R.string.head_form_circle,
+    R.string.head_form_oval,
+    R.string.head_form_square,
+    R.string.head_form_heart,
+    R.string.head_form_triangle,
+    R.string.head_form_diamond,
+    R.string.head_form_oblong
 )
 
 val hairStructList = listOf(
-    R.string.straight,
-    R.string.wavy,
-    R.string.curly,
-    R.string.spiral
+    R.string.hair_structure_straight,
+    R.string.hair_structure_wavy,
+    R.string.hair_structure_curly,
+    R.string.hair_structure_spiral
 )
 
 val hairThicknessList = listOf(
-    R.string.low,
-    R.string.medium,
-    R.string.high
+    R.string.hair_thickness_low,
+    R.string.hair_thickness_medium,
+    R.string.hair_thickness_high
 )
 
 val hairLenList = listOf(
-    R.string.short_len,
-    R.string.medium,
-    R.string.long_len
+    R.string.hair_length_short,
+    R.string.hair_length_medium,
+    R.string.hair_length_long
 )
 
 val scalpTypeList = listOf(
-    R.string.dry,
-    R.string.normal,
-    R.string.oily,
-    R.string.sensitive
+    R.string.scalp_type_dry,
+    R.string.scalp_type_normal,
+    R.string.scalp_type_oily,
+    R.string.scalp_type_sensitive
 )
 
 val hairDamageLevelList = listOf(
-    R.string.healthy,
-    R.string.slightly_damaged,
-    R.string.severely_damaged
+    R.string.hair_damage_level_healthy,
+    R.string.hair_damage_level_slightly_damaged,
+    R.string.hair_damage_level_severely_damaged
 )
 
 val chemicalProceduresList = listOf(
-    R.string.coloring,
-    R.string.highlighting,
-    R.string.straightening,
-    R.string.none
+    R.string.chemical_procedure_coloring,
+    R.string.chemical_procedure_highlighting,
+    R.string.chemical_procedure_straightening,
+    R.string.chemical_procedure_none
 )
 
 val washingFrequencyList = listOf(
-    R.string.daily,
-    R.string.every_other_day,
-    R.string.two_to_three_times_a_week,
-    R.string.less_frequently
+    R.string.washing_frequency_daily,
+    R.string.washing_frequency_every_other_day,
+    R.string.washing_frequency_two_to_three_times_a_week,
+    R.string.washing_frequency_less_frequently
 )
 
 val averageStylingTimeList = listOf(
-    R.string.blonde,
-    R.string.brunette,
-    R.string.black_haired,
-    R.string.ginger
+    R.string.hair_color_blonde,
+    R.string.hair_color_brunette,
+    R.string.hair_color_black_haired,
+    R.string.hair_color_ginger
 )
 
 val stylingToolsList = listOf(
-    R.string.hair_dryer,
-    R.string.flat_iron,
-    R.string.curling_iron,
-    R.string.brush
+    R.string.styling_tool_hair_dryer,
+    R.string.styling_tool_flat_iron,
+    R.string.styling_tool_curling_iron,
+    R.string.styling_tool_brush
 )
 
 val lifestyleList = listOf(
-    R.string.sporty,
-    R.string.business,
-    R.string.calm,
-    R.string.creative
+    R.string.lifestyle_sporty,
+    R.string.lifestyle_business,
+    R.string.lifestyle_calm,
+    R.string.lifestyle_creative
 )
 
 val temperamentStyleList = listOf(
-    R.string.experimentalist,
-    R.string.minimalist,
-    R.string.conservative
+    R.string.temperament_experimentalist,
+    R.string.temperament_minimalist,
+    R.string.temperament_conservative
 )
 
 val hairColorList = listOf(
-    R.string.blonde,
-    R.string.brunette,
-    R.string.black_haired,
-    R.string.ginger
+    R.string.hair_color_blonde,
+    R.string.hair_color_brunette,
+    R.string.hair_color_black_haired,
+    R.string.hair_color_ginger
 )
 
 val bodyTypeList = listOf(
-    R.string.thin,
-    R.string.average,
-    R.string.sporty,
-    R.string.plump
+    R.string.body_type_thin,
+    R.string.body_type_average,
+    R.string.body_type_sporty,
+    R.string.body_type_plump
 )
 
-val paramNameList = listOf(
-    R.string.client_age_group,
-    R.string.cut_frequency,
-    R.string.cut_head_form,
-    R.string.cut_hair_struct,
-    R.string.cut_hair_thickness,
-    R.string.cut_hair_len,
-    R.string.cut_scalp_type
+val hairCareRoutineList = listOf(
+    R.string.hair_care_shampoo,
+    R.string.hair_care_conditioner,
+    R.string.hair_care_none
 )
 
-val questionList = listOf(
-    R.string.question_age_group,
-    R.string.question_cut_frequency,
-    R.string.question_head_form,
-    R.string.question_hair_struct,
-    R.string.question_hair_thickness,
-    R.string.question_hair_len,
-    R.string.question_scalp_type
+val preferredStylesList = listOf(
+    R.string.style_straight,
+    R.string.style_curly,
+    R.string.style_none
 )
 
-val paramsList = listOf(
-    ageGroupList,
-    cutFrequencyList,
-    headFormList,
-    hairStructList,
-    hairThicknessList,
-    hairLenList,
-    scalpTypeList
+val allergiesList = listOf(
+    R.string.allergy_nuts,
+    R.string.allergy_perfume,
+    R.string.allergy_none
 )
+
+val productUsageList = listOf(
+    R.string.product_usage_weekly,
+    R.string.product_usage_on_wet_hair,
+    R.string.product_usage_none
+)
+
+val nameToLabelId = cutQuestionnaireScreenInfoLists
+    .associate { screen ->
+        screen.paramName to screen.paramLabelId
+    }.toMutableMap()
+    .also {
+        it["cutName"] = R.string.cut_name
+    }

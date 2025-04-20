@@ -4,30 +4,21 @@ import androidx.lifecycle.ViewModel
 import com.sidor.procuts.data.Client
 import com.sidor.procuts.data.Cut
 import com.sidor.procuts.data.CutDate
-import com.sidor.procuts.data.allCuts
 import com.sidor.procuts.data.cliensList
 import com.sidor.procuts.data.cutDatesList
 import com.sidor.procuts.data.cutNamesToId
 import com.sidor.procuts.ui.CutForm
+import com.sidor.procuts.ui.screens.screentypes.HomeScreenType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-
-enum class HomeScreenType {
-    Home,
-    Client,
-    AddClient,
-    Cut,
-    AddCut,
-    AddCare,
-    Visit,
-}
 
 open class HomeViewModel : ViewModel() {
     data class UiState(
         val screenType: HomeScreenType,
         val client: Client? = null,
-        val visit: CutDate? = null,
-        val cut: Cut? = null
+        val cutDate: CutDate? = null,
+        val cut: Cut? = null,
+        val cutId: Int? = null
     )
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState(HomeScreenType.Home))
@@ -38,11 +29,15 @@ open class HomeViewModel : ViewModel() {
     }
 
     fun setVisit(visit: CutDate) {
-        _uiState.value = _uiState.value.copy(visit = visit)
+        _uiState.value = _uiState.value.copy(cutDate = visit)
     }
 
     fun setCut(cut: Cut) {
         _uiState.value = _uiState.value.copy(cut = cut)
+    }
+
+    fun setCutId(cutId: Int) {
+        _uiState.value = _uiState.value.copy(cutId = cutId)
     }
 
     fun navigate(screenType: HomeScreenType) {
@@ -50,6 +45,7 @@ open class HomeViewModel : ViewModel() {
     }
 
     fun navigateHome() = navigate(HomeScreenType.Home)
+    fun navigateClients() = navigate(HomeScreenType.Clients)
     fun navigateClient() = navigate(HomeScreenType.Client)
     fun navigateAddClient() = navigate(HomeScreenType.AddClient)
     fun navigateVisit() = navigate(HomeScreenType.Visit)
@@ -63,7 +59,7 @@ open class HomeViewModel : ViewModel() {
 
     fun addCut(cutForm: CutForm): Boolean {
         cutNamesToId[cutForm.name]?.let { cutId ->
-            cutDatesList.add(CutDate(cutId = cutId, date = cutForm.date))
+            cutDatesList[cutDatesList.size] = CutDate(cutId = cutId, date = cutForm.date, cutParams = cutForm.cutParams)
             return true
         }
 
