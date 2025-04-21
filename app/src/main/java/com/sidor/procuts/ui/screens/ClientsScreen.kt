@@ -21,12 +21,10 @@ import com.sidor.procuts.ui.PaddingSpaces
 import com.sidor.procuts.ui.TextWithPlusButton
 import com.sidor.procuts.ui.screens.items.ClientItem
 import com.sidor.procuts.ui.screens.topbars.ClientsTopAppBar
-import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
 
 
 @Composable
 fun ClientsScreen(
-    modifier: Modifier = Modifier,
     onBack: () -> Unit,
     onClientClick: (Client) -> Unit,
     onAddClientClick: () -> Unit
@@ -54,6 +52,7 @@ fun ClientsScreen(
         }
 
         val filteredClientNameList = cliensList
+            .map { (_, client) -> client }
             .filter { client -> if (searchText.isNotEmpty()) client.getFullName().lowercase().contains(searchText.lowercase()) else true }
 
         filteredClientNameList

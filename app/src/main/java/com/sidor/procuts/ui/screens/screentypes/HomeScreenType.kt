@@ -5,6 +5,7 @@ enum class HomeScreenType {
     Clients,
     Client,
     AddClient,
+    EditClient,
     Cut,
     AddCut,
     AddCare,

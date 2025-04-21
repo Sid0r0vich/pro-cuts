@@ -1,7 +1,6 @@
 package com.sidor.procuts.ui
 
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -20,32 +19,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.sidor.procuts.R
-import android.content.ContentResolver
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import androidx.compose.ui.platform.LocalContext
-import java.io.ByteArrayOutputStream
-
-fun loadImageAsByteArray(contentResolver: ContentResolver, uri: Uri): ByteArray? {
-    val bitmap = contentResolver.openInputStream(uri)?.use { inputStream ->
-        BitmapFactory.decodeStream(inputStream)
-    }
-
-    return bitmap?.let {
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        it.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
-        byteArrayOutputStream.toByteArray()
-    }
-}
+import com.sidor.procuts.utils.getPainterFromByteArray
+import com.sidor.procuts.utils.loadImageAsByteArray
 
 @Composable
 fun ImagePicker(
+    clientImage: ByteArray? = null,
     onImageLoad: (ByteArray) -> Unit
 ) {
+    val painter = clientImage?.let { getPainterFromByteArray(it) }
     var imageUri: Uri? by remember { mutableStateOf(null) }
 
     val context = LocalContext.current
@@ -65,10 +52,9 @@ fun ImagePicker(
             .size(100.dp),
         contentAlignment = Alignment.Center
     ) {
-        if (imageUri != null) {
-            Log.d("NOTNULL", "NOTNULL")
+        if (imageUri != null || painter != null) {
             Image(
-                painter = rememberAsyncImagePainter(imageUri),
+                painter = if (imageUri != null) rememberAsyncImagePainter(imageUri) else painter!!,
                 contentDescription = stringResource(R.string.client_photo),
                 modifier = Modifier.fillMaxSize()
             )

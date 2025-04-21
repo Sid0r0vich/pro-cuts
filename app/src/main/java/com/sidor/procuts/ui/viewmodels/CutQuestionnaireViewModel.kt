@@ -1,6 +1,5 @@
 package com.sidor.procuts.ui.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.sidor.procuts.data.CutDate
 import com.sidor.procuts.data.cutDatesList
@@ -9,14 +8,12 @@ import com.sidor.procuts.ui.screens.screentypes.CutQuestionnaireScreenType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.Date
-import kotlin.math.max
-import kotlin.math.min
 
 open class CutQuestionnaireViewModel : ViewModel() {
     data class UiState(
         val screenType: CutQuestionnaireScreenType,
         val date: Date = Date(),
-        val paramsMap: MutableMap<String, String> = mutableMapOf()
+        var paramsMap: MutableMap<String, String> = mutableMapOf()
     )
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState(CutQuestionnaireScreenType.DateName))
@@ -56,7 +53,8 @@ open class CutQuestionnaireViewModel : ViewModel() {
     fun addCut() {
         val cutId = cutNamesToId[getParam("cutName")]
         if (cutId != null) {
-            cutDatesList[cutDatesList.size] = CutDate(cutId = cutId, date = uiState.value.date, cutParams = uiState.value.paramsMap)
+            cutDatesList[cutDatesList.size] = CutDate(cutId = cutId, date = _uiState.value.date, cutParams = _uiState.value.paramsMap)
+            _uiState.value.paramsMap = mutableMapOf()
         }
     }
 }

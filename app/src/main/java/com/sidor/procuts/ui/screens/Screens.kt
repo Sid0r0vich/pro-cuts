@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.sidor.procuts.R
 import com.sidor.procuts.ui.LocalBoardPadding
 import com.sidor.procuts.ui.PaddingSpaces
+import com.sidor.procuts.ui.theme.LocalColorPalette
 
 @Composable
 fun PaddingProviderScreen(
@@ -103,14 +104,17 @@ fun DefaultPaddingScreenWithQuestionnaireButtons(
                 onClick = onNext,
                 shape = RectangleShape,
                 modifier = Modifier.fillMaxWidth(),
-                enabled = enabled
+                enabled = enabled,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = LocalColorPalette.current.buttonColor
+                )
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(text = stringResource(R.string.next))
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                         contentDescription = null,
-                        modifier = Modifier.padding(start = 4.dp)
+                        modifier = Modifier.padding(start = 4.dp),
                     )
                 }
             }

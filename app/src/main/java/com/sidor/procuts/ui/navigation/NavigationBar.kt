@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
+import com.sidor.procuts.ui.theme.LocalColorPalette
 
 @Composable
 fun BottomNavigationBar(
@@ -18,7 +19,8 @@ fun BottomNavigationBar(
     onClick: (Route) -> Unit,
 ) {
     NavigationBar(
-        modifier = modifier
+        modifier = modifier,
+        containerColor = LocalColorPalette.current.barColor,
     ) {
         TOP_LEVEL_DESTINATIONS
             .onEachIndexed { index, item ->
@@ -28,11 +30,13 @@ fun BottomNavigationBar(
                             imageVector = item.selectedIcon,
                             contentDescription = null,
                             modifier = Modifier.size(25.dp),
+                            tint = LocalColorPalette.current.mainColor
                         )
                     },
                     label = {
                         Text(
-                            text = stringResource(item.iconTextId)
+                            text = stringResource(item.iconTextId),
+                            color = LocalColorPalette.current.mainColor
                         )
                     },
                     selected = TOP_LEVEL_DESTINATIONS.map { item -> item.route.toString() }.indexOf(

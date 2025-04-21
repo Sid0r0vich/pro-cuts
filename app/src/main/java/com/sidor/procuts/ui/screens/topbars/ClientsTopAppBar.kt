@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sidor.procuts.R
 import com.sidor.procuts.ui.screens.DefaultSpacer
+import com.sidor.procuts.ui.theme.LocalColorPalette
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,10 +52,10 @@ fun ClientsTopAppBar(
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = stringResource(R.string.button_back),
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = LocalColorPalette.current.mainColor
                 )
             }
-        },
+        }
     )
 }
 

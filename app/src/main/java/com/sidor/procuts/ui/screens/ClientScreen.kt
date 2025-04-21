@@ -1,6 +1,10 @@
 package com.sidor.procuts.ui.screens
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
@@ -14,6 +18,7 @@ import com.sidor.procuts.ui.TextWithPlusButton
 import com.sidor.procuts.ui.screens.cards.ClientCard
 import com.sidor.procuts.ui.screens.items.VisitItem
 import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
+import com.sidor.procuts.ui.theme.LocalColorPalette
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -22,12 +27,22 @@ fun ClientScreen(
     onBack: () -> Unit,
     onVisitClick: (Pair<Int, CutDate>) -> Unit,
     onAddCutClick: () -> Unit,
-    onAddCareClick: () -> Unit
+    onAddCareClick: () -> Unit,
+    onEditClientClick: () -> Unit
 ) {
     TopAppBarScreen(
         topBar = {
             TitleTopAppBar(
                 title = stringResource(R.string.client_tab_app_bar),
+                actions = {
+                    IconButton(onClick = onEditClientClick) {
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = stringResource(R.string.button_back),
+                            tint = LocalColorPalette.current.mainColor
+                        )
+                    }
+                },
                 onBack = onBack
             )
         },

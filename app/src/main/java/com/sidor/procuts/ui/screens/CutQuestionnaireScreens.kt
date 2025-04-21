@@ -2,6 +2,7 @@ package com.sidor.procuts.ui.screens
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,6 +22,7 @@ import com.sidor.procuts.ui.PaddingSpaces
 import com.sidor.procuts.ui.QuestionnaireDropdownMenu
 import com.sidor.procuts.ui.TextWithBoldField
 import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
+import com.sidor.procuts.ui.theme.LocalColorPalette
 import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -96,7 +98,10 @@ fun CutQuestionnaireLastScreen(
                 Button(
                     onClick = onAddCut,
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RectangleShape
+                    shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = LocalColorPalette.current.buttonColor
+                    )
                 ) {
                     Text(stringResource(R.string.create_haircut))
                 }

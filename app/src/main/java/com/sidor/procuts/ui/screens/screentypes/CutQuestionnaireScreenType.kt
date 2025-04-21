@@ -3,7 +3,7 @@ package com.sidor.procuts.ui.screens.screentypes
 enum class CutQuestionnaireScreenType {
     DateName,
     Age,
-    CutFrequency,
+//    CutFrequency,
 //    HeadForm,
 //    HairStruct,
 //    HairThickness,

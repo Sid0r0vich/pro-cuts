@@ -19,13 +19,13 @@ val cutQuestionnaireScreenInfoLists: List<CutQuestionnaireScreenInfo> = listOf(
         paramName = "age",
         screenType = CutQuestionnaireScreenType.Age
     ),
-    CutQuestionnaireScreenInfo(
-        paramLabelId = R.string.cut_frequency,
-        questionId = R.string.question_cut_frequency,
-        paramIdList = cutFrequencyList,
-        paramName = "cutFrequency",
-        screenType = CutQuestionnaireScreenType.CutFrequency
-    ),
+//    CutQuestionnaireScreenInfo(
+//        paramLabelId = R.string.cut_frequency,
+//        questionId = R.string.question_cut_frequency,
+//        paramIdList = cutFrequencyList,
+//        paramName = "cutFrequency",
+//        screenType = CutQuestionnaireScreenType.CutFrequency
+//    ),
 //    CutQuestionnaireScreenInfo(
 //        paramLabelId = R.string.cut_head_form,
 //        questionId = R.string.question_head_form,

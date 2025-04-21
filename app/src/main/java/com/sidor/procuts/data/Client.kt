@@ -1,6 +1,7 @@
 package com.sidor.procuts.data
 
 class Client(
+    val id: Int,
     val firstName: String,
     val lastName: String = "",
     val middleName: String? = null,

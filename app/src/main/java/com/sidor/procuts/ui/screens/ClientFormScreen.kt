@@ -4,6 +4,7 @@ package com.sidor.procuts.ui.screens
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,27 +21,84 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import com.sidor.procuts.R
 import com.sidor.procuts.data.Client
+import com.sidor.procuts.data.cliensList
 import com.sidor.procuts.ui.ImagePicker
 import com.sidor.procuts.ui.PaddingSpaces
 import com.sidor.procuts.ui.RectangleTextField
 import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
+import com.sidor.procuts.ui.theme.LocalColorPalette
 
-@OptIn(ExperimentalMaterial3Api::class)
+data class DefaultClientForm(
+    val clientId: Int,
+    val lastName: String,
+    val firstName: String,
+    val middleName: String?,
+    val noMiddleName: Boolean,
+    val clientPhoto: ByteArray?
+)
+
 @Composable
 fun AddClientScreen(
     onBack: () -> Unit,
     onAddClient: (Client) -> Unit
 ) {
-    var lastName by remember { mutableStateOf("") }
-    var firstName by remember { mutableStateOf("") }
-    var middleName by remember { mutableStateOf("") }
-    var noMiddleName by remember { mutableStateOf(false) }
-    var clientPhoto by remember { mutableStateOf<ByteArray?>(null) }
+    ClientFormScreen(
+        defaultClientForm = DefaultClientForm(
+            clientId = cliensList.size,
+            lastName = "",
+            firstName = "",
+            middleName = null,
+            noMiddleName = false,
+            clientPhoto = null
+        ),
+        topBarTitleText = stringResource(R.string.create_client_tab_app_bar),
+        buttonText = stringResource(R.string.create_client),
+        onBack = onBack,
+        onClickButton = onAddClient
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EditClientScreen(
+    onBack: () -> Unit,
+    client: Client?,
+    onEditClient: (Client) -> Unit
+) {
+    ClientFormScreen(
+        defaultClientForm = DefaultClientForm(
+            clientId = client?.id ?: cliensList.size,
+            lastName = client?.lastName ?: "",
+            firstName = client?.firstName ?: "",
+            middleName = client?.middleName,
+            noMiddleName = client != null && client.middleName == null,
+            clientPhoto = client?.photo
+        ),
+        topBarTitleText = stringResource(R.string.edit_client_tab_app_bar),
+        buttonText = stringResource(R.string.edit_client),
+        onBack = onBack,
+        onClickButton = onEditClient
+    )
+}
+
+@Composable
+fun ClientFormScreen(
+    defaultClientForm: DefaultClientForm,
+    topBarTitleText: String,
+    buttonText: String,
+    onBack: () -> Unit,
+    onClickButton: (Client) -> Unit
+) {
+    var lastName by remember { mutableStateOf(defaultClientForm.lastName) }
+    var firstName by remember { mutableStateOf(defaultClientForm.firstName) }
+    var middleName by remember { mutableStateOf<String?>(defaultClientForm.middleName) }
+    var noMiddleName by remember { mutableStateOf(defaultClientForm.noMiddleName) }
+    var clientPhoto by remember { mutableStateOf<ByteArray?>(defaultClientForm.clientPhoto) }
 
     TopAppBarScreen(
         topBar = {
             TitleTopAppBar(
-                title = stringResource(R.string.add_client_tab_app_bar),
+                title = topBarTitleText,
                 onBack = onBack
             )
         },
@@ -48,8 +106,9 @@ fun AddClientScreen(
         PaddingScreenWithBottomButtons(
             buttons = {
                 Button(
-                    onClick = { onAddClient(
+                    onClick = { onClickButton(
                         Client(
+                            id = defaultClientForm.clientId,
                             firstName = firstName,
                             lastName = lastName,
                             middleName = middleName,
@@ -57,10 +116,13 @@ fun AddClientScreen(
                         )
                     ) },
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = lastName.isNotBlank() && firstName.isNotBlank() && (noMiddleName || middleName.isNotBlank()),
-                    shape = RectangleShape
+                    enabled = lastName.isNotBlank() && firstName.isNotBlank() && (noMiddleName || !middleName.isNullOrEmpty()),
+                    shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = LocalColorPalette.current.buttonColor
+                    )
                 ) {
-                    Text(stringResource(R.string.create_client))
+                    Text(buttonText)
                 }
             },
             paddingSpaces = PaddingSpaces(horizontal = 2, vertical = 1)
@@ -81,7 +143,7 @@ fun AddClientScreen(
             DefaultSpacer()
             Row(verticalAlignment = Alignment.CenterVertically) {
                 RectangleTextField(
-                    value = middleName,
+                    value = middleName ?: "",
                     onValueChange = { middleName = it },
                     label = stringResource(R.string.middle_name),
                     modifier = Modifier.weight(1f),
@@ -92,7 +154,7 @@ fun AddClientScreen(
                     checked = noMiddleName,
                     onCheckedChange = {
                         noMiddleName = it
-                        if (it) middleName = ""
+                        if (it) middleName = null
                     },
                     colors = CheckboxDefaults.colors(
                         checkedColor = Color.Black
@@ -104,7 +166,10 @@ fun AddClientScreen(
             DefaultSpacer(2)
             Text(text = stringResource(R.string.photo))
             DefaultSpacer()
-            ImagePicker { clientPhoto = it }
+            ImagePicker(
+                clientImage = clientPhoto,
+                onImageLoad =  { clientPhoto = it }
+            )
         }
     }
 }

@@ -13,9 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import com.sidor.procuts.R
-import com.sidor.procuts.data.cutNamesToId
+import com.sidor.procuts.ui.theme.LocalColorPalette
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,14 +41,19 @@ fun QuestionnaireDropdownMenu(
                     expanded = expanded
                 )
             },
-            colors = ExposedDropdownMenuDefaults.textFieldColors(),
+            colors = ExposedDropdownMenuDefaults.textFieldColors(
+                focusedIndicatorColor = LocalColorPalette.current.darkFontColor,
+                focusedContainerColor = LocalColorPalette.current.mainColor,
+                unfocusedContainerColor = LocalColorPalette.current.mainColor
+            ),
             modifier = Modifier.fillMaxWidth().menuAnchor()
         )
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = {
                 expanded = false
-            }
+            },
+            containerColor = LocalColorPalette.current.cardColor
         ) {
             menuList.forEach { option ->
                 DropdownMenuItem(

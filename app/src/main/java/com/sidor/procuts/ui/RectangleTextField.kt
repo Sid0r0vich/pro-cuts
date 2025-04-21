@@ -6,8 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import com.sidor.procuts.ui.theme.LocalColorPalette
 
 @Composable
 fun RectangleTextField(
@@ -25,7 +25,10 @@ fun RectangleTextField(
         shape = RectangleShape,
         enabled = enabled,
         colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = Color.Black
+            focusedIndicatorColor = LocalColorPalette.current.darkFontColor,
+            focusedContainerColor = LocalColorPalette.current.mainColor,
+            unfocusedContainerColor = LocalColorPalette.current.mainColor,
+            disabledContainerColor = LocalColorPalette.current.disabledColor
         ),
     )
 }

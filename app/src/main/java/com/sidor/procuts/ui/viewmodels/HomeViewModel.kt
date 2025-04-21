@@ -5,9 +5,6 @@ import com.sidor.procuts.data.Client
 import com.sidor.procuts.data.Cut
 import com.sidor.procuts.data.CutDate
 import com.sidor.procuts.data.cliensList
-import com.sidor.procuts.data.cutDatesList
-import com.sidor.procuts.data.cutNamesToId
-import com.sidor.procuts.ui.CutForm
 import com.sidor.procuts.ui.screens.screentypes.HomeScreenType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -47,6 +44,7 @@ open class HomeViewModel : ViewModel() {
     fun navigateHome() = navigate(HomeScreenType.Home)
     fun navigateClients() = navigate(HomeScreenType.Clients)
     fun navigateClient() = navigate(HomeScreenType.Client)
+    fun navigateEditClient() = navigate(HomeScreenType.EditClient)
     fun navigateAddClient() = navigate(HomeScreenType.AddClient)
     fun navigateVisit() = navigate(HomeScreenType.Visit)
     fun navigateCut() = navigate(HomeScreenType.Cut)
@@ -54,16 +52,11 @@ open class HomeViewModel : ViewModel() {
     fun navigateAddCare() = navigate(HomeScreenType.AddCare)
 
     fun addClient(client: Client) {
-        cliensList.add(client)
+        cliensList[client.id] = client
     }
 
-    fun addCut(cutForm: CutForm): Boolean {
-        cutNamesToId[cutForm.name]?.let { cutId ->
-            cutDatesList[cutDatesList.size] = CutDate(cutId = cutId, date = cutForm.date, cutParams = cutForm.cutParams)
-            return true
-        }
-
-        return false
+    fun getClient(): Client? {
+        return _uiState.value.client
     }
 
     companion object {

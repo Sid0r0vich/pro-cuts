@@ -4,18 +4,20 @@ import com.sidor.procuts.R
 import java.text.SimpleDateFormat
 
 var cliensList = mutableListOf(
-    Client(firstName = "Jason", lastName = "Statham"),
-    Client(firstName = "Dwayne", middleName =  "Douglas", lastName =  "Johnson"),
-    Client(firstName = "Илья", middleName = "Игоревич", lastName =  "Муромцев"),
-    Client(firstName = "Дмитрий", middleName = "Сергеевич", lastName = "Шалымов"),
-    Client(firstName = "Владимир", lastName = "Путин"),
-    Client(firstName = "Евгений", lastName =  "Туаев"),
-    Client(firstName = "Роберт", lastName = "Смайт"),
-    Client(firstName = "Павел", lastName = "Скаков"),
-    Client(firstName = "Мистер", lastName = "Бист"),
-    Client(firstName = "Иван", lastName = "Иванов"),
-    Client(firstName = "Иван", lastName = "Петрухин"),
-)
+    Client(id = 0, firstName = "Jason", lastName = "Statham"),
+    Client(id = 1, firstName = "Dwayne", middleName =  "Douglas", lastName =  "Johnson"),
+    Client(id = 2, firstName = "Илья", middleName = "Игоревич", lastName =  "Муромцев"),
+    Client(id = 3, firstName = "Дмитрий", middleName = "Сергеевич", lastName = "Шалымов"),
+    Client(id = 4, firstName = "Владимир", lastName = "Путин"),
+    Client(id = 5, firstName = "Евгений", lastName =  "Туаев"),
+    Client(id = 6, firstName = "Роберт", lastName = "Смайт"),
+    Client(id = 7, firstName = "Павел", lastName = "Скаков"),
+    Client(id = 8, firstName = "Мистер", lastName = "Бист"),
+    Client(id = 9, firstName = "Иван", lastName = "Иванов"),
+    Client(id = 10, firstName = "Иван", lastName = "Петрухин"),
+).associate { client ->
+    client.id to client
+}.toMutableMap()
 
 val allCuts = mapOf(
     0 to Cut(0, "Classic", "Классическая модельная стрижка представляет собой длину волос около пяти сантиметров, при этом присутствуют в основном ровные линии. Такая стрижка выглядит сдержанно и аккуратно, отлично подходит деловым мужчинам и тем, которые не хотят чрезмерного внимания к своему внешнему виду.", R.drawable.classic),
@@ -121,10 +123,10 @@ val washingFrequencyList = listOf(
 )
 
 val averageStylingTimeList = listOf(
-    R.string.hair_color_blonde,
-    R.string.hair_color_brunette,
-    R.string.hair_color_black_haired,
-    R.string.hair_color_ginger
+    R.string.average_styling_time_a_couple_of_minutes,
+    R.string.average_styling_time_3_10_minutes,
+    R.string.average_styling_time_more_than_10_minutes,
+    R.string.average_styling_time_none,
 )
 
 val stylingToolsList = listOf(
