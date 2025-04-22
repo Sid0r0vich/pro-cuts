@@ -1,7 +1,13 @@
 package com.sidor.procuts.ui.screens.routes
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sidor.procuts.data.ClientDTO
 import com.sidor.procuts.data.ClientInfoDTO
@@ -20,6 +26,9 @@ import com.sidor.procuts.ui.screens.VisitScreen
 import com.sidor.procuts.ui.screens.screentypes.HomeCardScreenType
 import com.sidor.procuts.ui.screens.screentypes.HomeScreenType
 import com.sidor.procuts.ui.viewmodels.HomeViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 @Composable
 fun HomeRoute(
@@ -38,37 +47,51 @@ fun HomeRoute(
                 }
             }
         )
-        HomeScreenType.Clients -> ClientsScreen(
-            onBack = { viewModel.navigateHome() },
-            clients = viewModel
-                .getAllClients()
-                .map { clientFlow -> clientFlow.collectAsState().value },
-            onClientClick = { clientDTO: ClientDTO ->
-                viewModel.setClient(clientDTO)
-                viewModel.navigateClient()
-            },
-            onAddClientClick = { viewModel.navigateAddClient() }
-        )
-        HomeScreenType.Client -> ClientScreen(
-            clientDTO = viewModel.getClientDTO(),
-            cutDates = viewModel
-                .getClientCutDates()
-                .map { cutDateStateFlow -> cutDateStateFlow.collectAsState().value },
-            onBack = { viewModel.navigateClients() },
-            onVisitClick = { cutDateDTO: CutDateDTO ->
-                viewModel.setVisit(cutDateDTO)
-                viewModel.navigateVisit()
-            },
-            onAddCutClick = {
-                viewModel.navigateAddCut()
-            },
-            onAddCareClick = {
-                viewModel.navigateAddCare()
-            },
-            onEditClientClick = {
-                viewModel.navigateEditClient()
-            }
-        )
+        HomeScreenType.Clients -> {
+            var loadingIsCompleted by rememberSaveable { mutableStateOf(false) }
+
+            ClientsScreen(
+                onBack = { viewModel.navigateHome() },
+                clients = viewModel
+                    .getAllClients {
+                        loadingIsCompleted = true
+                    }
+                    .map { clientFlow -> clientFlow.collectAsState().value },
+                onClientClick = { clientDTO: ClientDTO ->
+                    viewModel.setClient(clientDTO)
+                    viewModel.navigateClient()
+                },
+                onAddClientClick = { viewModel.navigateAddClient() },
+                loadingIsCompleted = loadingIsCompleted
+            )
+        }
+        HomeScreenType.Client -> {
+            var loadingIsCompleted by rememberSaveable { mutableStateOf(false) }
+
+            ClientScreen(
+                clientDTO = viewModel.getClientDTO(),
+                cutDates = viewModel
+                    .getClientCutDates {
+                        loadingIsCompleted = true
+                    }
+                    .map { cutDateStateFlow -> cutDateStateFlow.collectAsState().value },
+                onBack = { viewModel.navigateClients() },
+                onVisitClick = { cutDateDTO: CutDateDTO ->
+                    viewModel.setVisit(cutDateDTO)
+                    viewModel.navigateVisit()
+                },
+                onAddCutClick = {
+                    viewModel.navigateAddCut()
+                },
+                onAddCareClick = {
+                    viewModel.navigateAddCare()
+                },
+                onEditClientClick = {
+                    viewModel.navigateEditClient()
+                },
+                loadingIsCompleted = loadingIsCompleted
+            )
+        }
         HomeScreenType.AddClient -> AddClientScreen(
             onBack = { viewModel.navigateClients() },
             onAddClient = { clientInfoDTO: ClientInfoDTO ->

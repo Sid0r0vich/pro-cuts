@@ -1,7 +1,5 @@
 package com.sidor.procuts.data
 
-
-
 class ClientDTO(
     val id: Int = -1,
     val firstName: String = "",
@@ -32,3 +30,5 @@ class ClientInfoDTO(
             phoneNumber = phoneNumber
         )
 }
+
+val defaultClientDTO= ClientDTO()

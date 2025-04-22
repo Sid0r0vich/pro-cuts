@@ -32,7 +32,8 @@ fun ClientScreen(
     onVisitClick: (CutDateDTO) -> Unit,
     onAddCutClick: () -> Unit,
     onAddCareClick: () -> Unit,
-    onEditClientClick: () -> Unit
+    onEditClientClick: () -> Unit,
+    loadingIsCompleted: Boolean
 ) {
     TopAppBarScreen(
         topBar = {
@@ -80,7 +81,10 @@ fun ClientScreen(
                 cutDates.forEach { cutDate ->
                     item {
                         DefaultSpacer(1)
-                        VisitItem(date = cutDate.date, onClick = { onVisitClick(cutDate) })
+                        VisitItem(
+                            date = cutDate.date, onClick = { onVisitClick(cutDate) },
+                            loadingIsCompleted = loadingIsCompleted
+                        )
                     }
                 }
                 item {

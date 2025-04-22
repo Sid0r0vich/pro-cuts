@@ -12,11 +12,13 @@ import java.util.Date
 fun VisitItem(
     modifier: Modifier = Modifier,
     date: Date,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
+    loadingIsCompleted: Boolean = true
 ) {
     DefaultItem(
         modifier = modifier,
         text = readableDMYDateFormat.format(date),
-        onClick = onClick
+        onClick = onClick,
+        loadingIsCompleted = loadingIsCompleted
     )
 }

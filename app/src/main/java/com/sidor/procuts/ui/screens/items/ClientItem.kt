@@ -17,11 +17,13 @@ import androidx.compose.ui.unit.dp
 fun ClientItem(
     name: String,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
+    loadingIsCompleted: Boolean = true
 ) {
     DefaultItem(
         modifier = modifier,
         text = name,
-        onClick = onClick
+        onClick = onClick,
+        loadingIsCompleted = loadingIsCompleted
     )
 }

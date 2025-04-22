@@ -33,7 +33,7 @@ private fun formatDefault(digits: String): String {
 
 @Composable
 fun ClientCard(
-    clientDTO: ClientDTO
+    clientDTO: ClientDTO,
 ) {
     val defaultPhoto = painterResource(R.drawable.default_user_avatar)
     val clientPhoto: Painter = getPainterFromByteArray(clientDTO.photo) ?: defaultPhoto

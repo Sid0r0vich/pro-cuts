@@ -2,7 +2,6 @@ package com.sidor.procuts.ui.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber
 import com.sidor.procuts.data.CutDateInfoDTO
 import com.sidor.procuts.data.cutNamesToId
 import com.sidor.procuts.ui.screens.screentypes.CutQuestionnaireScreenType

@@ -27,7 +27,8 @@ fun ClientsScreen(
     onBack: () -> Unit,
     clients: List<ClientDTO>,
     onClientClick: (ClientDTO) -> Unit,
-    onAddClientClick: () -> Unit
+    onAddClientClick: () -> Unit,
+    loadingIsCompleted: Boolean
 ) {
     var searchText by remember { mutableStateOf("") }
 
@@ -61,7 +62,8 @@ fun ClientsScreen(
                     Spacer(modifier = Modifier.height(LocalBoardPadding.current * 1))
                     ClientItem(
                         name = client.getFullName(),
-                        onClick = { onClientClick(client) }
+                        onClick = { onClientClick(client) },
+                        loadingIsCompleted = loadingIsCompleted
                     )
                 }
             }

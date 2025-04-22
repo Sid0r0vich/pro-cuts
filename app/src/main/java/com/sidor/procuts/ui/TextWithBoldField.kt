@@ -26,3 +26,22 @@ fun TextWithBoldField(
         style = style
     )
 }
+@Composable
+fun BlurTextWithBoldField(
+    loadingIsCompleted: Boolean,
+    field: String,
+    value: String,
+    style: TextStyle = LocalTextStyle.current
+) {
+    val text = buildAnnotatedString {
+        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+            append("$field: ")
+        }
+        append(value)
+    }
+    BlurText(
+        loadingIsCompleted = loadingIsCompleted,
+        text = text,
+        style = style
+    )
+}
