@@ -14,8 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.sidor.procuts.R
-import com.sidor.procuts.data.Client
-import com.sidor.procuts.data.cliensList
+import com.sidor.procuts.data.ClientDTO
 import com.sidor.procuts.ui.LocalBoardPadding
 import com.sidor.procuts.ui.PaddingSpaces
 import com.sidor.procuts.ui.TextWithPlusButton
@@ -26,7 +25,8 @@ import com.sidor.procuts.ui.screens.topbars.ClientsTopAppBar
 @Composable
 fun ClientsScreen(
     onBack: () -> Unit,
-    onClientClick: (Client) -> Unit,
+    clients: List<ClientDTO>,
+    onClientClick: (ClientDTO) -> Unit,
     onAddClientClick: () -> Unit
 ) {
     var searchText by remember { mutableStateOf("") }
@@ -51,8 +51,7 @@ fun ClientsScreen(
             )
         }
 
-        val filteredClientNameList = cliensList
-            .map { (_, client) -> client }
+        val filteredClientNameList = clients
             .filter { client -> if (searchText.isNotEmpty()) client.getFullName().lowercase().contains(searchText.lowercase()) else true }
 
         filteredClientNameList

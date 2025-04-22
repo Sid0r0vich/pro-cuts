@@ -18,15 +18,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.sidor.procuts.R
-import com.sidor.procuts.data.Client
+import com.sidor.procuts.data.ClientDTO
 import com.sidor.procuts.utils.getPainterFromByteArray
 
 @Composable
 fun ClientCard(
-    client: Client
+    clientDTO: ClientDTO
 ) {
     val defaultPhoto = painterResource(R.drawable.default_user_avatar)
-    val clientPhoto: Painter = getPainterFromByteArray(client.photo) ?: defaultPhoto
+    val clientPhoto: Painter = getPainterFromByteArray(clientDTO.photo) ?: defaultPhoto
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
@@ -40,7 +40,7 @@ fun ClientCard(
         )
         Spacer(modifier = Modifier.width(10.dp))
         Text(
-            text = client.getFullName(),
+            text = clientDTO.getFullName(),
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.titleLarge,
             textAlign = TextAlign.Center,

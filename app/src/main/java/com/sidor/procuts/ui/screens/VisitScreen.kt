@@ -5,8 +5,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.sidor.procuts.R
-import com.sidor.procuts.data.Cut
-import com.sidor.procuts.data.CutDate
+import com.sidor.procuts.data.CutDTO
+import com.sidor.procuts.data.CutDateDTO
 import com.sidor.procuts.data.allCuts
 import com.sidor.procuts.data.nameToLabelId
 import com.sidor.procuts.data.readableDMYDateFormat
@@ -18,9 +18,9 @@ import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VisitScreen(
-    visit: CutDate,
+    visit: CutDateDTO,
     onBack: () -> Unit,
-    onCutClick: (Cut) -> Unit,
+    onCutClick: (CutDTO) -> Unit,
     cutParams: Map<String, String>
 ) {
     TopAppBarScreen(

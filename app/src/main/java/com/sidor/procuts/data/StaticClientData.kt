@@ -3,52 +3,17 @@ package com.sidor.procuts.data
 import com.sidor.procuts.R
 import java.text.SimpleDateFormat
 
-var cliensList = mutableListOf(
-    Client(id = 0, firstName = "Jason", lastName = "Statham"),
-    Client(id = 1, firstName = "Dwayne", middleName =  "Douglas", lastName =  "Johnson"),
-    Client(id = 2, firstName = "Илья", middleName = "Игоревич", lastName =  "Муромцев"),
-    Client(id = 3, firstName = "Дмитрий", middleName = "Сергеевич", lastName = "Шалымов"),
-    Client(id = 4, firstName = "Владимир", lastName = "Путин"),
-    Client(id = 5, firstName = "Евгений", lastName =  "Туаев"),
-    Client(id = 6, firstName = "Роберт", lastName = "Смайт"),
-    Client(id = 7, firstName = "Павел", lastName = "Скаков"),
-    Client(id = 8, firstName = "Мистер", lastName = "Бист"),
-    Client(id = 9, firstName = "Иван", lastName = "Иванов"),
-    Client(id = 10, firstName = "Иван", lastName = "Петрухин"),
-).associate { client ->
-    client.id to client
-}.toMutableMap()
-
 val allCuts = mapOf(
-    0 to Cut(0, "Classic", "Классическая модельная стрижка представляет собой длину волос около пяти сантиметров, при этом присутствуют в основном ровные линии. Такая стрижка выглядит сдержанно и аккуратно, отлично подходит деловым мужчинам и тем, которые не хотят чрезмерного внимания к своему внешнему виду.", R.drawable.classic),
-    1 to Cut(1, "Undercut", "Для стрижки характерна почти одинаковая длина волос по всей поверхности головы. Классический варианта – это выбритые виски и немного удлиненные волосы на верхней части. Андеркат в таком исполнении подходит практически всем. Он придаст образу мужественности и делового стиля.", R.drawable.undercut),
-    2 to Cut(2, "Curtains", "Мужская стрижка, предполагающая прямой центральный пробор и симметричные пряди по обеим сторонам. При этом длина стрижки, наличие или отсутствие челки, градуировка никаким образом не регламентированы — здесь у нас с вами полная свобода.", R.drawable.curtains),
-    3 to Cut(3, "Bold", "Цель данной стрижки — полностью обнажить кожу головы, сбрив все волосы. Стрижка под 0 способствует созданию образа уверенного и сильного человека, своему обладателю придает максимум мужественности, помогает почувствовать себя увереннее и подчеркнуть индивидуальность.", R.drawable.bold),
+    0 to CutDTO(0, "Classic", "Классическая модельная стрижка представляет собой длину волос около пяти сантиметров, при этом присутствуют в основном ровные линии. Такая стрижка выглядит сдержанно и аккуратно, отлично подходит деловым мужчинам и тем, которые не хотят чрезмерного внимания к своему внешнему виду.", R.drawable.classic),
+    1 to CutDTO(1, "Undercut", "Для стрижки характерна почти одинаковая длина волос по всей поверхности головы. Классический варианта – это выбритые виски и немного удлиненные волосы на верхней части. Андеркат в таком исполнении подходит практически всем. Он придаст образу мужественности и делового стиля.", R.drawable.undercut),
+    2 to CutDTO(2, "Curtains", "Мужская стрижка, предполагающая прямой центральный пробор и симметричные пряди по обеим сторонам. При этом длина стрижки, наличие или отсутствие челки, градуировка никаким образом не регламентированы — здесь у нас с вами полная свобода.", R.drawable.curtains),
+    3 to CutDTO(3, "Bold", "Цель данной стрижки — полностью обнажить кожу головы, сбрив все волосы. Стрижка под 0 способствует созданию образа уверенного и сильного человека, своему обладателю придает максимум мужественности, помогает почувствовать себя увереннее и подчеркнуть индивидуальность.", R.drawable.bold),
 )
 
 var cutNamesToId = allCuts.entries.associate { (key, value) -> value.name to key }
 
 val readableDMYDateFormat = SimpleDateFormat("dd MMMM yyyy")
 var DMYDateFormat = SimpleDateFormat("dd-MM-yyyy")
-
-var cutDatesList = mutableListOf(
-    "31-12-2022",
-    "31-12-2023",
-    "28-11-2024",
-    "19-04-2025"
-)
-    .map { date -> DMYDateFormat.parse(date)!! }
-    .withIndex()
-    .associate { (index, date) -> index to CutDate(allCuts.toList().random().second.id, date, mapOf()) }
-    .toMutableMap()
-
-var caresList = listOf(
-    "29-12-2022",
-    "24-12-2023",
-    "15-11-2024",
-    "13-12-2025"
-).map { date -> DMYDateFormat.parse(date)!! }
-
 
 val ageGroupList = listOf(
     R.string.age_group_0_12,

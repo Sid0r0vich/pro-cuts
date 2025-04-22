@@ -9,10 +9,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.sidor.procuts.R
-import com.sidor.procuts.data.Client
-import com.sidor.procuts.data.CutDate
-import com.sidor.procuts.data.caresList
-import com.sidor.procuts.data.cutDatesList
+import com.sidor.procuts.data.ClientDTO
+import com.sidor.procuts.data.CutDateDTO
 import com.sidor.procuts.ui.PaddingSpaces
 import com.sidor.procuts.ui.TextWithPlusButton
 import com.sidor.procuts.ui.screens.cards.ClientCard
@@ -23,9 +21,10 @@ import com.sidor.procuts.ui.theme.LocalColorPalette
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ClientScreen(
-    client: Client?,
+    clientDTO: ClientDTO?,
+    cutDates: List<CutDateDTO>,
     onBack: () -> Unit,
-    onVisitClick: (Pair<Int, CutDate>) -> Unit,
+    onVisitClick: (CutDateDTO) -> Unit,
     onAddCutClick: () -> Unit,
     onAddCareClick: () -> Unit,
     onEditClientClick: () -> Unit
@@ -50,10 +49,10 @@ fun ClientScreen(
         LazyPaddingScreen(
             paddingSpaces = PaddingSpaces(2)
         ) {
-            if (client != null) {
+            if (clientDTO != null) {
                 item {
                     DefaultSpacer(1)
-                    ClientCard(client)
+                    ClientCard(clientDTO)
                 }
                 item {
                     DefaultSpacer(2)
@@ -62,10 +61,10 @@ fun ClientScreen(
                         onClick = onAddCutClick
                     )
                 }
-                cutDatesList.forEach { (cutId, date) ->
+                cutDates.forEach { cutDate ->
                     item {
                         DefaultSpacer(1)
-                        VisitItem(date = date.date, onClick = { onVisitClick(Pair(cutId, date)) })
+                        VisitItem(date = cutDate.date, onClick = { onVisitClick(cutDate) })
                     }
                 }
                 item {
@@ -74,12 +73,6 @@ fun ClientScreen(
                         text = stringResource(R.string.cares),
                         onClick = onAddCareClick
                     )
-                }
-                caresList.forEach { date ->
-                    item {
-                        DefaultSpacer(1)
-                        VisitItem(date = date, onClick = {})
-                    }
                 }
             } else {
                 item {

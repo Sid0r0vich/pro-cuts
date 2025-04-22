@@ -10,13 +10,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.sidor.procuts.R
-import com.sidor.procuts.data.Cut
+import com.sidor.procuts.data.CutDTO
 import com.sidor.procuts.ui.TextWithBoldField
 import com.sidor.procuts.ui.screens.DefaultSpacer
 
 @Composable
 fun CutCard(
-    cut: Cut,
+    cut: CutDTO,
 ) {
     Column {
         TextWithBoldField(
@@ -32,7 +32,7 @@ fun CutCard(
         )
         DefaultSpacer(1)
         Image(
-            painter = painterResource(cut.imgId),
+            painter = painterResource(cut.imageId),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier

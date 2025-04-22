@@ -1,8 +1,8 @@
 package com.sidor.procuts.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
-import com.sidor.procuts.data.CutDate
-import com.sidor.procuts.data.cutDatesList
+import com.sidor.procuts.data.CutDateDTO
+import com.sidor.procuts.data.CutDateInfoDTO
 import com.sidor.procuts.data.cutNamesToId
 import com.sidor.procuts.ui.screens.screentypes.CutQuestionnaireScreenType
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,10 +50,12 @@ open class CutQuestionnaireViewModel : ViewModel() {
         return CutQuestionnaireScreenType.entries[next]
     }
 
-    fun addCut() {
+    fun addCut(
+        onAddClick: (CutDateInfoDTO) -> Unit
+    ) {
         val cutId = cutNamesToId[getParam("cutName")]
         if (cutId != null) {
-            cutDatesList[cutDatesList.size] = CutDate(cutId = cutId, date = _uiState.value.date, cutParams = _uiState.value.paramsMap)
+            onAddClick(CutDateInfoDTO(cutId = cutId, date = _uiState.value.date, cutParams = _uiState.value.paramsMap))
             _uiState.value.paramsMap = mutableMapOf()
         }
     }

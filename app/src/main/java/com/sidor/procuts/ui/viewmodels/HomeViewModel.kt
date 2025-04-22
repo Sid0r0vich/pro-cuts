@@ -1,41 +1,56 @@
 package com.sidor.procuts.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
-import com.sidor.procuts.data.Client
-import com.sidor.procuts.data.Cut
-import com.sidor.procuts.data.CutDate
-import com.sidor.procuts.data.cliensList
+import androidx.lifecycle.viewModelScope
+import com.sidor.procuts.data.ClientDTO
+import com.sidor.procuts.data.ClientInfoDTO
+import com.sidor.procuts.data.ClientRepository
+import com.sidor.procuts.data.CutDTO
+import com.sidor.procuts.data.CutDateDTO
+import com.sidor.procuts.data.CutDateInfoDTO
+import com.sidor.procuts.data.CutDateRepository
 import com.sidor.procuts.ui.screens.screentypes.HomeScreenType
+import com.sidor.procuts.ui.viewmodels.HomeViewModel.Companion.TIMEOUT_MILLIS
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
-open class HomeViewModel : ViewModel() {
+@HiltViewModel
+open class HomeViewModel @Inject constructor(
+    val clientRepository: ClientRepository,
+    val cutDateRepository: CutDateRepository
+) : ViewModel() {
     data class UiState(
         val screenType: HomeScreenType,
-        val client: Client? = null,
-        val cutDate: CutDate? = null,
-        val cut: Cut? = null,
-        val cutId: Int? = null
+        val clientDTO: ClientDTO? = null,
+        val cutDate: CutDateDTO? = null,
+        val cut: CutDTO? = null,
     )
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState(HomeScreenType.Home))
     val uiState: StateFlow<UiState> get() = _uiState
 
-    fun setClient(client: Client) {
-        _uiState.value = _uiState.value.copy(client = client)
+    fun setClient(clientDTO: ClientDTO) {
+        _uiState.value = _uiState.value.copy(clientDTO = clientDTO)
     }
 
-    fun setVisit(visit: CutDate) {
+    fun setVisit(visit: CutDateDTO) {
         _uiState.value = _uiState.value.copy(cutDate = visit)
     }
 
-    fun setCut(cut: Cut) {
+    fun setCut(cut: CutDTO) {
         _uiState.value = _uiState.value.copy(cut = cut)
     }
 
-    fun setCutId(cutId: Int) {
-        _uiState.value = _uiState.value.copy(cutId = cutId)
-    }
+    fun getClientDTO() =
+        _uiState.value.clientDTO
+
+    fun getCutDateDTO() =
+        _uiState.value.cutDate
 
     fun navigate(screenType: HomeScreenType) {
         _uiState.value = _uiState.value.copy(screenType = screenType)
@@ -51,15 +66,44 @@ open class HomeViewModel : ViewModel() {
     fun navigateAddCut() = navigate(HomeScreenType.AddCut)
     fun navigateAddCare() = navigate(HomeScreenType.AddCare)
 
-    fun addClient(client: Client) {
-        cliensList[client.id] = client
+    fun addClient(clientInfoDTO: ClientInfoDTO) {
+        clientRepository.insertClient(clientInfoDTO)
     }
 
-    fun getClient(): Client? {
-        return _uiState.value.client
+    fun editClient(clientDTO: ClientDTO) {
+        clientRepository.updateClient(clientDTO)
     }
+
+    fun getAllClients() =
+        clientRepository
+            .getClientStateFlows(viewModelScope)
+
+    fun addCutDate(cutDateInfoDTO: CutDateInfoDTO) {
+        cutDateRepository.insertCut(cutDateInfoDTO)
+    }
+
+    fun getAllCuts() =
+        cutDateRepository.getCutDateStateFlows(viewModelScope)
 
     companion object {
         const val TIMEOUT_MILLIS = 5_000L
     }
 }
+
+fun ClientRepository.getClientStateFlows(scope: CoroutineScope): List<StateFlow<ClientDTO>> =
+    this.getStream().map { flow ->
+        flow.stateIn(
+            scope = scope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = ClientDTO()
+        )
+    }
+
+fun CutDateRepository.getCutDateStateFlows(scope: CoroutineScope): List<StateFlow<CutDateDTO>> =
+    this.getStream().map { flow ->
+        flow.stateIn(
+            scope = scope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = CutDateDTO()
+        )
+    }

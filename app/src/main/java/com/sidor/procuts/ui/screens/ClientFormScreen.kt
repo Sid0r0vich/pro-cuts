@@ -20,8 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import com.sidor.procuts.R
-import com.sidor.procuts.data.Client
-import com.sidor.procuts.data.cliensList
+import com.sidor.procuts.data.ClientDTO
+import com.sidor.procuts.data.ClientInfoDTO
 import com.sidor.procuts.ui.ImagePicker
 import com.sidor.procuts.ui.PaddingSpaces
 import com.sidor.procuts.ui.RectangleTextField
@@ -29,7 +29,6 @@ import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
 import com.sidor.procuts.ui.theme.LocalColorPalette
 
 data class DefaultClientForm(
-    val clientId: Int,
     val lastName: String,
     val firstName: String,
     val middleName: String?,
@@ -40,11 +39,10 @@ data class DefaultClientForm(
 @Composable
 fun AddClientScreen(
     onBack: () -> Unit,
-    onAddClient: (Client) -> Unit
+    onAddClient: (ClientInfoDTO) -> Unit
 ) {
     ClientFormScreen(
         defaultClientForm = DefaultClientForm(
-            clientId = cliensList.size,
             lastName = "",
             firstName = "",
             middleName = null,
@@ -62,22 +60,21 @@ fun AddClientScreen(
 @Composable
 fun EditClientScreen(
     onBack: () -> Unit,
-    client: Client?,
-    onEditClient: (Client) -> Unit
+    clientDTO: ClientDTO,
+    onEditClient: (ClientDTO) -> Unit
 ) {
     ClientFormScreen(
         defaultClientForm = DefaultClientForm(
-            clientId = client?.id ?: cliensList.size,
-            lastName = client?.lastName ?: "",
-            firstName = client?.firstName ?: "",
-            middleName = client?.middleName,
-            noMiddleName = client != null && client.middleName == null,
-            clientPhoto = client?.photo
+            lastName = clientDTO.lastName,
+            firstName = clientDTO.firstName,
+            middleName = clientDTO.middleName,
+            noMiddleName = clientDTO.middleName == null,
+            clientPhoto = clientDTO.photo
         ),
         topBarTitleText = stringResource(R.string.edit_client_tab_app_bar),
         buttonText = stringResource(R.string.edit_client),
         onBack = onBack,
-        onClickButton = onEditClient
+        onClickButton = { clientInfoDTO -> onEditClient(clientInfoDTO.withId(clientDTO.id)) }
     )
 }
 
@@ -87,7 +84,7 @@ fun ClientFormScreen(
     topBarTitleText: String,
     buttonText: String,
     onBack: () -> Unit,
-    onClickButton: (Client) -> Unit
+    onClickButton: (ClientInfoDTO) -> Unit
 ) {
     var lastName by remember { mutableStateOf(defaultClientForm.lastName) }
     var firstName by remember { mutableStateOf(defaultClientForm.firstName) }
@@ -107,8 +104,7 @@ fun ClientFormScreen(
             buttons = {
                 Button(
                     onClick = { onClickButton(
-                        Client(
-                            id = defaultClientForm.clientId,
+                        ClientInfoDTO(
                             firstName = firstName,
                             lastName = lastName,
                             middleName = middleName,

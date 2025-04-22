@@ -2,10 +2,12 @@ package com.sidor.procuts.ui.screens.routes
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.sidor.procuts.data.Client
-import com.sidor.procuts.data.Cut
-import com.sidor.procuts.data.cutDatesList
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.sidor.procuts.data.ClientDTO
+import com.sidor.procuts.data.ClientInfoDTO
+import com.sidor.procuts.data.CutDTO
+import com.sidor.procuts.data.CutDateDTO
+import com.sidor.procuts.data.CutDateInfoDTO
 import com.sidor.procuts.ui.CareForm
 import com.sidor.procuts.ui.screens.AddCareScreen
 import com.sidor.procuts.ui.screens.AddClientScreen
@@ -20,7 +22,7 @@ import com.sidor.procuts.ui.viewmodels.HomeViewModel
 
 @Composable
 fun HomeRoute(
-    viewModel: HomeViewModel = viewModel(),
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsState().value
 
@@ -30,18 +32,23 @@ fun HomeRoute(
         )
         HomeScreenType.Clients -> ClientsScreen(
             onBack = { viewModel.navigateHome() },
-            onClientClick = { client: Client ->
-                viewModel.setClient(client)
+            clients = viewModel
+                .getAllClients()
+                .map { clientFlow -> clientFlow.collectAsState().value },
+            onClientClick = { clientDTO: ClientDTO ->
+                viewModel.setClient(clientDTO)
                 viewModel.navigateClient()
             },
             onAddClientClick = { viewModel.navigateAddClient() }
         )
         HomeScreenType.Client -> ClientScreen(
-            client = uiState.client,
+            clientDTO = viewModel.getClientDTO(),
+            cutDates = viewModel
+                .getAllCuts()
+                .map { cutDateStateFlow -> cutDateStateFlow.collectAsState().value },
             onBack = { viewModel.navigateClients() },
-            onVisitClick = { (cutId, cutDate) ->
-                viewModel.setCutId(cutId)
-                viewModel.setVisit(cutDate)
+            onVisitClick = { cutDateDTO: CutDateDTO ->
+                viewModel.setVisit(cutDateDTO)
                 viewModel.navigateVisit()
             },
             onAddCutClick = {
@@ -56,22 +63,30 @@ fun HomeRoute(
         )
         HomeScreenType.AddClient -> AddClientScreen(
             onBack = { viewModel.navigateClients() },
-            onAddClient = { client: Client ->
-                viewModel.addClient(client)
+            onAddClient = { clientInfoDTO: ClientInfoDTO ->
+                viewModel.addClient(clientInfoDTO)
                 viewModel.navigateClients()
             }
         )
-        HomeScreenType.EditClient -> EditClientScreen(
-            onBack = { viewModel.navigateClient() },
-            client = viewModel.getClient(),
-            onEditClient = { client: Client ->
-                viewModel.addClient(client)
-                viewModel.setClient(client)
-                viewModel.navigateClient()
+        HomeScreenType.EditClient -> {
+            val clientDTO = viewModel.getClientDTO()
+            if (clientDTO != null) {
+                EditClientScreen(
+                    onBack = { viewModel.navigateClient() },
+                    clientDTO = clientDTO,
+                    onEditClient = { clientDTO: ClientDTO ->
+                        viewModel.editClient(clientDTO)
+                        viewModel.setClient(clientDTO)
+                        viewModel.navigateClient()
+                    }
+                )
             }
-        )
+            else viewModel.navigateAddClient()
+        }
         HomeScreenType.AddCut -> CutQuestionnaireRoute(
             onBack = { viewModel.navigateClient() },
+            onAddCutClick = { cutDateInfoDTO: CutDateInfoDTO ->
+                viewModel.addCutDate(cutDateInfoDTO) }
         )
         HomeScreenType.AddCare -> AddCareScreen(
             onBack = { viewModel.navigateClient() },
@@ -82,11 +97,11 @@ fun HomeRoute(
         HomeScreenType.Visit -> VisitScreen(
             visit = uiState.cutDate!!,
             onBack = { viewModel.navigateClient() },
-            onCutClick = { cut: Cut ->
+            onCutClick = { cut: CutDTO ->
                 viewModel.setCut(cut)
                 viewModel.navigateCut()
             },
-            cutParams = cutDatesList[uiState.cutId]?.cutParams ?: mapOf()
+            cutParams = viewModel.getCutDateDTO()?.cutParams ?: mapOf()
         )
         HomeScreenType.Cut -> CutScreen(
             cut = uiState.cut!!,

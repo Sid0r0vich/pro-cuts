@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.sidor.procuts.data.CutDateInfoDTO
 import com.sidor.procuts.data.cutQuestionnaireScreenInfoLists
 import com.sidor.procuts.ui.screens.CutQuestionnaireFirstScreen
 import com.sidor.procuts.ui.screens.CutQuestionnaireLastScreen
@@ -26,6 +27,7 @@ import com.sidor.procuts.ui.viewmodels.CutQuestionnaireViewModel
 fun CutQuestionnaireRoute(
     modifier: Modifier = Modifier,
     onBack: () -> Unit,
+    onAddCutClick: (CutDateInfoDTO) -> Unit,
     viewModel: CutQuestionnaireViewModel = viewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsState().value
@@ -92,7 +94,7 @@ fun CutQuestionnaireRoute(
             CutQuestionnaireScreenType.Add -> CutQuestionnaireLastScreen(
                 onBack = onPrevQuestion(CutQuestionnaireScreenType.Add),
                 onAddCut = {
-                    viewModel.addCut()
+                    viewModel.addCut(onAddCutClick)
                     onBack()
                     onNextQuestion(CutQuestionnaireScreenType.Add)()
                 },
