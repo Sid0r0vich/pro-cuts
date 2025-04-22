@@ -11,12 +11,13 @@ import com.sidor.procuts.R
 import com.sidor.procuts.ui.LocalBoardPadding
 import com.sidor.procuts.ui.PaddingSpaces
 import com.sidor.procuts.ui.screens.cards.HomeCard
+import com.sidor.procuts.ui.screens.screentypes.HomeCardScreenType
 import com.sidor.procuts.ui.screens.topbars.UserTopAppBar
 
 
 @Composable
 fun HomeScreen(
-    onClientsClick: () -> Unit
+    onCardClick: (HomeCardScreenType) -> Unit
 ) {
     TopAppBarScreen(
         topBar = { UserTopAppBar() },
@@ -34,7 +35,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.width(LocalBoardPadding.current * 2))
                 HomeCard(
                     modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.study_care)
+                    text = stringResource(R.string.my_cuts)
                 )
             }
         }
@@ -46,12 +47,13 @@ fun HomeScreen(
                 HomeCard(
                     modifier = Modifier.weight(1f),
                     text = stringResource(R.string.clients),
-                    onClick = onClientsClick
+                    onClick = { onCardClick(HomeCardScreenType.Clients) }
                 )
                 Spacer(modifier = Modifier.width(LocalBoardPadding.current * 2))
                 HomeCard(
                     modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.start_cutting)
+                    text = stringResource(R.string.start_cutting),
+                    onClick = { onCardClick(HomeCardScreenType.StartCutting) }
                 )
             }
         }

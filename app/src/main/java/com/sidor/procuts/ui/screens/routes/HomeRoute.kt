@@ -17,6 +17,7 @@ import com.sidor.procuts.ui.screens.CutScreen
 import com.sidor.procuts.ui.screens.EditClientScreen
 import com.sidor.procuts.ui.screens.HomeScreen
 import com.sidor.procuts.ui.screens.VisitScreen
+import com.sidor.procuts.ui.screens.screentypes.HomeCardScreenType
 import com.sidor.procuts.ui.screens.screentypes.HomeScreenType
 import com.sidor.procuts.ui.viewmodels.HomeViewModel
 
@@ -28,7 +29,14 @@ fun HomeRoute(
 
     when (uiState.screenType) {
         HomeScreenType.Home -> HomeScreen(
-            onClientsClick = { viewModel.navigateClients() }
+            onCardClick = { homeCardScreenType: HomeCardScreenType ->
+                when(homeCardScreenType) {
+                    HomeCardScreenType.StudyCut -> {}
+                    HomeCardScreenType.Clients -> viewModel.navigateClients()
+                    HomeCardScreenType.MyCuts -> {}
+                    HomeCardScreenType.StartCutting -> viewModel.navigateAddCut()
+                }
+            }
         )
         HomeScreenType.Clients -> ClientsScreen(
             onBack = { viewModel.navigateHome() },
@@ -84,7 +92,7 @@ fun HomeRoute(
             else viewModel.navigateAddClient()
         }
         HomeScreenType.AddCut -> CutQuestionnaireRoute(
-            onBack = { viewModel.navigateClient() },
+            onBack = { viewModel.navigateHome() },
             onAddCutClick = { cutDateInfoDTO: CutDateInfoDTO ->
                 viewModel.addCutDate(cutDateInfoDTO) }
         )
