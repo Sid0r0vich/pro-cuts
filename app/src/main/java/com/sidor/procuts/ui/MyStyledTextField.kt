@@ -1,21 +1,26 @@
 package com.sidor.procuts.ui
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import com.sidor.procuts.ui.theme.LocalColorPalette
 
 @Composable
-fun RectangleTextField(
+fun MyStyledTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default
 ) {
     OutlinedTextField(
         value = value,
@@ -30,5 +35,7 @@ fun RectangleTextField(
             unfocusedContainerColor = LocalColorPalette.current.mainColor,
             disabledContainerColor = LocalColorPalette.current.disabledColor
         ),
+        visualTransformation = visualTransformation,
+        keyboardOptions = keyboardOptions,
     )
 }

@@ -52,7 +52,7 @@ fun HomeRoute(
         HomeScreenType.Client -> ClientScreen(
             clientDTO = viewModel.getClientDTO(),
             cutDates = viewModel
-                .getAllCuts()
+                .getClientCutDates()
                 .map { cutDateStateFlow -> cutDateStateFlow.collectAsState().value },
             onBack = { viewModel.navigateClients() },
             onVisitClick = { cutDateDTO: CutDateDTO ->
@@ -94,7 +94,11 @@ fun HomeRoute(
         HomeScreenType.AddCut -> CutQuestionnaireRoute(
             onBack = { viewModel.navigateHome() },
             onAddCutClick = { cutDateInfoDTO: CutDateInfoDTO ->
-                viewModel.addCutDate(cutDateInfoDTO) }
+                viewModel.addCutDate(cutDateInfoDTO)
+            },
+            getClientIdOnPhoneNumber = { phoneNumber: String ->
+                viewModel.getClientIdOnPhoneNumber(phoneNumber)
+            }
         )
         HomeScreenType.AddCare -> AddCareScreen(
             onBack = { viewModel.navigateClient() },

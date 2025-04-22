@@ -1,13 +1,17 @@
 package com.sidor.procuts.ui.screens
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import com.sidor.procuts.R
 import com.sidor.procuts.data.ClientDTO
 import com.sidor.procuts.data.CutDateDTO
@@ -23,6 +27,7 @@ import com.sidor.procuts.ui.theme.LocalColorPalette
 fun ClientScreen(
     clientDTO: ClientDTO?,
     cutDates: List<CutDateDTO>,
+    caresDates: List<CutDateDTO> = listOf(), // TODO
     onBack: () -> Unit,
     onVisitClick: (CutDateDTO) -> Unit,
     onAddCutClick: () -> Unit,
@@ -61,6 +66,17 @@ fun ClientScreen(
                         onClick = onAddCutClick
                     )
                 }
+                if (cutDates.isEmpty()) {
+                    item {
+                        DefaultSpacer(2)
+                        Text(
+                            text = stringResource(R.string.no_client_cuts),
+                            style = MaterialTheme.typography.titleLarge,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
                 cutDates.forEach { cutDate ->
                     item {
                         DefaultSpacer(1)
@@ -73,6 +89,17 @@ fun ClientScreen(
                         text = stringResource(R.string.cares),
                         onClick = onAddCareClick
                     )
+                }
+                if (caresDates.isEmpty()) {
+                    item {
+                        DefaultSpacer(2)
+                        Text(
+                            text = stringResource(R.string.no_client_cares),
+                            style = MaterialTheme.typography.titleLarge,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
                 }
             } else {
                 item {

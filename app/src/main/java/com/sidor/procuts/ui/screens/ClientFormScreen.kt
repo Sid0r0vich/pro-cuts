@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,16 +25,19 @@ import com.sidor.procuts.data.ClientDTO
 import com.sidor.procuts.data.ClientInfoDTO
 import com.sidor.procuts.ui.ImagePicker
 import com.sidor.procuts.ui.PaddingSpaces
-import com.sidor.procuts.ui.RectangleTextField
+import com.sidor.procuts.ui.MyStyledTextField
+import com.sidor.procuts.ui.PhoneNumberField
 import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
 import com.sidor.procuts.ui.theme.LocalColorPalette
+import com.sidor.procuts.utils.PhoneNumberParser
 
 data class DefaultClientForm(
     val lastName: String,
     val firstName: String,
     val middleName: String?,
     val noMiddleName: Boolean,
-    val clientPhoto: ByteArray?
+    val clientPhoto: ByteArray?,
+    val clientPhoneNumber: String?
 )
 
 @Composable
@@ -47,7 +51,8 @@ fun AddClientScreen(
             firstName = "",
             middleName = null,
             noMiddleName = false,
-            clientPhoto = null
+            clientPhoto = null,
+            clientPhoneNumber = null
         ),
         topBarTitleText = stringResource(R.string.create_client_tab_app_bar),
         buttonText = stringResource(R.string.create_client),
@@ -69,7 +74,8 @@ fun EditClientScreen(
             firstName = clientDTO.firstName,
             middleName = clientDTO.middleName,
             noMiddleName = clientDTO.middleName == null,
-            clientPhoto = clientDTO.photo
+            clientPhoto = clientDTO.photo,
+            clientPhoneNumber = clientDTO.phoneNumber
         ),
         topBarTitleText = stringResource(R.string.edit_client_tab_app_bar),
         buttonText = stringResource(R.string.edit_client),
@@ -86,11 +92,13 @@ fun ClientFormScreen(
     onBack: () -> Unit,
     onClickButton: (ClientInfoDTO) -> Unit
 ) {
-    var lastName by remember { mutableStateOf(defaultClientForm.lastName) }
-    var firstName by remember { mutableStateOf(defaultClientForm.firstName) }
-    var middleName by remember { mutableStateOf<String?>(defaultClientForm.middleName) }
-    var noMiddleName by remember { mutableStateOf(defaultClientForm.noMiddleName) }
-    var clientPhoto by remember { mutableStateOf<ByteArray?>(defaultClientForm.clientPhoto) }
+    var lastName by rememberSaveable { mutableStateOf(defaultClientForm.lastName) }
+    var firstName by rememberSaveable { mutableStateOf(defaultClientForm.firstName) }
+    var middleName by rememberSaveable { mutableStateOf<String?>(defaultClientForm.middleName) }
+    var noMiddleName by rememberSaveable { mutableStateOf(defaultClientForm.noMiddleName) }
+    var clientPhoto by rememberSaveable { mutableStateOf<ByteArray?>(defaultClientForm.clientPhoto) }
+    var phoneNumber by rememberSaveable { mutableStateOf<String?>(defaultClientForm.clientPhoneNumber) }
+    var phoneNumberIsValid by rememberSaveable { mutableStateOf(false) }
 
     TopAppBarScreen(
         topBar = {
@@ -108,7 +116,8 @@ fun ClientFormScreen(
                             firstName = firstName,
                             lastName = lastName,
                             middleName = middleName,
-                            photo = clientPhoto
+                            photo = clientPhoto,
+                            phoneNumber = phoneNumber.toString()
                         )
                     ) },
                     modifier = Modifier.fillMaxWidth(),
@@ -123,14 +132,28 @@ fun ClientFormScreen(
             },
             paddingSpaces = PaddingSpaces(horizontal = 2, vertical = 1)
         ) {
-            RectangleTextField(
+            PhoneNumberField(
+                phoneNumber,
+                onPhoneNumberChange = { number ->
+                    phoneNumber = number
+                    val parsedNumber = PhoneNumberParser.parsePhoneNumber(number)
+                    if (parsedNumber != null) {
+                        phoneNumberIsValid = true
+                    } else {
+                        phoneNumberIsValid = false
+                    }
+                }
+            )
+
+            DefaultSpacer()
+            MyStyledTextField(
                 value = firstName,
                 onValueChange = { firstName = it },
                 label = stringResource(R.string.first_name),
             )
 
             DefaultSpacer()
-            RectangleTextField(
+            MyStyledTextField(
                 value = lastName,
                 onValueChange = { lastName = it },
                 label = stringResource(R.string.last_name),
@@ -138,7 +161,7 @@ fun ClientFormScreen(
 
             DefaultSpacer()
             Row(verticalAlignment = Alignment.CenterVertically) {
-                RectangleTextField(
+                MyStyledTextField(
                     value = middleName ?: "",
                     onValueChange = { middleName = it },
                     label = stringResource(R.string.middle_name),

@@ -231,4 +231,7 @@
     <string name="edit_client">Edit client</string>
     <string name="create_client_tab_app_bar">Create client</string>
     <string name="my_cuts">My cuts</string>
+    <string name="client_phone_number">Phone number</string>
+    <string name="no_client_cuts">No cuts yet…</string>
+    <string name="no_client_cares">No cares yet…</string>
 </resources>

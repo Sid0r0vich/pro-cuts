@@ -10,19 +10,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
+import com.google.i18n.phonenumbers.Phonenumber
 import com.sidor.procuts.R
 import com.sidor.procuts.data.cutNamesToId
 import com.sidor.procuts.data.nameToLabelId
 import com.sidor.procuts.ui.DatePickerDocked
 import com.sidor.procuts.ui.PaddingSpaces
+import com.sidor.procuts.ui.PhoneNumberField
 import com.sidor.procuts.ui.QuestionnaireDropdownMenu
 import com.sidor.procuts.ui.TextWithBoldField
 import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
 import com.sidor.procuts.ui.theme.LocalColorPalette
+import com.sidor.procuts.utils.PhoneNumberParser
 import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,8 +75,12 @@ fun CutQuestionnaireFirstScreen(
 fun CutQuestionnaireLastScreen(
     onBack: () -> Unit,
     onAddCut: () -> Unit,
+    onSetPhoneNumber: (String) -> Unit,
     cutParams: Map<String, String>
 ) {
+    var phoneNumber by rememberSaveable { mutableStateOf<String?>(null) }
+    var phoneNumberIsValid by rememberSaveable { mutableStateOf(false) }
+
     TopAppBarScreen(
         topBar = {
             TitleTopAppBar(
@@ -93,6 +101,24 @@ fun CutQuestionnaireLastScreen(
                     )
                 }
             }
+
+            item {
+                DefaultSpacer(2)
+                PhoneNumberField(
+                    phoneNumber,
+                    onPhoneNumberChange = { number ->
+                        phoneNumber = number
+                        val parsedNumber = PhoneNumberParser.parsePhoneNumber(number)
+                        if (parsedNumber != null) {
+                            onSetPhoneNumber(number)
+                            phoneNumberIsValid = true
+                        } else {
+                            phoneNumberIsValid = false
+                        }
+                    }
+                )
+            }
+
             item {
                 DefaultSpacer(2)
                 Button(
@@ -101,7 +127,8 @@ fun CutQuestionnaireLastScreen(
                     shape = RectangleShape,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = LocalColorPalette.current.buttonColor
-                    )
+                    ),
+                    enabled = phoneNumberIsValid
                 ) {
                     Text(stringResource(R.string.create_haircut))
                 }

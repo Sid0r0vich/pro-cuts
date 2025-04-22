@@ -13,9 +13,16 @@ class CutDateMockRepository @Inject constructor(): CutDateRepository {
         }
 
     override fun getStream(): List<Flow<CutDateDTO>> =
-        cutDatesMap.map { (id, client) ->
+        cutDatesMap.map { (_, client) ->
             flow { emit(client) }
         }
+
+    override fun getAllCutsWithClientId(clientId: Int): List<Flow<CutDateDTO>> =
+        cutDatesMap
+            .filter { (_, cutDate) -> cutDate.clientId == clientId }
+            .map { (_, cutDate) ->
+                flow { emit(cutDate) }
+            }
 
     override fun insertCut(cutDateInfoDTO: CutDateInfoDTO) {
         val cutId = cutDatesMap.size
@@ -42,7 +49,15 @@ class CutDateMockRepository @Inject constructor(): CutDateRepository {
         )
             .map { date -> DMYDateFormat.parse(date)!! }
             .withIndex()
-            .associate { (index, date) -> index to CutDateDTO(index, allCuts.toList().random().second.id, date, mapOf()) }
+            .associate { (index, date) -> index to
+                    CutDateDTO(
+                        id = index,
+                        cutId = allCuts.toList().random().second.id,
+                        clientId = 0,
+                        date = date,
+                        cutParams = mapOf()
+                    )
+            }
             .toMutableMap()
     }
 }

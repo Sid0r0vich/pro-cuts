@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber
 import com.sidor.procuts.data.CutDateInfoDTO
 import com.sidor.procuts.data.cutQuestionnaireScreenInfoLists
 import com.sidor.procuts.ui.screens.CutQuestionnaireFirstScreen
@@ -28,6 +29,7 @@ fun CutQuestionnaireRoute(
     modifier: Modifier = Modifier,
     onBack: () -> Unit,
     onAddCutClick: (CutDateInfoDTO) -> Unit,
+    getClientIdOnPhoneNumber: (String) -> Int?,
     viewModel: CutQuestionnaireViewModel = viewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsState().value
@@ -94,9 +96,15 @@ fun CutQuestionnaireRoute(
             CutQuestionnaireScreenType.Add -> CutQuestionnaireLastScreen(
                 onBack = onPrevQuestion(CutQuestionnaireScreenType.Add),
                 onAddCut = {
-                    viewModel.addCut(onAddCutClick)
+                    viewModel.addCut(
+                        getClientIdOnPhoneNumber = getClientIdOnPhoneNumber,
+                        onAddClick = onAddCutClick,
+                    )
                     onBack()
                     onNextQuestion(CutQuestionnaireScreenType.Add)()
+                },
+                onSetPhoneNumber = { phoneNumber: String ->
+                    viewModel.setPhoneNumber(phoneNumber)
                 },
                 cutParams = uiState.paramsMap
             )

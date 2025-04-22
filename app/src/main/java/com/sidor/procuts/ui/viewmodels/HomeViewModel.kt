@@ -9,6 +9,7 @@ import com.sidor.procuts.data.CutDTO
 import com.sidor.procuts.data.CutDateDTO
 import com.sidor.procuts.data.CutDateInfoDTO
 import com.sidor.procuts.data.CutDateRepository
+import com.sidor.procuts.data.defaultCutDateDTO
 import com.sidor.procuts.ui.screens.screentypes.HomeScreenType
 import com.sidor.procuts.ui.viewmodels.HomeViewModel.Companion.TIMEOUT_MILLIS
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -78,12 +79,15 @@ open class HomeViewModel @Inject constructor(
         clientRepository
             .getClientStateFlows(viewModelScope)
 
+    fun getClientIdOnPhoneNumber(phoneNumber: String): Int? =
+        clientRepository.getClientWithPhoneNumber(phoneNumber)
+
     fun addCutDate(cutDateInfoDTO: CutDateInfoDTO) {
         cutDateRepository.insertCut(cutDateInfoDTO)
     }
 
-    fun getAllCuts() =
-        cutDateRepository.getCutDateStateFlows(viewModelScope)
+    fun getClientCutDates(): List<StateFlow<CutDateDTO>> =
+        _uiState.value.clientDTO?.id?.let { cutDateRepository.getClientCutDatesStateFlows(clientId = it, viewModelScope) } ?: listOf()
 
     companion object {
         const val TIMEOUT_MILLIS = 5_000L
@@ -99,11 +103,14 @@ fun ClientRepository.getClientStateFlows(scope: CoroutineScope): List<StateFlow<
         )
     }
 
-fun CutDateRepository.getCutDateStateFlows(scope: CoroutineScope): List<StateFlow<CutDateDTO>> =
-    this.getStream().map { flow ->
+fun CutDateRepository.getClientCutDatesStateFlows(
+    clientId: Int,
+    scope: CoroutineScope
+): List<StateFlow<CutDateDTO>> =
+    this.getAllCutsWithClientId(clientId = clientId).map { flow ->
         flow.stateIn(
             scope = scope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = CutDateDTO()
+            initialValue = defaultCutDateDTO
         )
     }

@@ -1,7 +1,8 @@
 package com.sidor.procuts.ui.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.sidor.procuts.data.CutDateDTO
+import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber
 import com.sidor.procuts.data.CutDateInfoDTO
 import com.sidor.procuts.data.cutNamesToId
 import com.sidor.procuts.ui.screens.screentypes.CutQuestionnaireScreenType
@@ -13,6 +14,7 @@ open class CutQuestionnaireViewModel : ViewModel() {
     data class UiState(
         val screenType: CutQuestionnaireScreenType,
         val date: Date = Date(),
+        var clientPhoneNumber: String? = null,
         var paramsMap: MutableMap<String, String> = mutableMapOf()
     )
 
@@ -25,6 +27,10 @@ open class CutQuestionnaireViewModel : ViewModel() {
 
     fun getDate(): Date {
         return _uiState.value.date
+    }
+
+    fun setPhoneNumber(phoneNumber: String) {
+        _uiState.value.clientPhoneNumber = phoneNumber
     }
 
     fun setParam(name: String, value: String) {
@@ -51,11 +57,21 @@ open class CutQuestionnaireViewModel : ViewModel() {
     }
 
     fun addCut(
+        getClientIdOnPhoneNumber: (String) -> Int?,
         onAddClick: (CutDateInfoDTO) -> Unit
     ) {
         val cutId = cutNamesToId[getParam("cutName")]
-        if (cutId != null) {
-            onAddClick(CutDateInfoDTO(cutId = cutId, date = _uiState.value.date, cutParams = _uiState.value.paramsMap))
+        val clientId = _uiState.value.clientPhoneNumber?.let { getClientIdOnPhoneNumber(it.toString()) }
+        Log.d("CLIENT ID", clientId.toString())
+        if (cutId != null && clientId != null) {
+            onAddClick(
+                CutDateInfoDTO(
+                    cutId = cutId,
+                    clientId = clientId,
+                    date = _uiState.value.date,
+                    cutParams = _uiState.value.paramsMap
+                )
+            )
             _uiState.value.paramsMap = mutableMapOf()
         }
     }

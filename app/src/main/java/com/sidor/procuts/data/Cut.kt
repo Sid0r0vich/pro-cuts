@@ -2,13 +2,6 @@ package com.sidor.procuts.data
 
 import java.util.Date
 
-data class CutDateDTO(
-    val id: Int = -1,
-    val cutId: Int = -1,
-    val date: Date = Date(),
-    val cutParams: Map<String, String> = mutableMapOf()
-)
-
 data class CutDTO(
     val id: Int,
     val name: String,
@@ -16,8 +9,17 @@ data class CutDTO(
     val imageId: Int
 )
 
+data class CutDateDTO(
+    val id: Int,
+    val cutId: Int,
+    val clientId: Int,
+    val date: Date,
+    val cutParams: Map<String, String> = mutableMapOf()
+)
+
 class CutDateInfoDTO(
     val cutId: Int,
+    val clientId: Int,
     val date: Date,
     val cutParams: Map<String, String>
 ) {
@@ -25,7 +27,16 @@ class CutDateInfoDTO(
         CutDateDTO(
             id = id,
             cutId = cutId,
+            clientId = clientId,
             date = date,
             cutParams = cutParams
         )
 }
+
+val defaultCutDateDTO = CutDateDTO(
+    id = 0,
+    cutId = 0,
+    clientId = 0,
+    date = Date(),
+    cutParams = mapOf()
+)
