@@ -20,7 +20,8 @@ fun MyStyledTextField(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    isError: Boolean = false
 ) {
     OutlinedTextField(
         value = value,
@@ -33,9 +34,12 @@ fun MyStyledTextField(
             focusedIndicatorColor = LocalColorPalette.current.darkFontColor,
             focusedContainerColor = LocalColorPalette.current.mainColor,
             unfocusedContainerColor = LocalColorPalette.current.mainColor,
-            disabledContainerColor = LocalColorPalette.current.disabledColor
+            disabledContainerColor = LocalColorPalette.current.disabledColor,
+            errorIndicatorColor = LocalColorPalette.current.errorColor,
+            errorContainerColor = LocalColorPalette.current.mainColor
         ),
         visualTransformation = visualTransformation,
         keyboardOptions = keyboardOptions,
+        isError = isError
     )
 }

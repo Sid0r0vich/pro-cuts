@@ -9,7 +9,8 @@ data class ColorPalette(
     val barColor: Color,
     val cardColor: Color,
     val darkFontColor: Color,
-    val disabledColor: Color
+    val disabledColor: Color,
+    val errorColor: Color
 )
 
 val barDarkColor = Color(0xff242f3d)
@@ -33,7 +34,8 @@ val baseLightPalette = ColorPalette(
     barColor = barLightColor,
     cardColor = cardLightColor,
     darkFontColor = darkFontColor,
-    disabledColor = disabledLightColor
+    disabledColor = disabledLightColor,
+    errorColor = Color.Red
 )
 val baseDarkPalette = baseLightPalette.copy(
     mainColor = Color.Black,

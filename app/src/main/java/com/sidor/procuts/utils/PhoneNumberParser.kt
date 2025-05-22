@@ -9,7 +9,7 @@ object PhoneNumberParser {
 
     fun parsePhoneNumber(bareNumber: String): Phonenumber.PhoneNumber? {
         return try {
-            phoneUtil.parse(bareNumber, "CH")
+            if (bareNumber.length == 10) phoneUtil.parse(bareNumber, "RU") else null
         } catch (e: NumberParseException) { null }
     }
 }

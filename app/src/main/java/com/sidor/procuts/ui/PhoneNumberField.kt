@@ -13,7 +13,8 @@ import com.sidor.procuts.R
 @Composable
 fun PhoneNumberField(
     phoneNumber: String?,
-    onPhoneNumberChange: (String) -> Unit
+    onPhoneNumberChange: (String) -> Unit,
+    isError: Boolean = false
 ) {
     val numericRegex = Regex("[^0-9]")
 
@@ -31,7 +32,8 @@ fun PhoneNumberField(
         },
         label = stringResource(R.string.client_phone_number),
         visualTransformation = PhoneVisualTransformation(),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        isError = isError
     )
 }
 

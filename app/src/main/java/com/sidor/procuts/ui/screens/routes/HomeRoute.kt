@@ -119,6 +119,7 @@ fun HomeRoute(
             onAddCutClick = { cutDateInfoDTO: CutDateInfoDTO ->
                 viewModel.addCutDate(cutDateInfoDTO)
             },
+            clientPhoneNumber = uiState.clientDTO?.phoneNumber,
             getClientIdOnPhoneNumber = { phoneNumber: String ->
                 viewModel.getClientIdOnPhoneNumber(phoneNumber)
             }

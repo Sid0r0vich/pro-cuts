@@ -1,6 +1,5 @@
 package com.sidor.procuts.ui.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.sidor.procuts.data.CutDateInfoDTO
 import com.sidor.procuts.data.cutNamesToId
@@ -8,6 +7,12 @@ import com.sidor.procuts.ui.screens.screentypes.CutQuestionnaireScreenType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.Date
+
+enum class AddResult {
+    SUCCESS,
+    CUT_NAME_IS_NOT_FOUND,
+    PHONE_NUMBER_IS_NOT_FOUND
+}
 
 open class CutQuestionnaireViewModel : ViewModel() {
     data class UiState(
@@ -55,23 +60,26 @@ open class CutQuestionnaireViewModel : ViewModel() {
         return CutQuestionnaireScreenType.entries[next]
     }
 
-    fun addCut(
+    fun tryAddCut(
         getClientIdOnPhoneNumber: (String) -> Int?,
         onAddClick: (CutDateInfoDTO) -> Unit
-    ) {
+    ): AddResult {
         val cutId = cutNamesToId[getParam("cutName")]
         val clientId = _uiState.value.clientPhoneNumber?.let { getClientIdOnPhoneNumber(it.toString()) }
-        Log.d("CLIENT ID", clientId.toString())
-        if (cutId != null && clientId != null) {
-            onAddClick(
-                CutDateInfoDTO(
-                    cutId = cutId,
-                    clientId = clientId,
-                    date = _uiState.value.date,
-                    cutParams = _uiState.value.paramsMap
-                )
+
+        if (cutId == null) return AddResult.CUT_NAME_IS_NOT_FOUND
+        if (clientId == null) return AddResult.PHONE_NUMBER_IS_NOT_FOUND
+
+        onAddClick(
+            CutDateInfoDTO(
+                cutId = cutId,
+                clientId = clientId,
+                date = _uiState.value.date,
+                cutParams = _uiState.value.paramsMap
             )
-            _uiState.value.paramsMap = mutableMapOf()
-        }
+        )
+        _uiState.value.paramsMap = mutableMapOf()
+
+        return AddResult.SUCCESS
     }
 }

@@ -234,4 +234,6 @@
     <string name="client_phone_number">Phone number</string>
     <string name="no_client_cuts">No cuts yet…</string>
     <string name="no_client_cares">No cares yet…</string>
+    <string name="cut_choice_tab_app_bar">Cut choice</string>
+    <string name="cut_has_been_created">Cut has been already created!</string>
 </resources>
