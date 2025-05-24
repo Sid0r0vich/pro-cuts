@@ -9,7 +9,9 @@ import com.sidor.procuts.data.CutDTO
 import com.sidor.procuts.data.CutDateDTO
 import com.sidor.procuts.data.CutDateInfoDTO
 import com.sidor.procuts.data.CutDateRepository
+import com.sidor.procuts.data.CutRepository
 import com.sidor.procuts.data.defaultClientDTO
+import com.sidor.procuts.data.defaultCutDTO
 import com.sidor.procuts.data.defaultCutDateDTO
 import com.sidor.procuts.ui.screens.screentypes.HomeScreenType
 import com.sidor.procuts.ui.viewmodels.HomeViewModel.Companion.TIMEOUT_MILLIS
@@ -19,6 +21,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
@@ -26,7 +29,8 @@ import javax.inject.Inject
 @HiltViewModel
 open class HomeViewModel @Inject constructor(
     val clientRepository: ClientRepository,
-    val cutDateRepository: CutDateRepository
+    val cutDateRepository: CutDateRepository,
+    val cutRepository: CutRepository
 ) : ViewModel() {
     data class UiState(
         val screenType: HomeScreenType,
@@ -55,6 +59,17 @@ open class HomeViewModel @Inject constructor(
 
     fun getCutDateDTO() =
         _uiState.value.cutDate
+
+    fun getCutDTO(cutId: Int): StateFlow<CutDTO> =
+        cutRepository
+            .getCutStream(cutId)
+            .map { it ?: defaultCutDTO }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+                initialValue = defaultCutDTO
+            )
+
 
     fun navigate(screenType: HomeScreenType) {
         _uiState.value = _uiState.value.copy(screenType = screenType)
@@ -118,10 +133,10 @@ fun ClientRepository.getClientStateFlows(
                 }
             }
             .stateIn(
-            scope = scope,
-            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = defaultClientDTO
-        )
+                scope = scope,
+                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+                initialValue = defaultClientDTO
+            )
     }
 
 fun CutDateRepository.getClientCutDatesStateFlows(

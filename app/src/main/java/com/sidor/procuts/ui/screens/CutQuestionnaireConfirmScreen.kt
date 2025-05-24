@@ -31,7 +31,7 @@ import com.sidor.procuts.ui.theme.LocalColorPalette
 fun CutQuestionnaireConfirmScreen(
     onBack: () -> Unit,
     onNext: () -> Unit,
-    getCut: () -> CutDTO?
+    cut: CutDTO?
 ) {
     TopAppBarScreen(
         topBar = {
@@ -63,8 +63,7 @@ fun CutQuestionnaireConfirmScreen(
             },
             paddingSpaces = PaddingSpaces(horizontal = 2, top = 2, bottom = 1),
         ) {
-            getCut()
-                ?.let { CutCard(it) }
+            cut?.let { CutCard(it) }
                 ?: Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center

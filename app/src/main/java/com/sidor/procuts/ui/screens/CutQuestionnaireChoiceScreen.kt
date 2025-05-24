@@ -5,21 +5,24 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sidor.procuts.R
-import com.sidor.procuts.data.allCuts
+import com.sidor.procuts.data.CutDTO
 import com.sidor.procuts.ui.PaddingSpaces
 import com.sidor.procuts.ui.screens.cards.CutOptionCard
 import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
+import kotlinx.coroutines.flow.StateFlow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CutQuestionnaireChoiceScreen(
     onBack: () -> Unit,
     onCutChoice: (Int) -> Unit,
-    clientRecentCutIds: List<Int>
+    clientRecentCutIds: List<Int>,
+    allCuts: List<StateFlow<CutDTO>>
 ) {
     TopAppBarScreen(
         topBar = {
@@ -40,8 +43,9 @@ fun CutQuestionnaireChoiceScreen(
                 )
                 DefaultSpacer(1)
             }
-            allCuts.values.toList().forEach { option ->
+            allCuts.toList().forEach { optionFlow ->
                 item {
+                    val option = optionFlow.collectAsState().value
                     CutOptionCard(
                         cutOption = option,
                         onClick = { onCutChoice(option.id) }
@@ -59,9 +63,10 @@ fun CutQuestionnaireChoiceScreen(
                     DefaultSpacer(1)
                 }
             }
-            clientRecentCutIds.mapNotNull  { id -> allCuts[id] }
-                .forEach { option ->
+            clientRecentCutIds.map { id -> allCuts[id] }
+                .forEach { optionFlow ->
                 item {
+                    val option = optionFlow.collectAsState().value
                     CutOptionCard(
                         cutOption = option,
                         onClick = { onCutChoice(option.id) }

@@ -1,6 +1,7 @@
 package com.sidor.procuts.data
 
 import android.net.Uri
+import com.sidor.procuts.R
 import java.util.Date
 
 data class CutDTO(
@@ -9,6 +10,20 @@ data class CutDTO(
     val description: String,
     val imageId: Int
 )
+
+class CutInfoDTO(
+    val name: String,
+    val description: String,
+    val imageId: Int
+) {
+    fun withId(id: Int): CutDTO =
+        CutDTO(
+            id = id,
+            name = name,
+            description = description,
+            imageId = imageId
+        )
+}
 
 data class CutDateDTO(
     val id: Int,
@@ -44,4 +59,11 @@ val defaultCutDateDTO = CutDateDTO(
     date = Date(),
     cutPhoto = null,
     cutParams = mapOf()
+)
+
+val defaultCutDTO = CutDTO(
+    id = -1,
+    name = "Cut not found",
+    description = "",
+    imageId = R.drawable.default_user_cut
 )

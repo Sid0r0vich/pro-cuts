@@ -3,13 +3,20 @@ package com.sidor.procuts.ui.viewmodels
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.sidor.procuts.data.CutDTO
 import com.sidor.procuts.data.CutDateInfoDTO
-import com.sidor.procuts.data.allCuts
-import com.sidor.procuts.data.cutNamesToId
+import com.sidor.procuts.data.CutRepository
+import com.sidor.procuts.data.defaultCutDTO
 import com.sidor.procuts.ui.screens.screentypes.CutQuestionnaireScreenType
+import com.sidor.procuts.ui.viewmodels.HomeViewModel.Companion.TIMEOUT_MILLIS
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import java.util.Date
 
 enum class AddResult {
@@ -18,7 +25,10 @@ enum class AddResult {
     PHONE_NUMBER_IS_NOT_FOUND
 }
 
-open class CutQuestionnaireViewModel() : ViewModel() {
+@HiltViewModel
+open class CutQuestionnaireViewModel @Inject constructor(
+    val cutRepository: CutRepository
+) : ViewModel() {
     data class UiState(
         val screenType: CutQuestionnaireScreenType,
         val clientId: Int? = null,
@@ -56,8 +66,17 @@ open class CutQuestionnaireViewModel() : ViewModel() {
         _uiState.value = _uiState.value.copy(clientId = clientId)
     }
 
-    fun getCut(): CutDTO? {
-        return allCuts[_uiState.value.cutId]
+    fun getCut(): StateFlow<CutDTO?>? {
+        return _uiState.value.cutId?.let {
+            cutRepository
+                .getCutStream(it)
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+                    initialValue = defaultCutDTO
+
+                )
+        }
     }
 
     fun setCutId(cutId: Int) {
@@ -66,6 +85,10 @@ open class CutQuestionnaireViewModel() : ViewModel() {
 
     fun setPhotoUri(photoUri: Uri) {
         _uiState.value = _uiState.value.copy(photoUri = photoUri)
+    }
+
+    fun getAllCuts(): List<StateFlow<CutDTO>> {
+        return cutRepository.getAllCutsStateFlows(viewModelScope)
     }
 
     fun navigate(screenType: CutQuestionnaireScreenType) {
@@ -91,7 +114,9 @@ open class CutQuestionnaireViewModel() : ViewModel() {
         val clientId = _uiState.value.clientPhoneNumber?.let { getClientIdOnPhoneNumber(it.toString()) }
         setClientId(clientId)
 
-        if (cutId == null || !allCuts.contains(cutId)) return AddResult.CUT_NAME_IS_NOT_FOUND
+        val allCutIds = cutRepository.getAll().map { cut -> cut.id }
+        Log.d("CUTLIST", allCutIds.toString())
+        if (cutId == null || !allCutIds.contains(cutId)) return AddResult.CUT_NAME_IS_NOT_FOUND
         if (clientId == null) return AddResult.PHONE_NUMBER_IS_NOT_FOUND
 
         onAddClick(
@@ -106,5 +131,17 @@ open class CutQuestionnaireViewModel() : ViewModel() {
         _uiState.value.paramsMap = mutableMapOf()
 
         return AddResult.SUCCESS
+    }
+}
+
+fun CutRepository.getAllCutsStateFlows(
+    scope: CoroutineScope,
+): List<StateFlow<CutDTO>> {
+    return this.getStream().map { flow ->
+        flow.stateIn(
+            scope = scope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = defaultCutDTO
+        )
     }
 }

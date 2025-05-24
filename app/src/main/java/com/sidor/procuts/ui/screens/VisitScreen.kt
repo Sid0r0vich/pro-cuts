@@ -7,7 +7,6 @@ import androidx.compose.ui.res.stringResource
 import com.sidor.procuts.R
 import com.sidor.procuts.data.CutDTO
 import com.sidor.procuts.data.CutDateDTO
-import com.sidor.procuts.data.allCuts
 import com.sidor.procuts.data.nameToLabelId
 import com.sidor.procuts.data.readableDMYDateFormat
 import com.sidor.procuts.ui.PaddingSpaces
@@ -21,7 +20,8 @@ fun VisitScreen(
     visit: CutDateDTO,
     onBack: () -> Unit,
     onCutClick: (CutDTO) -> Unit,
-    cutParams: Map<String, String>
+    cutParams: Map<String, String>,
+    cut: CutDTO
 ) {
     TopAppBarScreen(
         topBar = {
@@ -54,11 +54,11 @@ fun VisitScreen(
                 )
             }
             item {
-                val cut = allCuts[visit.cutId]
+                val cut = cut
                 DefaultSpacer()
                 CutItem(
-                    name = cut?.name ?: stringResource(R.string.no_found_cut_name),
-                    onClick = { cut?.let { onCutClick(it) } }
+                    name = cut.name,
+                    onClick = { onCutClick(cut) }
                 )
             }
         }

@@ -136,7 +136,8 @@ fun HomeRoute(
                 viewModel.setCut(cut)
                 viewModel.navigateCut()
             },
-            cutParams = viewModel.getCutDateDTO()?.cutParams ?: mapOf()
+            cutParams = viewModel.getCutDateDTO()?.cutParams ?: mapOf(),
+            cut = viewModel.getCutDTO(uiState.cutDate.cutId).collectAsState().value
         )
         HomeScreenType.Cut -> CutScreen(
             cut = uiState.cut!!,

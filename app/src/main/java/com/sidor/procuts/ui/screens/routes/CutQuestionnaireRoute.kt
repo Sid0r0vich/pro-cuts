@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sidor.procuts.CameraActivity
 import com.sidor.procuts.R
@@ -44,7 +45,7 @@ fun CutQuestionnaireRoute(
     onAddCutClick: (CutDateInfoDTO) -> Unit,
     clientPhoneNumber: String? = null,
     getClientIdOnPhoneNumber: (String) -> Int?,
-    viewModel: CutQuestionnaireViewModel = viewModel(),
+    viewModel: CutQuestionnaireViewModel = hiltViewModel(),
     getClientRecentCutIds: @Composable (Int) -> List<Int>,
 ) {
     val uiState = viewModel.uiState.collectAsState().value
@@ -156,7 +157,8 @@ fun CutQuestionnaireRoute(
                 },
                 clientRecentCutIds = viewModel.uiState.value.clientId?.let {
                     getClientRecentCutIds(it)
-                } ?: listOf()
+                } ?: listOf(),
+                allCuts = viewModel.getAllCuts()
             )
 
             CutQuestionnaireScreenType.Confirm -> {
@@ -181,7 +183,7 @@ fun CutQuestionnaireRoute(
                             ToastNotifier(context = ctx).show(message = addResult.toString())
                         }
                     },
-                    getCut = { viewModel.getCut() }
+                    cut = viewModel.getCut()?.collectAsState()?.value
                 )
             }
 
