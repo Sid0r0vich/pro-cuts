@@ -236,4 +236,12 @@
     <string name="no_client_cares">No cares yet…</string>
     <string name="cut_choice_tab_app_bar">Cut choice</string>
     <string name="cut_has_been_created">Cut has been already created!</string>
+    <string name="cut_recommendations">Cut recommendations</string>
+    <string name="recent_cuts">Recent cuts</string>
+    <string name="camera_claim">The camera is now ready to scan client face. AI will help you choose a haircut</string>
+    <string name="photo_is_not_uploaded">Photo is not uploaded!</string>
+    <string name="wrong_uri">Wrong image uri!</string>
+    <string name="choose_cut">Choose client cut</string>
+    <string name="no_cut_found">No cut found</string>
+    <string name="confirm_haircut_tab_app_bar">Confirm cut</string>
 </resources>

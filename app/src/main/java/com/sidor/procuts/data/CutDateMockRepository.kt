@@ -42,19 +42,20 @@ class CutDateMockRepository @Inject constructor(): CutDateRepository {
 
     companion object {
         private var cutDatesMap = mutableListOf(
-            "31-12-2022",
-            "31-12-2023",
-            "28-11-2024",
-            "19-04-2025"
+            Triple("31-12-2022", 0, 3),
+            Triple("31-12-2023", 1, 1),
+            Triple("28-11-2024", 1, 2),
+            Triple("19-04-2025", 1, 3)
         )
-            .map { date -> DMYDateFormat.parse(date)!! }
+            .map { triple -> Triple(DMYDateFormat.parse(triple.first)!!, triple.second, triple.third) }
             .withIndex()
-            .associate { (index, date) -> index to
+            .associate { (index, triple) -> index to
                     CutDateDTO(
                         id = index,
-                        cutId = allCuts.toList().random().second.id,
-                        clientId = 0,
-                        date = date,
+                        cutId = triple.third,
+                        clientId = triple.second,
+                        date = triple.first,
+                        cutPhoto = null,
                         cutParams = mapOf()
                     )
             }

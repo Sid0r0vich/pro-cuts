@@ -47,16 +47,17 @@ class ClientMockRepository @Inject constructor(): ClientRepository {
     companion object {
         private var clientsMap = mutableListOf(
             ClientDTO(id = 0, firstName = "Jason", lastName = "Statham", phoneNumber = "8888888888"),
-            ClientDTO(id = 1, firstName = "Dwayne", middleName =  "Douglas", lastName =  "Johnson"),
-            ClientDTO(id = 2, firstName = "Илья", middleName = "Игоревич", lastName =  "Муромцев"),
-            ClientDTO(id = 3, firstName = "Дмитрий", middleName = "Сергеевич", lastName = "Шалымов"),
-            ClientDTO(id = 4, firstName = "Владимир", lastName = "Путин"),
-            ClientDTO(id = 5, firstName = "Евгений", lastName =  "Туаев"),
-            ClientDTO(id = 6, firstName = "Роберт", lastName = "Смайт"),
-            ClientDTO(id = 7, firstName = "Павел", lastName = "Скаков"),
-            ClientDTO(id = 8, firstName = "Мистер", lastName = "Бист"),
-            ClientDTO(id = 9, firstName = "Иван", lastName = "Иванов"),
-            ClientDTO(id = 10, firstName = "Иван", lastName = "Петрухин"),
+            ClientDTO(id = 1, firstName = "Иван", lastName = "Иванов", phoneNumber = "8888888889"),
+            ClientDTO(id = 11, firstName = "Пётр", lastName = "Петров", phoneNumber = "8888888887"),
+//            ClientDTO(id = 2, firstName = "Илья", middleName = "Игоревич", lastName =  "Муромцев"),
+//            ClientDTO(id = 3, firstName = "Дмитрий", middleName = "Сергеевич", lastName = "Шалымов"),
+//            ClientDTO(id = 4, firstName = "Владимир", lastName = "Путин"),
+//            ClientDTO(id = 5, firstName = "Евгений", lastName =  "Туаев"),
+//            ClientDTO(id = 6, firstName = "Роберт", lastName = "Смайт"),
+//            ClientDTO(id = 7, firstName = "Павел", lastName = "Скаков"),
+//            ClientDTO(id = 8, firstName = "Мистер", lastName = "Бист"),
+//            ClientDTO(id = 9, firstName = "Dwayne", middleName =  "Douglas", lastName =  "Johnson"),
+//            ClientDTO(id = 10, firstName = "Иван", lastName = "Петрухин"),
         ).associate { client ->
             client.id to client
         }.toMutableMap()

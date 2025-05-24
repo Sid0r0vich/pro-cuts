@@ -1,5 +1,6 @@
 package com.sidor.procuts.data
 
+import android.net.Uri
 import java.util.Date
 
 data class CutDTO(
@@ -14,6 +15,7 @@ data class CutDateDTO(
     val cutId: Int,
     val clientId: Int,
     val date: Date,
+    val cutPhoto: Uri?,
     val cutParams: Map<String, String> = mutableMapOf()
 )
 
@@ -21,7 +23,8 @@ class CutDateInfoDTO(
     val cutId: Int,
     val clientId: Int,
     val date: Date,
-    val cutParams: Map<String, String>
+    val cutPhoto: Uri?,
+    val cutParams: Map<String, String>,
 ) {
     fun withId(id: Int): CutDateDTO =
         CutDateDTO(
@@ -29,6 +32,7 @@ class CutDateInfoDTO(
             cutId = cutId,
             clientId = clientId,
             date = date,
+            cutPhoto = cutPhoto,
             cutParams = cutParams
         )
 }
@@ -38,5 +42,6 @@ val defaultCutDateDTO = CutDateDTO(
     cutId = 0,
     clientId = 0,
     date = Date(),
+    cutPhoto = null,
     cutParams = mapOf()
 )

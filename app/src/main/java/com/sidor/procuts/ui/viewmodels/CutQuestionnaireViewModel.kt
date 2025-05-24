@@ -1,7 +1,11 @@
 package com.sidor.procuts.ui.viewmodels
 
+import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.sidor.procuts.data.CutDTO
 import com.sidor.procuts.data.CutDateInfoDTO
+import com.sidor.procuts.data.allCuts
 import com.sidor.procuts.data.cutNamesToId
 import com.sidor.procuts.ui.screens.screentypes.CutQuestionnaireScreenType
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,11 +18,14 @@ enum class AddResult {
     PHONE_NUMBER_IS_NOT_FOUND
 }
 
-open class CutQuestionnaireViewModel : ViewModel() {
+open class CutQuestionnaireViewModel() : ViewModel() {
     data class UiState(
         val screenType: CutQuestionnaireScreenType,
+        val clientId: Int? = null,
         val date: Date = Date(),
         var clientPhoneNumber: String? = null,
+        var photoUri: Uri? = null,
+        var cutId: Int? = null,
         var paramsMap: MutableMap<String, String> = mutableMapOf()
     )
 
@@ -45,6 +52,22 @@ open class CutQuestionnaireViewModel : ViewModel() {
         return _uiState.value.paramsMap[name] ?: ""
     }
 
+    fun setClientId(clientId: Int?) {
+        _uiState.value = _uiState.value.copy(clientId = clientId)
+    }
+
+    fun getCut(): CutDTO? {
+        return allCuts[_uiState.value.cutId]
+    }
+
+    fun setCutId(cutId: Int) {
+        _uiState.value = _uiState.value.copy(cutId = cutId)
+    }
+
+    fun setPhotoUri(photoUri: Uri) {
+        _uiState.value = _uiState.value.copy(photoUri = photoUri)
+    }
+
     fun navigate(screenType: CutQuestionnaireScreenType) {
         _uiState.value = _uiState.value.copy(screenType = screenType)
     }
@@ -64,10 +87,11 @@ open class CutQuestionnaireViewModel : ViewModel() {
         getClientIdOnPhoneNumber: (String) -> Int?,
         onAddClick: (CutDateInfoDTO) -> Unit
     ): AddResult {
-        val cutId = cutNamesToId[getParam("cutName")]
+        val cutId = _uiState.value.cutId
         val clientId = _uiState.value.clientPhoneNumber?.let { getClientIdOnPhoneNumber(it.toString()) }
+        setClientId(clientId)
 
-        if (cutId == null) return AddResult.CUT_NAME_IS_NOT_FOUND
+        if (cutId == null || !allCuts.contains(cutId)) return AddResult.CUT_NAME_IS_NOT_FOUND
         if (clientId == null) return AddResult.PHONE_NUMBER_IS_NOT_FOUND
 
         onAddClick(
@@ -75,6 +99,7 @@ open class CutQuestionnaireViewModel : ViewModel() {
                 cutId = cutId,
                 clientId = clientId,
                 date = _uiState.value.date,
+                cutPhoto = _uiState.value.photoUri,
                 cutParams = _uiState.value.paramsMap
             )
         )

@@ -16,9 +16,10 @@ import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CutChoiceScreen(
+fun CutQuestionnaireChoiceScreen(
     onBack: () -> Unit,
-    onCutChoice: (String) -> Unit
+    onCutChoice: (Int) -> Unit,
+    clientRecentCutIds: List<Int>
 ) {
     TopAppBarScreen(
         topBar = {
@@ -33,21 +34,40 @@ fun CutChoiceScreen(
         ) {
             item {
                 Text(
-                    text = R.string.cut_recomendations,
+                    text = stringResource(R.string.cut_recommendations),
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(horizontal = 5.dp)
                 )
+                DefaultSpacer(1)
             }
-            cutOptions.forEach { option ->
+            allCuts.values.toList().forEach { option ->
                 item {
                     CutOptionCard(
                         cutOption = option,
-                        onClick = { onCutChoice(option.name) }
+                        onClick = { onCutChoice(option.id) }
+                    )
+                }
+            }
+            if (clientRecentCutIds.isNotEmpty()) {
+                item {
+                    DefaultSpacer(2)
+                    Text(
+                        text = stringResource(R.string.recent_cuts),
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.padding(horizontal = 5.dp)
+                    )
+                    DefaultSpacer(1)
+                }
+            }
+            clientRecentCutIds.mapNotNull  { id -> allCuts[id] }
+                .forEach { option ->
+                item {
+                    CutOptionCard(
+                        cutOption = option,
+                        onClick = { onCutChoice(option.id) }
                     )
                 }
             }
         }
     }
 }
-
-val cutOptions = allCuts.values.toList()

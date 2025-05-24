@@ -1,6 +1,5 @@
 package com.sidor.procuts.ui.viewmodels
 
-import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sidor.procuts.data.ClientDTO
@@ -19,12 +18,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
@@ -97,9 +92,10 @@ open class HomeViewModel @Inject constructor(
     }
 
     fun getClientCutDates(
-        onComplete: () -> Unit
+        clientId: Int? = _uiState.value.clientDTO?.id,
+        onComplete: () -> Unit = {}
     ): List<StateFlow<CutDateDTO>> =
-        _uiState.value.clientDTO?.id?.let { cutDateRepository.getClientCutDatesStateFlows(
+        clientId?.let { cutDateRepository.getClientCutDatesStateFlows(
             clientId = it,
             scope = viewModelScope,
             onComplete = onComplete

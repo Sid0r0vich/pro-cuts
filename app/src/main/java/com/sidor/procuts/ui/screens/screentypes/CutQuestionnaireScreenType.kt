@@ -22,6 +22,8 @@ enum class CutQuestionnaireScreenType {
 //    PreferredStyles,
 //    Allergies,
 //    ProductUsage,
+    PhoneNumber,
+    Camera,
     Choice,
-    Add,
+    Confirm
 }

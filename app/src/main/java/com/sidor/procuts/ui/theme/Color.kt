@@ -10,7 +10,8 @@ data class ColorPalette(
     val cardColor: Color,
     val darkFontColor: Color,
     val disabledColor: Color,
-    val errorColor: Color
+    val errorColor: Color,
+    val onButtonColor: Color
 )
 
 val barDarkColor = Color(0xff242f3d)
@@ -21,6 +22,7 @@ val cardDarkColor = Color(0xff3e546a)
 val cardLightColor = Color(0xffffffff)
 val buttonLightColor = Color(0xff2c3135)
 val buttonDarkColor = Color(0xffffffff)
+val onButtonLightColor = Color.White
 val disabledDarkColor = Color(0xffe6e6e6)
 val disabledLightColor = Color(0xffe6e6e6)
 
@@ -31,6 +33,7 @@ val baseLightPalette = ColorPalette(
     mainColor = Color.White,
     oppositeColor = Color.Black,
     buttonColor = buttonLightColor,
+    onButtonColor = onButtonLightColor,
     barColor = barLightColor,
     cardColor = cardLightColor,
     darkFontColor = darkFontColor,

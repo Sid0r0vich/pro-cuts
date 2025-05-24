@@ -72,4 +72,12 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:2.56.1")
 
     implementation("com.googlecode.libphonenumber:libphonenumber:8.12.50")
+
+    implementation("androidx.camera:camera-camera2:1.3.0")
+    implementation("androidx.camera:camera-lifecycle:1.3.0n")
+    implementation("androidx.camera:camera-view:1.3.0")
+    implementation("androidx.camera:camera-extensions:1.3.0")
+    implementation("com.google.accompanist:accompanist-permissions:0.37.3")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.36.0")
+    implementation("androidx.fragment:fragment-ktx:1.8.7")
 }
