@@ -21,11 +21,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sidor.procuts.CameraActivity
 import com.sidor.procuts.R
 import com.sidor.procuts.data.CutDateInfoDTO
 import com.sidor.procuts.data.cutQuestionnaireScreenInfoLists
+import com.sidor.procuts.network.defaultFeatures
 import com.sidor.procuts.ui.ToastNotifier
 import com.sidor.procuts.ui.screens.CameraClaimScreen
 import com.sidor.procuts.ui.screens.CutQuestionnaireChoiceScreen
@@ -129,6 +129,12 @@ fun CutQuestionnaireRoute(
                 },
             )
             CutQuestionnaireScreenType.Camera -> {
+                val clientRecentCuts = viewModel.getClientId()?.let { getClientRecentCutIds(it) }
+                val onNext = {
+                    viewModel.getCutRecommendations(defaultFeatures)
+                    clientRecentCuts?.let { viewModel.setRecentCuts(it) }
+                    onNextQuestion(CutQuestionnaireScreenType.Camera)()
+                }
                 val ctx = LocalContext.current
                 val textWrongUri = stringResource(R.string.wrong_uri)
                 val launcher = rememberLauncherForActivityResult(
@@ -138,7 +144,7 @@ fun CutQuestionnaireRoute(
                         val photoUri = result.data?.getStringExtra("photoUri")
                         photoUri?.let {
                             viewModel.setPhotoUri(it.toUri())
-                            onNextQuestion(CutQuestionnaireScreenType.Camera)()
+                            onNext()
                         } ?: ToastNotifier(ctx).show(message = textWrongUri)
                     }
                 }
@@ -149,17 +155,18 @@ fun CutQuestionnaireRoute(
             }
 
 
-            CutQuestionnaireScreenType.Choice -> CutQuestionnaireChoiceScreen(
-                onBack = onPrevQuestion(CutQuestionnaireScreenType.Choice),
-                onCutChoice = { cutId: Int ->
-                    viewModel.setCutId(cutId)
-                    onNextQuestion(CutQuestionnaireScreenType.Choice)()
-                },
-                clientRecentCutIds = viewModel.uiState.value.clientId?.let {
-                    getClientRecentCutIds(it)
-                } ?: listOf(),
-                allCuts = viewModel.getAllCuts()
-            )
+            CutQuestionnaireScreenType.Choice -> {
+                CutQuestionnaireChoiceScreen(
+                    onBack = onPrevQuestion(CutQuestionnaireScreenType.Choice),
+                    onCutChoice = { cutId: Int ->
+                        viewModel.setCutId(cutId)
+                        onNextQuestion(CutQuestionnaireScreenType.Choice)()
+                    },
+                    recentCuts = viewModel.getRecentCuts() ?: listOf(),
+                    recommendationsUiState = viewModel.recommendationsUiState,
+                    cutRecommendations = viewModel.getCutRecommendations() ?: listOf()
+                )
+            }
 
             CutQuestionnaireScreenType.Confirm -> {
                 val ctx = LocalContext.current
@@ -172,8 +179,6 @@ fun CutQuestionnaireRoute(
                             getClientIdOnPhoneNumber = getClientIdOnPhoneNumber,
                             onAddClick = onAddCutClick,
                         )
-
-                        Log.d("CHOOSE", addResult.toString())
 
                         if (addResult == AddResult.SUCCESS) {
                             ToastNotifier(context = ctx).show(message = successMessage)

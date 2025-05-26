@@ -14,6 +14,7 @@ import com.sidor.procuts.data.CutDTO
 import com.sidor.procuts.ui.PaddingSpaces
 import com.sidor.procuts.ui.screens.cards.CutOptionCard
 import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
+import com.sidor.procuts.ui.viewmodels.RecommendationsUIState
 import kotlinx.coroutines.flow.StateFlow
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -21,8 +22,9 @@ import kotlinx.coroutines.flow.StateFlow
 fun CutQuestionnaireChoiceScreen(
     onBack: () -> Unit,
     onCutChoice: (Int) -> Unit,
-    clientRecentCutIds: List<Int>,
-    allCuts: List<StateFlow<CutDTO>>
+    recommendationsUiState: RecommendationsUIState,
+    cutRecommendations: List<StateFlow<CutDTO>>,
+    recentCuts: List<StateFlow<CutDTO>>,
 ) {
     TopAppBarScreen(
         topBar = {
@@ -43,16 +45,21 @@ fun CutQuestionnaireChoiceScreen(
                 )
                 DefaultSpacer(1)
             }
-            allCuts.toList().forEach { optionFlow ->
-                item {
-                    val option = optionFlow.collectAsState().value
-                    CutOptionCard(
-                        cutOption = option,
-                        onClick = { onCutChoice(option.id) }
-                    )
-                }
+            when(recommendationsUiState) {
+                is RecommendationsUIState.Success ->
+                    cutRecommendations
+                        .forEach { optionFlow ->
+                            item {
+                                val option = optionFlow.collectAsState().value
+                                CutOptionCard(
+                                    cutOption = option,
+                                    onClick = { onCutChoice(option.id) }
+                                )
+                            }
+                        }
+                else -> {}
             }
-            if (clientRecentCutIds.isNotEmpty()) {
+            if (recentCuts.isNotEmpty()) {
                 item {
                     DefaultSpacer(2)
                     Text(
@@ -63,16 +70,16 @@ fun CutQuestionnaireChoiceScreen(
                     DefaultSpacer(1)
                 }
             }
-            clientRecentCutIds.map { id -> allCuts[id] }
+            recentCuts
                 .forEach { optionFlow ->
-                item {
-                    val option = optionFlow.collectAsState().value
-                    CutOptionCard(
-                        cutOption = option,
-                        onClick = { onCutChoice(option.id) }
-                    )
+                    item {
+                        val option = optionFlow.collectAsState().value
+                        CutOptionCard(
+                            cutOption = option,
+                            onClick = { onCutChoice(option.id) }
+                        )
+                    }
                 }
-            }
         }
     }
 }

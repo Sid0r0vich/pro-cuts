@@ -67,12 +67,15 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("io.coil-kt:coil-compose:2.7.0")
 
+    // Dependency injection
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     implementation("com.google.dagger:hilt-android:2.56.1")
     kapt("com.google.dagger:hilt-android-compiler:2.56.1")
 
+    // Phone number parser
     implementation("com.googlecode.libphonenumber:libphonenumber:8.12.50")
 
+    // Camera
     implementation("androidx.camera:camera-camera2:1.3.0")
     implementation("androidx.camera:camera-lifecycle:1.3.0n")
     implementation("androidx.camera:camera-view:1.3.0")
@@ -80,4 +83,10 @@ dependencies {
     implementation("com.google.accompanist:accompanist-permissions:0.37.3")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.36.0")
     implementation("androidx.fragment:fragment-ktx:1.8.7")
+
+    // Retrofit
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("io.coil-kt:coil-compose:2.7.0")
 }
