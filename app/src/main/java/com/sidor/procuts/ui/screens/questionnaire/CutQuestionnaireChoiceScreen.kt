@@ -1,4 +1,4 @@
-package com.sidor.procuts.ui.screens
+package com.sidor.procuts.ui.screens.questionnaire
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -12,6 +12,9 @@ import androidx.compose.ui.unit.dp
 import com.sidor.procuts.R
 import com.sidor.procuts.data.CutDTO
 import com.sidor.procuts.ui.PaddingSpaces
+import com.sidor.procuts.ui.screens.DefaultSpacer
+import com.sidor.procuts.ui.screens.LazyPaddingScreen
+import com.sidor.procuts.ui.screens.TopAppBarScreen
 import com.sidor.procuts.ui.screens.cards.CutOptionCard
 import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
 import com.sidor.procuts.ui.viewmodels.RecommendationsUIState
@@ -45,7 +48,7 @@ fun CutQuestionnaireChoiceScreen(
                 )
                 DefaultSpacer(1)
             }
-            when(recommendationsUiState) {
+            when (recommendationsUiState) {
                 is RecommendationsUIState.Success ->
                     cutRecommendations
                         .forEach { optionFlow ->
@@ -57,6 +60,7 @@ fun CutQuestionnaireChoiceScreen(
                                 )
                             }
                         }
+
                 else -> {}
             }
             if (recentCuts.isNotEmpty()) {

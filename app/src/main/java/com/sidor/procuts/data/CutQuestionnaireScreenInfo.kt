@@ -4,21 +4,28 @@ import com.sidor.procuts.R
 import com.sidor.procuts.ui.screens.screentypes.CutQuestionnaireScreenType
 
 data class CutQuestionnaireScreenInfo(
-    val paramLabelId: Int,
-    val questionId: Int,
-    val paramIdList: List<Int>,
     val paramName: String,
+    val question: String,
+    val paramList: List<String>,
     val screenType: CutQuestionnaireScreenType
 )
 
-val cutQuestionnaireScreenInfoLists: List<CutQuestionnaireScreenInfo> = listOf(
-    CutQuestionnaireScreenInfo(
-        paramLabelId = R.string.client_age_group,
-        questionId = R.string.question_age_group,
-        paramIdList = ageGroupList,
-        paramName = "age",
-        screenType = CutQuestionnaireScreenType.Age
-    ),
+//data class CutQuestionnaireScreenInfo(
+//    val paramLabelId: Int,
+//    val questionId: Int,
+//    val paramIdList: List<Int>,
+//    val paramName: String,
+//    val screenType: CutQuestionnaireScreenType
+//)
+//
+//val cutQuestionnaireScreenInfoLists: List<CutQuestionnaireScreenInfo> = listOf(
+//    CutQuestionnaireScreenInfo(
+//        paramLabelId = R.string.client_age_group,
+//        questionId = R.string.question_age_group,
+//        paramIdList = ageGroupList,
+//        paramName = "age",
+//        screenType = CutQuestionnaireScreenType.Age
+//    ),
 //    CutQuestionnaireScreenInfo(
 //        paramLabelId = R.string.cut_frequency,
 //        questionId = R.string.question_cut_frequency,
@@ -152,4 +159,4 @@ val cutQuestionnaireScreenInfoLists: List<CutQuestionnaireScreenInfo> = listOf(
 //        paramName = "productUsage",
 //        screenType = CutQuestionnaireScreenType.ProductUsage
 //    )
-)
+//)

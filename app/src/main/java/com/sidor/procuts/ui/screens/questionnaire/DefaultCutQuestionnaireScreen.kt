@@ -1,4 +1,4 @@
-package com.sidor.procuts.ui.screens
+package com.sidor.procuts.ui.screens.questionnaire
 
 
 import androidx.compose.foundation.layout.ColumnScope
@@ -17,6 +17,9 @@ import androidx.compose.ui.unit.dp
 import com.sidor.procuts.R
 import com.sidor.procuts.ui.PaddingSpaces
 import com.sidor.procuts.ui.QuestionnaireDropdownMenu
+import com.sidor.procuts.ui.screens.DefaultPaddingScreenWithQuestionnaireButtons
+import com.sidor.procuts.ui.screens.DefaultSpacer
+import com.sidor.procuts.ui.screens.TopAppBarScreen
 import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,7 +73,6 @@ fun CutQuestionnaireScreenWithSeveralAnswerOption(
         )
         DefaultSpacer(2)
         QuestionnaireDropdownMenu(
-            name = name,
             value = value,
             onValueChanged = {
                 onValueChange(it)

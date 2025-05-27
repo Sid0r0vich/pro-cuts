@@ -11,10 +11,12 @@ import com.sidor.procuts.data.CutDTO
 import com.sidor.procuts.data.CutDateInfoDTO
 import com.sidor.procuts.data.CutRepository
 import com.sidor.procuts.data.defaultCutDTO
-import com.sidor.procuts.network.CutRecommendation
-import com.sidor.procuts.network.Features
-import com.sidor.procuts.network.InferCutRecommendationsApi
-import com.sidor.procuts.network.defaultFeatures
+import com.sidor.procuts.network.googleforms.GoogleFormsApi
+import com.sidor.procuts.network.googleforms.Question
+import com.sidor.procuts.network.googleforms.QuestionOptions
+import com.sidor.procuts.network.infer.CutRecommendation
+import com.sidor.procuts.network.infer.Features
+import com.sidor.procuts.network.infer.InferCutRecommendationsApi
 import com.sidor.procuts.ui.screens.screentypes.CutQuestionnaireScreenType
 import com.sidor.procuts.ui.viewmodels.HomeViewModel.Companion.TIMEOUT_MILLIS
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,10 +26,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
-import java.util.Date
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import java.io.IOException
+import java.util.Date
 
 enum class AddResult {
     SUCCESS,
@@ -48,6 +50,7 @@ open class CutQuestionnaireViewModel @Inject constructor(
 ) : ViewModel() {
     data class UiState(
         val screenType: CutQuestionnaireScreenType,
+        val questionInd: Int = 0,
         val clientId: Int? = null,
         val date: Date = Date(),
         var clientPhoneNumber: String? = null,
@@ -55,8 +58,15 @@ open class CutQuestionnaireViewModel @Inject constructor(
         var cutId: Int? = null,
         var cutRecommendations: List<StateFlow<CutDTO>>? = null,
         var recentCuts: List<StateFlow<CutDTO>>? = null,
+        var questionList: List<QuestionOptions>? = null,
         var paramsMap: MutableMap<String, String> = mutableMapOf()
     )
+
+    init {
+        viewModelScope.launch {
+            getForm()
+        }
+    }
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState(CutQuestionnaireScreenType.DateName))
     val uiState: StateFlow<UiState> get() = _uiState
@@ -96,10 +106,16 @@ open class CutQuestionnaireViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(cutRecommendations = cutRecommendations)
     }
 
+    fun getQuestionList() = _uiState.value.questionList
+
+    fun setQuestionList(questionList: List<QuestionOptions>) {
+        _uiState.value = _uiState.value.copy(questionList = questionList)
+    }
+
     fun getRecentCuts() = _uiState.value.recentCuts
 
     fun setRecentCuts(recentCutIds: List<Int>) {
-        val recentCuts = cutRepository.getCutsStateFlows(recentCutIds, viewModelScope)
+        val recentCuts = cutRepository.getCutsStateFlowsByIds(recentCutIds, viewModelScope)
         _uiState.value = _uiState.value.copy(recentCuts = recentCuts)
     }
 
@@ -125,7 +141,7 @@ open class CutQuestionnaireViewModel @Inject constructor(
     }
 
     fun getCuts(cutIds: List<Int>): List<StateFlow<CutDTO>> {
-        return cutRepository.getCutsStateFlows(cutIds, viewModelScope)
+        return cutRepository.getCutsStateFlowsByIds(cutIds, viewModelScope)
     }
 
     fun navigate(screenType: CutQuestionnaireScreenType) {
@@ -141,6 +157,10 @@ open class CutQuestionnaireViewModel @Inject constructor(
         var next = cutQuestionnaireScreenType.ordinal - 1
         if (next < 0) next += CutQuestionnaireScreenType.entries.size
         return CutQuestionnaireScreenType.entries[next]
+    }
+
+    fun setQuestionInd(questionInd: Int) {
+        _uiState.value = _uiState.value.copy(questionInd = questionInd)
     }
 
     fun tryAddCut(
@@ -170,25 +190,31 @@ open class CutQuestionnaireViewModel @Inject constructor(
     }
 
     fun getCutRecommendations(features: Features) {
-        Log.d("GETREC", "GETREC")
         viewModelScope.launch {
-            val jsonString = Json.encodeToString(defaultFeatures)
-            Log.d("SERIALIZEDFEATURES", jsonString)
-
             recommendationsUiState = RecommendationsUIState.Loading
             recommendationsUiState = try {
-                val listResult = InferCutRecommendationsApi.retrofitService.getRecommendations(features)
+                val listResult = InferCutRecommendationsApi.retrofitService.getRecommendations(features).predictions
 
                 setCutRecommendations(
-                    cutRepository.getCutsStateFlows(
-                        listResult.map { cutRecommendation -> cutRecommendation.cutId },
+                    cutRepository.getCutsStateFlowsByNames(
+                        listResult.map { cutRecommendation -> cutRecommendation.style },
                         viewModelScope
                     )
                 )
                 RecommendationsUIState.Success(listResult)
             } catch (e: IOException) {
+                Log.e("RETROFIT", e.toString())
                 RecommendationsUIState.Error
             }
+        }
+    }
+
+    suspend fun getForm() {
+        try {
+            val questionList = InferCutRecommendationsApi.retrofitService.getOptions().toQuestionList()
+            if (questionList.isNotEmpty()) setQuestionList(questionList.drop(1))
+        } catch (e: Exception) {
+            Log.e("RETROFIT", e.toString())
         }
     }
 }
@@ -205,11 +231,24 @@ fun CutRepository.getAllCutsStateFlows(
     }
 }
 
-fun CutRepository.getCutsStateFlows(
+fun CutRepository.getCutsStateFlowsByIds(
     cutIds: List<Int>,
     scope: CoroutineScope,
 ): List<StateFlow<CutDTO>> {
-    return this.getCuts(cutIds).map { flow ->
+    return this.getCutsByIds(cutIds).map { flow ->
+        flow.stateIn(
+            scope = scope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = defaultCutDTO
+        )
+    }
+}
+
+fun CutRepository.getCutsStateFlowsByNames(
+    cutNames: List<String>,
+    scope: CoroutineScope,
+): List<StateFlow<CutDTO>> {
+    return this.getCutsByNames(cutNames).map { flow ->
         flow.stateIn(
             scope = scope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),

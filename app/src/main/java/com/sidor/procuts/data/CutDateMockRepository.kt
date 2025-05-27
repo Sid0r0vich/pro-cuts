@@ -42,10 +42,10 @@ class CutDateMockRepository @Inject constructor(): CutDateRepository {
 
     companion object {
         private var cutDatesMap = mutableListOf(
-            Triple("31-12-2022", 0, 3),
-            Triple("31-12-2023", 1, 1),
-            Triple("28-11-2024", 1, 2),
-            Triple("19-04-2025", 1, 3)
+            Triple("31-12-2022", 0, 12),
+            Triple("31-12-2023", 1, 0),
+            Triple("28-11-2024", 1, 4),
+            Triple("19-04-2025", 1, 7)
         )
             .map { triple -> Triple(DMYDateFormat.parse(triple.first)!!, triple.second, triple.third) }
             .withIndex()

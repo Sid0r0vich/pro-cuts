@@ -1,4 +1,4 @@
-package com.sidor.procuts.ui.screens
+package com.sidor.procuts.ui.screens.questionnaire
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import com.sidor.procuts.R
 import com.sidor.procuts.data.CutDTO
 import com.sidor.procuts.ui.PaddingSpaces
+import com.sidor.procuts.ui.screens.PaddingScreenWithBottomButtons
+import com.sidor.procuts.ui.screens.TopAppBarScreen
 import com.sidor.procuts.ui.screens.cards.CutCard
 import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
 import com.sidor.procuts.ui.theme.LocalColorPalette

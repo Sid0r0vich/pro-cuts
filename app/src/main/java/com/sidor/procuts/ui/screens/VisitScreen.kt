@@ -7,7 +7,6 @@ import androidx.compose.ui.res.stringResource
 import com.sidor.procuts.R
 import com.sidor.procuts.data.CutDTO
 import com.sidor.procuts.data.CutDateDTO
-import com.sidor.procuts.data.nameToLabelId
 import com.sidor.procuts.data.readableDMYDateFormat
 import com.sidor.procuts.ui.PaddingSpaces
 import com.sidor.procuts.ui.TextWithBoldField
@@ -34,12 +33,12 @@ fun VisitScreen(
         LazyPaddingScreen(
             paddingSpaces = PaddingSpaces(2)
         ) {
-            nameToLabelId.forEach { (name, label) ->
+            cutParams.forEach { (name, option) ->
                 item {
                     if (cutParams[name] != null) {
                         TextWithBoldField(
-                            field = stringResource(label),
-                            value = cutParams[name]!!,
+                            field = name,
+                            value = option,
                             style = MaterialTheme.typography.titleLarge
                         )
                         DefaultSpacer()

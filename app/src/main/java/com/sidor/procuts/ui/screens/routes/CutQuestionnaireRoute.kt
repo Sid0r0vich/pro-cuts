@@ -2,7 +2,6 @@ package com.sidor.procuts.ui.screens.routes
 
 import android.app.Activity
 import android.content.Intent
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
@@ -24,15 +23,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.sidor.procuts.CameraActivity
 import com.sidor.procuts.R
 import com.sidor.procuts.data.CutDateInfoDTO
-import com.sidor.procuts.data.cutQuestionnaireScreenInfoLists
-import com.sidor.procuts.network.defaultFeatures
+import com.sidor.procuts.network.infer.defaultFeatures
 import com.sidor.procuts.ui.ToastNotifier
-import com.sidor.procuts.ui.screens.CameraClaimScreen
-import com.sidor.procuts.ui.screens.CutQuestionnaireChoiceScreen
-import com.sidor.procuts.ui.screens.CutQuestionnaireConfirmScreen
-import com.sidor.procuts.ui.screens.CutQuestionnaireFirstScreen
-import com.sidor.procuts.ui.screens.CutQuestionnairePhoneNumberScreen
-import com.sidor.procuts.ui.screens.CutQuestionnaireScreenWithSeveralAnswerOption
+import com.sidor.procuts.ui.screens.questionnaire.CameraClaimScreen
+import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireChoiceScreen
+import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireConfirmScreen
+import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireDateScreen
+import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnairePhoneNumberScreen
+import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireScreenWithSeveralAnswerOption
 import com.sidor.procuts.ui.screens.screentypes.CutQuestionnaireScreenType
 import com.sidor.procuts.ui.viewmodels.AddResult
 import com.sidor.procuts.ui.viewmodels.CutQuestionnaireViewModel
@@ -54,7 +52,7 @@ fun CutQuestionnaireRoute(
     var phoneNumberIsExists by rememberSaveable { mutableStateOf(true) }
 
     AnimatedContent(
-        targetState = uiState.screenType,
+        targetState = Pair(uiState.screenType, uiState.questionInd),
         transitionSpec = {
             if (isNavigatingForward) {
                 slideInHorizontally(initialOffsetX = { it }) with slideOutHorizontally(targetOffsetX = { -it })
@@ -62,8 +60,8 @@ fun CutQuestionnaireRoute(
                 slideInHorizontally(initialOffsetX = { -it }) with slideOutHorizontally(targetOffsetX = { it })
             }
         }
-    ) { screenType ->
-        val onNextQuestion = { cutQuestionnaireScreenType: CutQuestionnaireScreenType ->
+    ) { (screenType, questionInd) ->
+        val onNextScreenType = { cutQuestionnaireScreenType: CutQuestionnaireScreenType ->
             {
                 isNavigatingForward = true
                 viewModel.navigate(
@@ -73,7 +71,7 @@ fun CutQuestionnaireRoute(
                 )
             }
         }
-        val onPrevQuestion = { cutQuestionnaireScreenType: CutQuestionnaireScreenType ->
+        val onPrevScreenType = { cutQuestionnaireScreenType: CutQuestionnaireScreenType ->
             {
                 isNavigatingForward = false
                 viewModel.navigate(
@@ -84,39 +82,55 @@ fun CutQuestionnaireRoute(
             }
         }
 
-        val screens = cutQuestionnaireScreenInfoLists
-            .map { screen ->
-                @Composable {
-                    CutQuestionnaireScreenWithSeveralAnswerOption(
-                        onBack = onPrevQuestion(screen.screenType),
-                        onNext = onNextQuestion(screen.screenType),
-                        text = stringResource(screen.questionId),
-                        name = stringResource(screen.paramLabelId),
-                        defaultValue = viewModel.getParam(screen.paramName),
-                        onValueChange = { value ->
-                            viewModel.setParam(screen.paramName, value)
-                        },
-                        valuesList = screen.paramIdList.map { stringResource(it) },
-                    )
+        val questionList = viewModel.getQuestionList()
+        val screens = questionList
+                ?.withIndex()
+                ?.map { (ind, question) ->
+                    @Composable {
+                        CutQuestionnaireScreenWithSeveralAnswerOption(
+                            onBack = {
+                                isNavigatingForward = false
+                                if (ind == 0) onPrevScreenType(CutQuestionnaireScreenType.Question)()
+                                else viewModel.setQuestionInd(ind - 1)
+                            },
+                            onNext = {
+                                isNavigatingForward = true
+                                if (ind == questionList.size - 1) onNextScreenType(
+                                    CutQuestionnaireScreenType.Question
+                                )()
+                                else viewModel.setQuestionInd(ind + 1)
+                            },
+                            text = question.question,
+                            name = "",
+                            defaultValue = if (question.options.isNotEmpty()) question.options[0] else "",
+                            onValueChange = { value ->
+                                viewModel.setParam(question.question, value)
+                            },
+                            valuesList = question.options,
+                        )
+                    }
                 }
-            }
 
         when (screenType) {
-            CutQuestionnaireScreenType.DateName -> CutQuestionnaireFirstScreen(
-                onNext = onNextQuestion(CutQuestionnaireScreenType.DateName),
+            CutQuestionnaireScreenType.DateName -> CutQuestionnaireDateScreen(
+                onNext = onNextScreenType(CutQuestionnaireScreenType.DateName),
                 onBack = onBack,
                 onDateChange = { date -> viewModel.setDate(date) },
                 date = viewModel.getDate()
             )
 
+            CutQuestionnaireScreenType.Question -> {
+                if (!screens.isNullOrEmpty()) screens[questionInd]()
+            }
+
             CutQuestionnaireScreenType.PhoneNumber -> CutQuestionnairePhoneNumberScreen(
-                onBack = onPrevQuestion(CutQuestionnaireScreenType.PhoneNumber),
+                onBack = onPrevScreenType(CutQuestionnaireScreenType.PhoneNumber),
                 onNext = { phoneNumber: String ->
                     viewModel.setPhoneNumber(phoneNumber)
                     val clientId = getClientIdOnPhoneNumber(phoneNumber)
                     viewModel.setClientId(clientId)
 
-                    if (clientId != null) onNextQuestion(CutQuestionnaireScreenType.PhoneNumber)()
+                    if (clientId != null) onNextScreenType(CutQuestionnaireScreenType.PhoneNumber)()
                     else {
                         phoneNumberIsExists = false
                     }
@@ -133,7 +147,7 @@ fun CutQuestionnaireRoute(
                 val onNext = {
                     viewModel.getCutRecommendations(defaultFeatures)
                     clientRecentCuts?.let { viewModel.setRecentCuts(it) }
-                    onNextQuestion(CutQuestionnaireScreenType.Camera)()
+                    onNextScreenType(CutQuestionnaireScreenType.Camera)()
                 }
                 val ctx = LocalContext.current
                 val textWrongUri = stringResource(R.string.wrong_uri)
@@ -149,7 +163,7 @@ fun CutQuestionnaireRoute(
                     }
                 }
                 CameraClaimScreen(
-                    onBack = onPrevQuestion(CutQuestionnaireScreenType.Camera),
+                    onBack = onPrevScreenType(CutQuestionnaireScreenType.Camera),
                     onNext = { launcher.launch(Intent(ctx, CameraActivity::class.java)) },
                 )
             }
@@ -157,10 +171,10 @@ fun CutQuestionnaireRoute(
 
             CutQuestionnaireScreenType.Choice -> {
                 CutQuestionnaireChoiceScreen(
-                    onBack = onPrevQuestion(CutQuestionnaireScreenType.Choice),
+                    onBack = onPrevScreenType(CutQuestionnaireScreenType.Choice),
                     onCutChoice = { cutId: Int ->
                         viewModel.setCutId(cutId)
-                        onNextQuestion(CutQuestionnaireScreenType.Choice)()
+                        onNextScreenType(CutQuestionnaireScreenType.Choice)()
                     },
                     recentCuts = viewModel.getRecentCuts() ?: listOf(),
                     recommendationsUiState = viewModel.recommendationsUiState,
@@ -173,7 +187,7 @@ fun CutQuestionnaireRoute(
                 val successMessage = stringResource(R.string.cut_has_been_created)
 
                 CutQuestionnaireConfirmScreen(
-                    onBack = onPrevQuestion(CutQuestionnaireScreenType.Confirm),
+                    onBack = onPrevScreenType(CutQuestionnaireScreenType.Confirm),
                     onNext = {
                         val addResult = viewModel.tryAddCut(
                             getClientIdOnPhoneNumber = getClientIdOnPhoneNumber,
@@ -183,18 +197,13 @@ fun CutQuestionnaireRoute(
                         if (addResult == AddResult.SUCCESS) {
                             ToastNotifier(context = ctx).show(message = successMessage)
                             onBack()
-                            onNextQuestion(CutQuestionnaireScreenType.PhoneNumber)()
+                            viewModel.navigate(CutQuestionnaireScreenType.DateName)
                         } else if (addResult == AddResult.PHONE_NUMBER_IS_NOT_FOUND) {
                             ToastNotifier(context = ctx).show(message = addResult.toString())
                         }
                     },
                     cut = viewModel.getCut()?.collectAsState()?.value
                 )
-            }
-
-            else -> {
-                val index = screenType.ordinal - 1
-                screens[index]()
             }
         }
     }

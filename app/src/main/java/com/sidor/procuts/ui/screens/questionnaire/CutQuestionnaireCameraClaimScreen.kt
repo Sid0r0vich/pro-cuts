@@ -1,4 +1,4 @@
-package com.sidor.procuts.ui.screens
+package com.sidor.procuts.ui.screens.questionnaire
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sidor.procuts.R
+import com.sidor.procuts.ui.screens.DefaultSpacer
 
 
 @Composable

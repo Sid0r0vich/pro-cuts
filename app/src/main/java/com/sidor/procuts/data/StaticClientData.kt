@@ -143,10 +143,10 @@ val productUsageList = listOf(
     R.string.product_usage_none
 )
 
-val nameToLabelId = cutQuestionnaireScreenInfoLists
-    .associate { screen ->
-        screen.paramName to screen.paramLabelId
-    }.toMutableMap()
-    .also {
-        it["cutName"] = R.string.cut_name
-    }
+//val nameToLabelId = cutQuestionnaireScreenInfoLists
+//    .associate { screen ->
+//        screen.paramName to screen.paramLabelId
+//    }.toMutableMap()
+//    .also {
+//        it["cutName"] = R.string.cut_name
+//    }

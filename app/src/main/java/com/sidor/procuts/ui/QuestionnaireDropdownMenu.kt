@@ -18,7 +18,6 @@ import com.sidor.procuts.ui.theme.LocalColorPalette
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QuestionnaireDropdownMenu(
-    name: String,
     value: String,
     onValueChanged: (String) -> Unit,
     menuList: List<String>
@@ -35,7 +34,6 @@ fun QuestionnaireDropdownMenu(
             readOnly = true,
             value = value,
             onValueChange = { },
-            label = { Text(text = name) },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(
                     expanded = expanded
