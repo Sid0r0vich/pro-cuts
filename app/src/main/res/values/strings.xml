@@ -244,4 +244,5 @@
     <string name="choose_cut">Choose client cut</string>
     <string name="no_cut_found">No cut found</string>
     <string name="confirm_haircut_tab_app_bar">Confirm cut</string>
+    <string name="retry">Retry</string>
 </resources>

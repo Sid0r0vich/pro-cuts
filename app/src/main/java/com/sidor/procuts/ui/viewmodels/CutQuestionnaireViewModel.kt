@@ -11,8 +11,6 @@ import com.sidor.procuts.data.CutDTO
 import com.sidor.procuts.data.CutDateInfoDTO
 import com.sidor.procuts.data.CutRepository
 import com.sidor.procuts.data.defaultCutDTO
-import com.sidor.procuts.network.googleforms.GoogleFormsApi
-import com.sidor.procuts.network.googleforms.Question
 import com.sidor.procuts.network.googleforms.QuestionOptions
 import com.sidor.procuts.network.infer.CutRecommendation
 import com.sidor.procuts.network.infer.Features
@@ -27,7 +25,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
 import java.io.IOException
 import java.util.Date
 
@@ -39,9 +36,14 @@ enum class AddResult {
 
 sealed interface RecommendationsUIState {
     data class Success(val recommendations: List<CutRecommendation>): RecommendationsUIState
-    object Wait: RecommendationsUIState
-    object Error: RecommendationsUIState
+    data class Error(val message: String): RecommendationsUIState
     object Loading: RecommendationsUIState
+}
+
+sealed interface QuestionnaireUIState {
+    data class Success(val questions: List<QuestionOptions>): QuestionnaireUIState
+    data class Error(val message: String): QuestionnaireUIState
+    object Loading: QuestionnaireUIState
 }
 
 @HiltViewModel
@@ -62,17 +64,16 @@ open class CutQuestionnaireViewModel @Inject constructor(
         var paramsMap: MutableMap<String, String> = mutableMapOf()
     )
 
-    init {
-        viewModelScope.launch {
-            getForm()
-        }
-    }
+    var recommendationsUIState: RecommendationsUIState by mutableStateOf(RecommendationsUIState.Loading)
+        private set
+
+    var questionnaireUIState: QuestionnaireUIState by mutableStateOf(QuestionnaireUIState.Loading)
+        private set
+
+    init { getForm() }
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState(CutQuestionnaireScreenType.DateName))
     val uiState: StateFlow<UiState> get() = _uiState
-
-    var recommendationsUiState: RecommendationsUIState by mutableStateOf(RecommendationsUIState.Wait)
-        private set
 
     fun setDate(date: Date) {
         _uiState.value = _uiState.value.copy(date = date)
@@ -104,12 +105,6 @@ open class CutQuestionnaireViewModel @Inject constructor(
 
     fun setCutRecommendations(cutRecommendations: List<StateFlow<CutDTO>>) {
         _uiState.value = _uiState.value.copy(cutRecommendations = cutRecommendations)
-    }
-
-    fun getQuestionList() = _uiState.value.questionList
-
-    fun setQuestionList(questionList: List<QuestionOptions>) {
-        _uiState.value = _uiState.value.copy(questionList = questionList)
     }
 
     fun getRecentCuts() = _uiState.value.recentCuts
@@ -191,8 +186,8 @@ open class CutQuestionnaireViewModel @Inject constructor(
 
     fun getCutRecommendations(features: Features) {
         viewModelScope.launch {
-            recommendationsUiState = RecommendationsUIState.Loading
-            recommendationsUiState = try {
+            recommendationsUIState = RecommendationsUIState.Loading
+            recommendationsUIState = try {
                 val listResult = InferCutRecommendationsApi.retrofitService.getRecommendations(features).predictions
 
                 setCutRecommendations(
@@ -204,17 +199,22 @@ open class CutQuestionnaireViewModel @Inject constructor(
                 RecommendationsUIState.Success(listResult)
             } catch (e: IOException) {
                 Log.e("RETROFIT", e.toString())
-                RecommendationsUIState.Error
+                RecommendationsUIState.Error(message = e.toString())
             }
         }
     }
 
-    suspend fun getForm() {
-        try {
-            val questionList = InferCutRecommendationsApi.retrofitService.getOptions().toQuestionList()
-            if (questionList.isNotEmpty()) setQuestionList(questionList.drop(1))
-        } catch (e: Exception) {
-            Log.e("RETROFIT", e.toString())
+    fun getForm() {
+        viewModelScope.launch {
+            questionnaireUIState = QuestionnaireUIState.Loading
+            questionnaireUIState = try {
+                val questionList = InferCutRecommendationsApi.retrofitService.getOptions().toQuestionList()
+                if (questionList.size >= 2) QuestionnaireUIState.Success(questionList.drop(1))
+                else QuestionnaireUIState.Error(message = "empty question list!")
+            } catch (e: Exception) {
+                Log.e("RETROFIT", e.toString())
+                QuestionnaireUIState.Error(message = e.toString())
+            }
         }
     }
 }
