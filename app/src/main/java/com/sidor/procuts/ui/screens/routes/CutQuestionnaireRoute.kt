@@ -114,7 +114,7 @@ fun CutQuestionnaireRoute(
                 onNext = onNextScreenType(CutQuestionnaireScreenType.DateName),
                 onBack = onBack,
                 onDateChange = { date -> viewModel.setDate(date) },
-                date = viewModel.getDate()
+                date = uiState.date
             )
 
             CutQuestionnaireScreenType.Question -> {
@@ -135,7 +135,7 @@ fun CutQuestionnaireRoute(
             }
 
             CutQuestionnaireScreenType.PhoneNumber -> {
-                val clientRecentCuts = viewModel.getClientId()?.let { getClientRecentCutIds(it) }
+                val clientRecentCuts = uiState.clientId?.let { getClientRecentCutIds(it) }
 
                 CutQuestionnairePhoneNumberScreen(
                     onBack = onPrevScreenType(CutQuestionnaireScreenType.PhoneNumber),
@@ -194,9 +194,9 @@ fun CutQuestionnaireRoute(
                         viewModel.setCutId(cutId)
                         onNextScreenType(CutQuestionnaireScreenType.Choice)()
                     },
-                    recentCuts = viewModel.getRecentCuts() ?: listOf(),
+                    recentCuts = uiState.recentCuts ?: listOf(),
                     recommendationsUiState = viewModel.recommendationsUIState,
-                    cutRecommendations = viewModel.getCutRecommendations() ?: listOf(),
+                    cutRecommendations = uiState.cutRecommendations ?: listOf(),
                     onRetry = viewModel::requestCutRecommendations
                 )
             }

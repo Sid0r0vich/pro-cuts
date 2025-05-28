@@ -35,8 +35,8 @@ open class HomeViewModel @Inject constructor(
     data class UiState(
         val screenType: HomeScreenType,
         val clientDTO: ClientDTO? = null,
-        val cutDate: CutDateDTO? = null,
-        val cut: CutDTO? = null,
+        val cutDateDTO: CutDateDTO? = null,
+        val cutDTO: CutDTO? = null,
     )
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState(HomeScreenType.Home))
@@ -47,18 +47,18 @@ open class HomeViewModel @Inject constructor(
     }
 
     fun setVisit(visit: CutDateDTO) {
-        _uiState.value = _uiState.value.copy(cutDate = visit)
+        _uiState.value = _uiState.value.copy(cutDateDTO = visit)
     }
 
     fun setCut(cut: CutDTO) {
-        _uiState.value = _uiState.value.copy(cut = cut)
+        _uiState.value = _uiState.value.copy(cutDTO = cut)
     }
 
     fun getClientDTO() =
         _uiState.value.clientDTO
 
     fun getCutDateDTO() =
-        _uiState.value.cutDate
+        _uiState.value.cutDateDTO
 
     fun getCutDTO(cutId: Int): StateFlow<CutDTO> =
         cutRepository

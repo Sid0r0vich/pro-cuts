@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.Date
+import kotlin.reflect.KProperty
 
 enum class AddResult {
     SUCCESS,
@@ -50,10 +51,10 @@ open class CutQuestionnaireViewModel @Inject constructor(
     val cutRepository: CutRepository
 ) : ViewModel() {
     data class UiState(
-        val screenType: CutQuestionnaireScreenType,
-        val questionInd: Int = 0,
-        val clientId: Int? = null,
-        val date: Date = Date(),
+        var screenType: CutQuestionnaireScreenType,
+        var questionInd: Int = 0,
+        var clientId: Int? = null,
+        var date: Date = Date(),
         var clientPhoneNumber: String? = null,
         var photoUri: Uri? = null,
         var cutId: Int? = null,
@@ -78,39 +79,43 @@ open class CutQuestionnaireViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(date = date)
     }
 
-    fun getDate(): Date {
-        return _uiState.value.date
-    }
-
     fun setPhoneNumber(phoneNumber: String) {
-        _uiState.value.clientPhoneNumber = phoneNumber
+        _uiState.value = _uiState.value.copy(clientPhoneNumber = phoneNumber)
     }
 
     fun setParam(name: String, value: String) {
-        _uiState.value.paramsMap[name] = value
+        val newParamsMap = _uiState.value.paramsMap.toMutableMap()
+        newParamsMap[name] = value
+        _uiState.value = _uiState.value.copy(paramsMap = newParamsMap)
     }
-
-    fun getParam(name: String): String {
-        return _uiState.value.paramsMap[name] ?: ""
-    }
-
-    fun getClientId() = _uiState.value.clientId
 
     fun setClientId(clientId: Int?) {
         _uiState.value = _uiState.value.copy(clientId = clientId)
     }
 
-    fun getCutRecommendations() = _uiState.value.cutRecommendations
-
     fun setCutRecommendations(cutRecommendations: List<StateFlow<CutDTO>>) {
         _uiState.value = _uiState.value.copy(cutRecommendations = cutRecommendations)
     }
 
-    fun getRecentCuts() = _uiState.value.recentCuts
-
     fun setRecentCuts(recentCutIds: List<Int>) {
         val recentCuts = cutRepository.getCutsStateFlowsByIds(recentCutIds, viewModelScope)
         _uiState.value = _uiState.value.copy(recentCuts = recentCuts)
+    }
+
+    fun setCutId(cutId: Int) {
+        _uiState.value = _uiState.value.copy(cutId = cutId)
+    }
+
+    fun setPhotoUri(photoUri: Uri) {
+        _uiState.value = _uiState.value.copy(photoUri = photoUri)
+    }
+
+    fun setQuestionInd(questionInd: Int) {
+        _uiState.value = _uiState.value.copy(questionInd = questionInd)
+    }
+
+    fun resetQuestionInd() {
+        _uiState.value = _uiState.value.copy(questionInd = 0)
     }
 
     fun getCut(): StateFlow<CutDTO?>? {
@@ -126,18 +131,6 @@ open class CutQuestionnaireViewModel @Inject constructor(
         }
     }
 
-    fun setCutId(cutId: Int) {
-        _uiState.value = _uiState.value.copy(cutId = cutId)
-    }
-
-    fun setPhotoUri(photoUri: Uri) {
-        _uiState.value = _uiState.value.copy(photoUri = photoUri)
-    }
-
-    fun getCuts(cutIds: List<Int>): List<StateFlow<CutDTO>> {
-        return cutRepository.getCutsStateFlowsByIds(cutIds, viewModelScope)
-    }
-
     fun navigate(screenType: CutQuestionnaireScreenType) {
         _uiState.value = _uiState.value.copy(screenType = screenType)
     }
@@ -151,14 +144,6 @@ open class CutQuestionnaireViewModel @Inject constructor(
         var next = cutQuestionnaireScreenType.ordinal - 1
         if (next < 0) next += CutQuestionnaireScreenType.entries.size
         return CutQuestionnaireScreenType.entries[next]
-    }
-
-    fun setQuestionInd(questionInd: Int) {
-        _uiState.value = _uiState.value.copy(questionInd = questionInd)
-    }
-
-    fun resetQuestionInd() {
-        _uiState.value = _uiState.value.copy(questionInd = 0)
     }
 
     fun tryAddCut(
@@ -182,7 +167,7 @@ open class CutQuestionnaireViewModel @Inject constructor(
                 cutParams = _uiState.value.paramsMap
             )
         )
-        _uiState.value.paramsMap = mutableMapOf()
+        _uiState.value = _uiState.value.copy(paramsMap = mutableMapOf())
 
         return AddResult.SUCCESS
     }

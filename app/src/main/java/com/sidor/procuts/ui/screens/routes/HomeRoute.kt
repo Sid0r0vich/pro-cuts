@@ -64,7 +64,7 @@ fun HomeRoute(
             var loadingIsCompleted by rememberSaveable { mutableStateOf(false) }
 
             ClientScreen(
-                clientDTO = viewModel.getClientDTO(),
+                clientDTO = uiState.clientDTO,
                 cutDates = viewModel
                     .getClientCutDates { loadingIsCompleted = true }
                     .map { cutDateStateFlow -> cutDateStateFlow.collectAsState().value },
@@ -93,7 +93,7 @@ fun HomeRoute(
             }
         )
         HomeScreenType.EditClient -> {
-            val clientDTO = viewModel.getClientDTO()
+            val clientDTO = uiState.clientDTO
             if (clientDTO != null) {
                 EditClientScreen(
                     onBack = { viewModel.navigateClient() },
@@ -130,17 +130,17 @@ fun HomeRoute(
             }
         )
         HomeScreenType.Visit -> VisitScreen(
-            visit = uiState.cutDate!!,
+            visit = uiState.cutDateDTO,
             onBack = { viewModel.navigateClient() },
             onCutClick = { cut: CutDTO ->
                 viewModel.setCut(cut)
                 viewModel.navigateCut()
             },
-            cutParams = viewModel.getCutDateDTO()?.cutParams ?: mapOf(),
-            cut = viewModel.getCutDTO(uiState.cutDate.cutId).collectAsState().value
+            cutParams = uiState.cutDateDTO?.cutParams ?: mapOf(),
+            cut = uiState.cutDateDTO?.let { viewModel.getCutDTO(it.cutId) }?.collectAsState()?.value
         )
         HomeScreenType.Cut -> CutScreen(
-            cut = uiState.cut!!,
+            cut = uiState.cutDTO!!,
             onBack = { viewModel.navigateVisit() }
         )
     }
