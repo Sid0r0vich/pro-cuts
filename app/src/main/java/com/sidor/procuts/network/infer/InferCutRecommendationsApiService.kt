@@ -23,7 +23,7 @@ private val retrofit = Retrofit.Builder()
 
 interface InferCutRecommendationsApiService {
     @POST("infer")
-    suspend fun getRecommendations(@Body features: Features): PredictionsResponse
+    suspend fun getRecommendations(@Body features: Map<String, String>): PredictionsResponse
 
     @GET("options")
     suspend fun getOptions(): FormResponse

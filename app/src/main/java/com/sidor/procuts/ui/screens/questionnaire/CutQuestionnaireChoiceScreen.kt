@@ -14,10 +14,8 @@ import com.sidor.procuts.data.CutDTO
 import com.sidor.procuts.ui.PaddingSpaces
 import com.sidor.procuts.ui.screens.DefaultSpacer
 import com.sidor.procuts.ui.screens.LazyPaddingScreen
-import com.sidor.procuts.ui.screens.state.LoadingScreen
 import com.sidor.procuts.ui.screens.TopAppBarScreen
 import com.sidor.procuts.ui.screens.cards.CutOptionCard
-import com.sidor.procuts.ui.screens.state.ErrorScreen
 import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
 import com.sidor.procuts.ui.viewmodels.RecommendationsUIState
 import kotlinx.coroutines.flow.StateFlow
@@ -30,6 +28,7 @@ fun CutQuestionnaireChoiceScreen(
     recommendationsUiState: RecommendationsUIState,
     cutRecommendations: List<StateFlow<CutDTO>>,
     recentCuts: List<StateFlow<CutDTO>>,
+    onRetry: () -> Unit,
 ) {
     val topAppBarBarTitle = stringResource(R.string.cut_choice_tab_app_bar)
 
@@ -57,7 +56,7 @@ fun CutQuestionnaireChoiceScreen(
         )
         is RecommendationsUIState.Error -> CutQuestionnaireErrorScreen(
             errorMessage = recommendationsUiState.message,
-            onRetry = { },
+            onRetry = onRetry,
             onBack = onBack,
             title = topAppBarBarTitle
         )

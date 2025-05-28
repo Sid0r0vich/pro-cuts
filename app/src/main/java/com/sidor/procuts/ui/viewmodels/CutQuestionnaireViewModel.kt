@@ -13,7 +13,6 @@ import com.sidor.procuts.data.CutRepository
 import com.sidor.procuts.data.defaultCutDTO
 import com.sidor.procuts.network.googleforms.QuestionOptions
 import com.sidor.procuts.network.infer.CutRecommendation
-import com.sidor.procuts.network.infer.Features
 import com.sidor.procuts.network.infer.InferCutRecommendationsApi
 import com.sidor.procuts.ui.screens.screentypes.CutQuestionnaireScreenType
 import com.sidor.procuts.ui.viewmodels.HomeViewModel.Companion.TIMEOUT_MILLIS
@@ -70,7 +69,7 @@ open class CutQuestionnaireViewModel @Inject constructor(
     var questionnaireUIState: QuestionnaireUIState by mutableStateOf(QuestionnaireUIState.Loading)
         private set
 
-    init { getForm() }
+    init { requestForm() }
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState(CutQuestionnaireScreenType.DateName))
     val uiState: StateFlow<UiState> get() = _uiState
@@ -158,6 +157,10 @@ open class CutQuestionnaireViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(questionInd = questionInd)
     }
 
+    fun resetQuestionInd() {
+        _uiState.value = _uiState.value.copy(questionInd = 0)
+    }
+
     fun tryAddCut(
         getClientIdOnPhoneNumber: (String) -> Int?,
         onAddClick: (CutDateInfoDTO) -> Unit
@@ -184,11 +187,13 @@ open class CutQuestionnaireViewModel @Inject constructor(
         return AddResult.SUCCESS
     }
 
-    fun getCutRecommendations(features: Features) {
+    fun requestCutRecommendations() {
         viewModelScope.launch {
             recommendationsUIState = RecommendationsUIState.Loading
             recommendationsUIState = try {
-                val listResult = InferCutRecommendationsApi.retrofitService.getRecommendations(features).predictions
+                val listResult = InferCutRecommendationsApi.retrofitService.getRecommendations(
+                    uiState.value.paramsMap
+                ).predictions
 
                 setCutRecommendations(
                     cutRepository.getCutsStateFlowsByNames(
@@ -204,7 +209,7 @@ open class CutQuestionnaireViewModel @Inject constructor(
         }
     }
 
-    fun getForm() {
+    fun requestForm() {
         viewModelScope.launch {
             questionnaireUIState = QuestionnaireUIState.Loading
             questionnaireUIState = try {
@@ -216,18 +221,6 @@ open class CutQuestionnaireViewModel @Inject constructor(
                 QuestionnaireUIState.Error(message = e.toString())
             }
         }
-    }
-}
-
-fun CutRepository.getAllCutsStateFlows(
-    scope: CoroutineScope,
-): List<StateFlow<CutDTO>> {
-    return this.getStream().map { flow ->
-        flow.stateIn(
-            scope = scope,
-            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = defaultCutDTO
-        )
     }
 }
 

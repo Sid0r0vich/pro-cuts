@@ -45,7 +45,8 @@ class CutDateMockRepository @Inject constructor(): CutDateRepository {
             Triple("31-12-2022", 0, 12),
             Triple("31-12-2023", 1, 0),
             Triple("28-11-2024", 1, 4),
-            Triple("19-04-2025", 1, 7)
+            Triple("19-04-2025", 1, 7),
+            Triple("19-06-2025", 1, 8)
         )
             .map { triple -> Triple(DMYDateFormat.parse(triple.first)!!, triple.second, triple.third) }
             .withIndex()

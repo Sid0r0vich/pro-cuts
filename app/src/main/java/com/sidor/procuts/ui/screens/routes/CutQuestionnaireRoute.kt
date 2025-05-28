@@ -1,15 +1,10 @@
 package com.sidor.procuts.ui.screens.routes
 
-import android.app.Activity
-import android.content.Intent
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
-import androidx.compose.animation.with
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -19,15 +14,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.sidor.procuts.CameraActivity
 import com.sidor.procuts.R
 import com.sidor.procuts.data.CutDateInfoDTO
-import com.sidor.procuts.network.infer.defaultFeatures
 import com.sidor.procuts.ui.ToastNotifier
-import com.sidor.procuts.ui.screens.TopAppBarScreen
-import com.sidor.procuts.ui.screens.questionnaire.CameraClaimScreen
 import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireChoiceScreen
 import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireConfirmScreen
 import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireDateScreen
@@ -36,9 +26,6 @@ import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireLoadingScreen
 import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnairePhoneNumberScreen
 import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireScreenWithSeveralAnswerOption
 import com.sidor.procuts.ui.screens.screentypes.CutQuestionnaireScreenType
-import com.sidor.procuts.ui.screens.state.ErrorScreen
-import com.sidor.procuts.ui.screens.state.LoadingScreen
-import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
 import com.sidor.procuts.ui.viewmodels.AddResult
 import com.sidor.procuts.ui.viewmodels.CutQuestionnaireViewModel
 import com.sidor.procuts.ui.viewmodels.QuestionnaireUIState
@@ -140,7 +127,7 @@ fun CutQuestionnaireRoute(
                     is QuestionnaireUIState.Error -> CutQuestionnaireErrorScreen(
                         onBack = onPrevScreenType(CutQuestionnaireScreenType.Question),
                         errorMessage = state.message,
-                        onRetry = viewModel::getForm,
+                        onRetry = viewModel::requestForm,
                         title = stringResource(R.string.add_haircut_tab_app_bar),
                     )
                 }
@@ -158,7 +145,7 @@ fun CutQuestionnaireRoute(
                         viewModel.setClientId(clientId)
 
                         if (clientId != null) {
-                            viewModel.getCutRecommendations(defaultFeatures)
+                            viewModel.requestCutRecommendations()
                             clientRecentCuts?.let { viewModel.setRecentCuts(it) }
                             onNextScreenType(CutQuestionnaireScreenType.PhoneNumber)()
                         }
@@ -210,6 +197,7 @@ fun CutQuestionnaireRoute(
                     recentCuts = viewModel.getRecentCuts() ?: listOf(),
                     recommendationsUiState = viewModel.recommendationsUIState,
                     cutRecommendations = viewModel.getCutRecommendations() ?: listOf(),
+                    onRetry = viewModel::requestCutRecommendations
                 )
             }
 
@@ -229,11 +217,12 @@ fun CutQuestionnaireRoute(
                             ToastNotifier(context = ctx).show(message = successMessage)
                             onBack()
                             viewModel.navigate(CutQuestionnaireScreenType.DateName)
+                            viewModel.resetQuestionInd()
                         } else if (addResult == AddResult.PHONE_NUMBER_IS_NOT_FOUND) {
                             ToastNotifier(context = ctx).show(message = addResult.toString())
                         }
                     },
-                    cut = viewModel.getCut()?.collectAsState()?.value
+                    cutDTO = viewModel.getCut()?.collectAsState()?.value
                 )
             }
         }

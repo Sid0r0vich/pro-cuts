@@ -91,6 +91,23 @@ fun PaddingScreenWithBottomButtons(
 }
 
 @Composable
+fun LazyPaddingScreenWithBottomButtons(
+    buttons: @Composable () -> Unit,
+    paddingSpaces: PaddingSpaces,
+    content: LazyListScope.() -> Unit = {}
+) {
+    LazyPaddingScreen(
+        paddingSpaces = paddingSpaces,
+    ) {
+        content()
+        item {
+            DefaultSpacer(2)
+            buttons()
+        }
+    }
+}
+
+@Composable
 fun DefaultPaddingScreenWithQuestionnaireButtons(
     onNext: () -> Unit,
     modifier: Modifier = Modifier,
