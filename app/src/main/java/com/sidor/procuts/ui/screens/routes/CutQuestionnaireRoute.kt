@@ -153,7 +153,7 @@ fun CutQuestionnaireRoute(
                             phoneNumberIsExists = false
                         }
                     },
-                    phoneNumber = uiState.clientPhoneNumber ?: "8888888888",
+                    phoneNumber = uiState.clientPhoneNumber ?: "",
                     phoneNumberIsExists = phoneNumberIsExists,
                     onSetPhoneNumber = { phoneNumber: String ->
                         viewModel.setPhoneNumber(phoneNumber)
