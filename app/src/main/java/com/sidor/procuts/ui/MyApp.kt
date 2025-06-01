@@ -17,6 +17,7 @@ import com.sidor.procuts.ui.navigation.BottomNavigationBar
 import com.sidor.procuts.ui.navigation.NavigationActions
 import com.sidor.procuts.ui.navigation.Route
 import com.sidor.procuts.ui.screens.PaddingProviderScreen
+import com.sidor.procuts.ui.screens.UserProfileScreen
 import com.sidor.procuts.ui.screens.routes.HomeRoute
 
 @Composable
@@ -42,7 +43,6 @@ fun MyApp(modifier: Modifier) {
             PaddingProviderScreen {
                 MyNavHost(
                     navController = navController,
-                    navigationActions = navigationActions,
                     modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
                     pad = innerPadding
                 )
@@ -54,7 +54,6 @@ fun MyApp(modifier: Modifier) {
 @Composable
 private fun MyNavHost(
     navController: NavHostController,
-    navigationActions: NavigationActions,
     modifier: Modifier = Modifier,
     pad: PaddingValues
 ) {
@@ -67,6 +66,7 @@ private fun MyNavHost(
             HomeRoute()
         }
         composable<Route.Profile> {
+            UserProfileScreen()
         }
     }
 }

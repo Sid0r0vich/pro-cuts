@@ -65,5 +65,5 @@ val defaultCutDTO = CutDTO(
     id = -1,
     name = "Cut not found",
     description = "",
-    imageId = R.drawable.default_user_cut
+    imageId = R.drawable.default_user_photo
 )

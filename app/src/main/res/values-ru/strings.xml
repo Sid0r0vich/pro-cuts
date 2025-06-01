@@ -247,4 +247,5 @@
     <string name="confirm_haircut_tab_app_bar">Подтвердить стрижку</string>
     <string name="retry">Повторить</string>
     <string name="no_visit_found">Посещение не найдено</string>
+    <string name="user_profile_tab_app_bar">Профиль</string>
 </resources>

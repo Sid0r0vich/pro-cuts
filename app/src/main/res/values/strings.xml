@@ -246,4 +246,5 @@
     <string name="confirm_haircut_tab_app_bar">Confirm cut</string>
     <string name="retry">Retry</string>
     <string name="no_visit_found">No visit found</string>
+    <string name="user_profile_tab_app_bar">Profile</string>
 </resources>

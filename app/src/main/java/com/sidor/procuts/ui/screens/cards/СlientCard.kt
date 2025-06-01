@@ -35,30 +35,10 @@ private fun formatDefault(digits: String): String {
 fun ClientCard(
     clientDTO: ClientDTO,
 ) {
-    val defaultPhoto = painterResource(R.drawable.default_user_avatar)
-    val clientPhoto: Painter = getPainterFromByteArray(clientDTO.photo) ?: defaultPhoto
+    val clientPhoto: Painter = getPainterFromByteArray(clientDTO.photo) ?: painterResource(R.drawable.default_user_photo)
+
     Column {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Image(
-                painter = clientPhoto,
-                contentDescription = stringResource(R.string.client_ava),
-                modifier = Modifier
-                    .weight(2f)
-                    .size(80.dp)
-            )
-            Spacer(modifier = Modifier.width(10.dp))
-            Text(
-                text = clientDTO.getFullName(),
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.titleLarge,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .weight(3f)
-            )
-        }
+        PersonCard(clientDTO.toPersonDTO())
 
         if (clientDTO.phoneNumber != null) {
             DefaultSpacer(3)

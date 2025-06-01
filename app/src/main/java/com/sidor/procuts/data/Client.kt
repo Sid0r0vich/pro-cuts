@@ -8,9 +8,15 @@ class ClientDTO(
     val photo: ByteArray? = null,
     val phoneNumber: String? = null
 ) {
-    fun getFullName(): String {
-        return "$firstName ${middleName ?: ""} $lastName"
-    }
+    fun getFullName(): String = toPersonDTO().getFullName()
+
+    fun toPersonDTO(): PersonDTO =
+        PersonDTO(
+            firstName = firstName,
+            lastName = lastName,
+            middleName = middleName,
+            photo = photo
+        )
 }
 
 class ClientInfoDTO(

@@ -57,7 +57,6 @@ fun ClientScreen(
         ) {
             if (clientDTO != null) {
                 item {
-                    DefaultSpacer(1)
                     ClientCard(clientDTO)
                 }
                 item {

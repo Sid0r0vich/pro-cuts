@@ -24,36 +24,26 @@ import com.sidor.procuts.ui.screens.DefaultSpacer
 fun CutCard(
     cut: CutDTO,
 ) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            TextWithBoldField(
-                field = stringResource(R.string.cut_field),
-                value = cut.name,
-                style = MaterialTheme.typography.titleLarge,
-            )
-            DefaultSpacer(1)
-            TextWithBoldField(
-                field = stringResource(R.string.description_field),
-                value = cut.description,
-                style = MaterialTheme.typography.bodyLarge,
-            )
-            DefaultSpacer(1)
-            Image(
-                painter = painterResource(cut.imageId),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(8.dp))
-            )
-        }
+    DefaultCard {
+        TextWithBoldField(
+            field = stringResource(R.string.cut_field),
+            value = cut.name,
+            style = MaterialTheme.typography.titleLarge,
+        )
+        DefaultSpacer(1)
+        TextWithBoldField(
+            field = stringResource(R.string.description_field),
+            value = cut.description,
+            style = MaterialTheme.typography.bodyLarge,
+        )
+        DefaultSpacer(1)
+        Image(
+            painter = painterResource(cut.imageId),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(8.dp))
+        )
     }
 }
