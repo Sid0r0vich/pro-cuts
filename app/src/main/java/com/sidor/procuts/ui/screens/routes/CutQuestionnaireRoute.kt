@@ -99,7 +99,6 @@ fun CutQuestionnaireRoute(
                                 else viewModel.setQuestionInd(ind + 1)
                             },
                             text = question.question,
-                            name = "",
                             defaultValue = if (question.options.isNotEmpty()) question.options[0] else "",
                             onValueChange = { value ->
                                 viewModel.setParam(question.question, value)
