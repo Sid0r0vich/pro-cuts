@@ -32,7 +32,6 @@ fun DefaultItem(
             .fillMaxWidth()
             .clickable { onClick() },
         elevation = CardDefaults.cardElevation(4.dp),
-        shape = RectangleShape,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
         )

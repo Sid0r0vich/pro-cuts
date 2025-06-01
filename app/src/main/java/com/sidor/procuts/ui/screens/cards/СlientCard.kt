@@ -39,14 +39,15 @@ fun ClientCard(
 
     Column {
         PersonCard(clientDTO.toPersonDTO())
-
-        if (clientDTO.phoneNumber != null) {
-            DefaultSpacer(3)
-            TextWithBoldField(
-                field = stringResource(R.string.client_phone_number),
-                value = formatDefault(clientDTO.phoneNumber),
-                style = MaterialTheme.typography.titleLarge
-            )
+        DefaultSpacer(3)
+        DefaultCard {
+            if (clientDTO.phoneNumber != null) {
+                TextWithBoldField(
+                    field = stringResource(R.string.client_phone_number),
+                    value = formatDefault(clientDTO.phoneNumber),
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
         }
     }
 }
