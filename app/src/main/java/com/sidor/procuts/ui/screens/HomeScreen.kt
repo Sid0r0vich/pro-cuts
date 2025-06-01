@@ -25,21 +25,6 @@ fun HomeScreen(
         paddingSpaces = PaddingSpaces(2)
     ) {
         item {
-            Row(
-                horizontalArrangement = Arrangement.SpaceAround,
-            ) {
-                HomeCard(
-                    modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.study_cut)
-                )
-                Spacer(modifier = Modifier.width(LocalBoardPadding.current * 2))
-                HomeCard(
-                    modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.my_cuts)
-                )
-            }
-        }
-        item {
             DefaultSpacer(2)
             Row(
                 horizontalArrangement = Arrangement.SpaceAround,

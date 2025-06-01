@@ -10,7 +10,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 
 private const val BASE_URL =
-    "http://192.168.0.104:9000"
+    "http://petruekhin.tech:8880"
 
 val json = Json { ignoreUnknownKeys = true }
 
