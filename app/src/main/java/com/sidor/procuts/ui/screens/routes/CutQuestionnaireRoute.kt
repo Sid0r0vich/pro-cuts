@@ -1,5 +1,6 @@
 package com.sidor.procuts.ui.screens.routes
 
+import android.util.Log
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.slideInHorizontally
@@ -16,14 +17,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sidor.procuts.R
+import com.sidor.procuts.data.ClientDTO
 import com.sidor.procuts.data.CutDateInfoDTO
 import com.sidor.procuts.ui.ToastNotifier
-import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireChoiceScreen
+import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireClientChoiceScreen
 import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireConfirmScreen
+import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireCutChoiceScreen
 import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireDateScreen
 import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireErrorScreen
 import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireLoadingScreen
-import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnairePhoneNumberScreen
 import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireScreenWithSeveralAnswerOption
 import com.sidor.procuts.ui.screens.screentypes.CutQuestionnaireScreenType
 import com.sidor.procuts.ui.viewmodels.AddResult
@@ -33,16 +35,14 @@ import com.sidor.procuts.ui.viewmodels.QuestionnaireUIState
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun CutQuestionnaireRoute(
-    modifier: Modifier = Modifier,
     onBack: () -> Unit,
     onAddCutClick: (CutDateInfoDTO) -> Unit,
-    clientPhoneNumber: String? = null,
     getClientIdOnPhoneNumber: (String) -> Int?,
     viewModel: CutQuestionnaireViewModel = hiltViewModel(),
-    getClientRecentCutIds: @Composable (Int) -> List<Int>,
+    getAllClients: @Composable () -> List<ClientDTO>,
+    getClientRecentCutIds: @Composable (Int) -> List<Int>
 ) {
     val uiState = viewModel.uiState.collectAsState().value
-    clientPhoneNumber?.let { viewModel.setPhoneNumber(it) }
     var isNavigatingForward by rememberSaveable { mutableStateOf(true) }
     var phoneNumberIsExists by rememberSaveable { mutableStateOf(true) }
 
@@ -133,33 +133,45 @@ fun CutQuestionnaireRoute(
 
             }
 
-            CutQuestionnaireScreenType.PhoneNumber -> {
-                val clientRecentCuts = uiState.clientId?.let { getClientRecentCutIds(it) }
-
-                CutQuestionnairePhoneNumberScreen(
-                    onBack = onPrevScreenType(CutQuestionnaireScreenType.PhoneNumber),
-                    onNext = { phoneNumber: String ->
-                        viewModel.setPhoneNumber(phoneNumber)
-                        val clientId = getClientIdOnPhoneNumber(phoneNumber)
-                        viewModel.setClientId(clientId)
-
-                        if (clientId != null) {
-                            viewModel.requestCutRecommendations()
-                            clientRecentCuts?.let { viewModel.setRecentCuts(it) }
-                            onNextScreenType(CutQuestionnaireScreenType.PhoneNumber)()
-                        }
-                        else {
-                            phoneNumberIsExists = false
-                        }
+            CutQuestionnaireScreenType.Client -> {
+                CutQuestionnaireClientChoiceScreen(
+                    onBack = onPrevScreenType(CutQuestionnaireScreenType.Client),
+                    onNext = { clientDTO ->
+                        viewModel.setClientId(clientDTO.id)
+                        viewModel.requestCutRecommendations()
+                        onNextScreenType(CutQuestionnaireScreenType.Client)()
                     },
-                    phoneNumber = uiState.clientPhoneNumber ?: "",
-                    phoneNumberIsExists = phoneNumberIsExists,
-                    onSetPhoneNumber = { phoneNumber: String ->
-                        viewModel.setPhoneNumber(phoneNumber)
-                        phoneNumberIsExists = true
-                    },
+                    clients = getAllClients()
                 )
             }
+
+//            CutQuestionnaireScreenType.PhoneNumber -> {
+//                val clientRecentCuts = uiState.clientId?.let { getClientRecentCutIds(it) }
+//
+//                CutQuestionnairePhoneNumberScreen(
+//                    onBack = onPrevScreenType(CutQuestionnaireScreenType.PhoneNumber),
+//                    onNext = { phoneNumber: String ->
+//                        viewModel.setPhoneNumber(phoneNumber)
+//                        val clientId = getClientIdOnPhoneNumber(phoneNumber)
+//                        viewModel.setClientId(clientId)
+//
+//                        if (clientId != null) {
+//                            viewModel.requestCutRecommendations()
+//                            clientRecentCuts?.let { viewModel.setRecentCuts(it) }
+//                            onNextScreenType(CutQuestionnaireScreenType.PhoneNumber)()
+//                        }
+//                        else {
+//                            phoneNumberIsExists = false
+//                        }
+//                    },
+//                    phoneNumber = uiState.clientPhoneNumber ?: "",
+//                    phoneNumberIsExists = phoneNumberIsExists,
+//                    onSetPhoneNumber = { phoneNumber: String ->
+//                        viewModel.setPhoneNumber(phoneNumber)
+//                        phoneNumberIsExists = true
+//                    },
+//                )
+//            }
 
 //            CutQuestionnaireScreenType.Camera -> {
 //                val onNext = {
@@ -187,7 +199,9 @@ fun CutQuestionnaireRoute(
 //            }
 
             CutQuestionnaireScreenType.Choice -> {
-                CutQuestionnaireChoiceScreen(
+                uiState.clientId?.let { getClientRecentCutIds(it) }?.let { viewModel.setRecentCuts(it) }
+
+                CutQuestionnaireCutChoiceScreen(
                     onBack = onPrevScreenType(CutQuestionnaireScreenType.Choice),
                     onCutChoice = { cutId: Int ->
                         viewModel.setCutId(cutId)
@@ -208,16 +222,15 @@ fun CutQuestionnaireRoute(
                     onBack = onPrevScreenType(CutQuestionnaireScreenType.Confirm),
                     onNext = {
                         val addResult = viewModel.tryAddCut(
-                            getClientIdOnPhoneNumber = getClientIdOnPhoneNumber,
                             onAddClick = onAddCutClick,
                         )
 
                         if (addResult == AddResult.SUCCESS) {
                             ToastNotifier(context = ctx).show(message = successMessage)
                             onBack()
-                            viewModel.navigate(CutQuestionnaireScreenType.DateName)
+                            viewModel.navigate(CutQuestionnaireScreenType.entries.first())
                             viewModel.resetQuestionInd()
-                        } else if (addResult == AddResult.PHONE_NUMBER_IS_NOT_FOUND) {
+                        } else if (addResult == AddResult.CLIENT_IS_NOT_FOUND) {
                             ToastNotifier(context = ctx).show(message = addResult.toString())
                         }
                     },

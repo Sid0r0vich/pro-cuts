@@ -94,7 +94,7 @@ open class HomeViewModel @Inject constructor(
     }
 
     fun getAllClients(
-        onComplete: () -> Unit
+        onComplete: () -> Unit = {}
     ) =
         clientRepository
             .getClientStateFlows(viewModelScope, onComplete)

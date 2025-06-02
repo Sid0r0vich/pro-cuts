@@ -247,4 +247,7 @@
     <string name="retry">Retry</string>
     <string name="no_visit_found">No visit found</string>
     <string name="user_profile_tab_app_bar">Profile</string>
+    <string name="client_name">Client name</string>
+    <string name="empty_client_field_message">Client field is empty!</string>
+    <string name="client_not_found_message">Client is not found!</string>
 </resources>

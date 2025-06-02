@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CutQuestionnaireChoiceScreen(
+fun CutQuestionnaireCutChoiceScreen(
     onBack: () -> Unit,
     onCutChoice: (Int) -> Unit,
     recommendationsUiState: RecommendationsUIState,

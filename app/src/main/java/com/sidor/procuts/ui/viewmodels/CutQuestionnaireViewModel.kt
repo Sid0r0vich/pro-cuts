@@ -26,12 +26,11 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.Date
-import kotlin.reflect.KProperty
 
 enum class AddResult {
     SUCCESS,
     CUT_NAME_IS_NOT_FOUND,
-    PHONE_NUMBER_IS_NOT_FOUND
+    CLIENT_IS_NOT_FOUND
 }
 
 sealed interface RecommendationsUIState {
@@ -55,7 +54,6 @@ open class CutQuestionnaireViewModel @Inject constructor(
         var questionInd: Int = 0,
         var clientId: Int? = null,
         var date: Date = Date(),
-        var clientPhoneNumber: String? = null,
         var photoUri: Uri? = null,
         var cutId: Int? = null,
         var cutRecommendations: List<StateFlow<CutDTO>>? = null,
@@ -72,15 +70,11 @@ open class CutQuestionnaireViewModel @Inject constructor(
 
     init { requestForm() }
 
-    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState(CutQuestionnaireScreenType.DateName))
+    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState(CutQuestionnaireScreenType.entries.first()))
     val uiState: StateFlow<UiState> get() = _uiState
 
     fun setDate(date: Date) {
         _uiState.value = _uiState.value.copy(date = date)
-    }
-
-    fun setPhoneNumber(phoneNumber: String) {
-        _uiState.value = _uiState.value.copy(clientPhoneNumber = phoneNumber)
     }
 
     fun setParam(name: String, value: String) {
@@ -147,16 +141,15 @@ open class CutQuestionnaireViewModel @Inject constructor(
     }
 
     fun tryAddCut(
-        getClientIdOnPhoneNumber: (String) -> Int?,
         onAddClick: (CutDateInfoDTO) -> Unit
     ): AddResult {
         val cutId = _uiState.value.cutId
-        val clientId = _uiState.value.clientPhoneNumber?.let { getClientIdOnPhoneNumber(it.toString()) }
+        val clientId = _uiState.value.clientId
         setClientId(clientId)
 
         val allCutIds = cutRepository.getAll().map { cut -> cut.id }
         if (cutId == null || !allCutIds.contains(cutId)) return AddResult.CUT_NAME_IS_NOT_FOUND
-        if (clientId == null) return AddResult.PHONE_NUMBER_IS_NOT_FOUND
+        if (clientId == null) return AddResult.CLIENT_IS_NOT_FOUND
 
         onAddClick(
             CutDateInfoDTO(

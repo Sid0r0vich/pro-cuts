@@ -248,4 +248,7 @@
     <string name="retry">Повторить</string>
     <string name="no_visit_found">Посещение не найдено</string>
     <string name="user_profile_tab_app_bar">Профиль</string>
+    <string name="client_name">Имя клиента</string>
+    <string name="empty_client_field_message">Введите имя клиента</string>
+    <string name="client_not_found_message">Клиент не найден</string>
 </resources>

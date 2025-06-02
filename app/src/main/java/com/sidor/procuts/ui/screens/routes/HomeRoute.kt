@@ -112,7 +112,6 @@ fun HomeRoute(
             onAddCutClick = { cutDateInfoDTO: CutDateInfoDTO ->
                 viewModel.addCutDate(cutDateInfoDTO)
             },
-            clientPhoneNumber = uiState.clientDTO?.phoneNumber,
             getClientIdOnPhoneNumber = { phoneNumber: String ->
                 viewModel.getClientIdOnPhoneNumber(phoneNumber)
             },
@@ -121,6 +120,10 @@ fun HomeRoute(
                     .map { cutDateStateFlow -> cutDateStateFlow.collectAsState().value }
                     .map { cutDateDTO: CutDateDTO -> cutDateDTO.cutId }
                     .distinct()
+            },
+            getAllClients = {
+                viewModel.getAllClients()
+                    .map { clientFlow -> clientFlow.collectAsState().value }
             }
         )
         HomeScreenType.AddCare -> AddCareScreen(
