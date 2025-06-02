@@ -1,6 +1,5 @@
 package com.sidor.procuts.ui.screens.routes
 
-import android.util.Log
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.slideInHorizontally
@@ -12,7 +11,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -44,7 +42,6 @@ fun CutQuestionnaireRoute(
 ) {
     val uiState = viewModel.uiState.collectAsState().value
     var isNavigatingForward by rememberSaveable { mutableStateOf(true) }
-    var phoneNumberIsExists by rememberSaveable { mutableStateOf(true) }
 
     AnimatedContent(
         targetState = Pair(uiState.screenType, uiState.questionInd),
@@ -85,6 +82,8 @@ fun CutQuestionnaireRoute(
                 ?.withIndex()
                 ?.map { (ind, question) ->
                     @Composable {
+                        val defaultValue = uiState.paramsMap[question.question]
+                            ?: if (question.options.isNotEmpty()) question.options[0] else ""
                         CutQuestionnaireScreenWithSeveralAnswerOption(
                             onBack = {
                                 isNavigatingForward = false
@@ -99,7 +98,7 @@ fun CutQuestionnaireRoute(
                                 else viewModel.setQuestionInd(ind + 1)
                             },
                             text = question.question,
-                            defaultValue = if (question.options.isNotEmpty()) question.options[0] else "",
+                            defaultValue = defaultValue,
                             onValueChange = { value ->
                                 viewModel.setParam(question.question, value)
                             },
@@ -135,9 +134,10 @@ fun CutQuestionnaireRoute(
 
             CutQuestionnaireScreenType.Client -> {
                 CutQuestionnaireClientChoiceScreen(
+                    defaultValue = uiState.clientDTO?.getFullName()?:"",
                     onBack = onPrevScreenType(CutQuestionnaireScreenType.Client),
                     onNext = { clientDTO ->
-                        viewModel.setClientId(clientDTO.id)
+                        viewModel.setClientDTO(clientDTO)
                         viewModel.requestCutRecommendations()
                         onNextScreenType(CutQuestionnaireScreenType.Client)()
                     },
@@ -199,7 +199,7 @@ fun CutQuestionnaireRoute(
 //            }
 
             CutQuestionnaireScreenType.Choice -> {
-                uiState.clientId?.let { getClientRecentCutIds(it) }?.let { viewModel.setRecentCuts(it) }
+                uiState.clientDTO?.let { getClientRecentCutIds(it.id) }?.let { viewModel.setRecentCuts(it) }
 
                 CutQuestionnaireCutChoiceScreen(
                     onBack = onPrevScreenType(CutQuestionnaireScreenType.Choice),

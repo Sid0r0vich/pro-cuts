@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sidor.procuts.data.ClientDTO
 import com.sidor.procuts.data.CutDTO
 import com.sidor.procuts.data.CutDateInfoDTO
 import com.sidor.procuts.data.CutRepository
@@ -52,7 +53,7 @@ open class CutQuestionnaireViewModel @Inject constructor(
     data class UiState(
         var screenType: CutQuestionnaireScreenType,
         var questionInd: Int = 0,
-        var clientId: Int? = null,
+        var clientDTO: ClientDTO? = null,
         var date: Date = Date(),
         var photoUri: Uri? = null,
         var cutId: Int? = null,
@@ -83,8 +84,8 @@ open class CutQuestionnaireViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(paramsMap = newParamsMap)
     }
 
-    fun setClientId(clientId: Int?) {
-        _uiState.value = _uiState.value.copy(clientId = clientId)
+    fun setClientDTO(clientDTO: ClientDTO?) {
+        _uiState.value = _uiState.value.copy(clientDTO = clientDTO)
     }
 
     fun setCutRecommendations(cutRecommendations: List<StateFlow<CutDTO>>) {
@@ -144,8 +145,7 @@ open class CutQuestionnaireViewModel @Inject constructor(
         onAddClick: (CutDateInfoDTO) -> Unit
     ): AddResult {
         val cutId = _uiState.value.cutId
-        val clientId = _uiState.value.clientId
-        setClientId(clientId)
+        val clientId = _uiState.value.clientDTO?.id
 
         val allCutIds = cutRepository.getAll().map { cut -> cut.id }
         if (cutId == null || !allCutIds.contains(cutId)) return AddResult.CUT_NAME_IS_NOT_FOUND

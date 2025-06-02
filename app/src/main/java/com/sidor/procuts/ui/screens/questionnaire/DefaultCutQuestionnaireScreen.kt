@@ -68,7 +68,7 @@ fun CutQuestionnaireScreenWithSeveralAnswerOption(
     onBack: () -> Unit,
     onNext: () -> Unit,
     text: String,
-    defaultValue: String = "",
+    defaultValue: String,
     valuesList: List<String>,
     onValueChange: (String) -> Unit,
 ) {

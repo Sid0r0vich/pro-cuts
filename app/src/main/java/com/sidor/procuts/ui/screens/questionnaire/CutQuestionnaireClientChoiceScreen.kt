@@ -40,9 +40,10 @@ import com.sidor.procuts.ui.theme.LocalColorPalette
 fun CutQuestionnaireClientChoiceScreen(
     onBack: () -> Unit,
     onNext: (ClientDTO) -> Unit,
-    clients: List<ClientDTO>
+    clients: List<ClientDTO>,
+    defaultValue: String
 ) {
-    var textValue by rememberSaveable { mutableStateOf("") }
+    var textValue by rememberSaveable { mutableStateOf(defaultValue) }
     val clientNames = clients.map { client -> client.getFullName() }
     val ctx = LocalContext.current
     val textIsEmptyMessage = stringResource(R.string.empty_client_field_message)
