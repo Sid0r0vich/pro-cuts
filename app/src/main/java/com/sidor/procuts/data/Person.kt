@@ -13,7 +13,7 @@ class PersonDTO(
 
 val defaultPersonDTO =
     PersonDTO(
-        firstName = "Иван",
-        lastName = "Иванов",
-        middleName = "Иванович",
+        firstName = "User",
+        lastName = "",
+        middleName = "",
     )
