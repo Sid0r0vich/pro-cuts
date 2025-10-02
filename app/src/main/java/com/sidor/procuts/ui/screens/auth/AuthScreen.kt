@@ -3,55 +3,39 @@ package com.sidor.procuts.ui.screens.auth
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import com.sidor.procuts.ui.navigation.AuthNavigationActions
+import androidx.compose.runtime.setValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sidor.procuts.ui.navigation.AuthRoute
 import com.sidor.procuts.ui.screens.PaddingProviderScreen
+import com.sidor.procuts.ui.viewmodels.AuthViewModel
 
 @Composable
 fun AuthScreen(
-    onSignUpClick: () -> Unit
+    viewModel: AuthViewModel
 ) {
-    val navController = rememberNavController()
-    val navigationActions = remember(navController) {
-        AuthNavigationActions(navController)
-    }
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
+    var route by remember { mutableStateOf<AuthRoute>(AuthRoute.SignIn) }
 
     Surface {
         PaddingProviderScreen {
-            AuthNavHost(
-                navController = navController,
-                navigationActions = navigationActions,
-                onSignUpClick = onSignUpClick
-            )
-        }
-    }
-}
+            when (route) {
+                AuthRoute.SignIn -> {
+                    LoginScreen(
+                        onSignUpClick = {
+                            route = AuthRoute.SignUp
+                        },
+                        viewModel = viewModel
+                    )
+                }
 
-@Composable
-private fun AuthNavHost(
-    navController: NavHostController,
-    navigationActions: AuthNavigationActions,
-    onSignUpClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    NavHost(
-        modifier = modifier,
-        navController = navController,
-        startDestination = AuthRoute.SignUp,
-    ) {
-        composable<AuthRoute.SignUp> {
-            RegistrationScreen(
-                onSignUpClick = onSignUpClick
-            )
+                AuthRoute.SignUp -> {
+                    RegistrationScreen(
+                        onSignInClick = { route = AuthRoute.SignIn },
+                        viewModel = viewModel
+                    )
+                }
+            }
         }
     }
 }

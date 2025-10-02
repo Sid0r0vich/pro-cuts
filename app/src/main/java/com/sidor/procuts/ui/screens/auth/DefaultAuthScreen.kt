@@ -1,5 +1,7 @@
-package com.sidor.procuts.ui.screens
+package com.sidor.procuts.ui.screens.auth
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,29 +15,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.sidor.procuts.R
-import com.sidor.procuts.data.defaultPersonDTO
 import com.sidor.procuts.ui.PaddingSpaces
-import com.sidor.procuts.ui.screens.cards.PersonCard
-import com.sidor.procuts.ui.screens.topbars.UserTopAppBar
+import com.sidor.procuts.ui.screens.PaddingProviderScreen
+import com.sidor.procuts.ui.screens.PaddingScreenWithBottomButtons
 import com.sidor.procuts.ui.theme.LocalColorPalette
-import com.sidor.procuts.ui.viewmodels.UserProfileViewModel
 
 @Composable
-fun UserProfileScreen(
-    viewModel: UserProfileViewModel = hiltViewModel()
+fun DefaultAuthScreen(
+    bottomButtonText: String,
+    onBottomButtonClick: () -> Unit,
+    content: @Composable ColumnScope.() -> Unit = {}
 ) {
-    TopAppBarScreen(
-        topBar = { UserTopAppBar() },
-    ) {
+    PaddingProviderScreen {
         PaddingScreenWithBottomButtons(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
             paddingSpaces = PaddingSpaces(2),
             buttons = {
                 Button(
-                    onClick = viewModel::signOut,
+                    onClick = onBottomButtonClick,
                     shape = RectangleShape,
                     modifier = Modifier.fillMaxWidth(),
                     enabled = true,
@@ -44,7 +43,7 @@ fun UserProfileScreen(
                     )
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = stringResource(R.string.sign_out))
+                        Text(text = bottomButtonText)
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ExitToApp,
                             contentDescription = null,
@@ -54,7 +53,7 @@ fun UserProfileScreen(
                 }
             }
         ) {
-            PersonCard(defaultPersonDTO)
+            content()
         }
     }
 }

@@ -1,0 +1,13 @@
+package com.example.wellness.auth
+
+enum class AuthStatus {
+    SUCCESS,
+    USER_NOT_FOUND,
+    INVALID_EMAIL_FORMAT,
+    INVALID_PASSWORD_FORMAT,
+    INVALID_NAME_FORMAT,
+    INVALID_CREDENTIALS,
+    EMAIL_COLLISION,
+    WEAK_PASSWORD,
+    UNKNOWN_ERROR
+}
