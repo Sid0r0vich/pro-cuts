@@ -1,72 +1,37 @@
 package com.sidor.procuts.ui
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import com.sidor.procuts.ui.navigation.BottomNavigationBar
-import com.sidor.procuts.ui.navigation.NavigationActions
-import com.sidor.procuts.ui.navigation.Route
-import com.sidor.procuts.ui.screens.PaddingProviderScreen
-import com.sidor.procuts.ui.screens.UserProfileScreen
-import com.sidor.procuts.ui.screens.routes.HomeRoute
+import androidx.compose.runtime.setValue
+import com.sidor.procuts.ui.navigation.MainRoute
+import com.sidor.procuts.ui.screens.auth.AuthScreen
+import com.sidor.procuts.ui.screens.main.MainScreen
+import com.sidor.procuts.ui.screens.state.LoadingScreen
+import kotlinx.coroutines.delay
 
 @Composable
-fun MyApp(modifier: Modifier) {
-    val navController = rememberNavController()
-    val navigationActions = remember(navController) {
-        NavigationActions(navController)
-    }
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
+fun MyApp() {
+    var authState by remember { mutableStateOf<Boolean?>(null) }
 
-    Surface {
-        Scaffold(
-            bottomBar = {
-                BottomNavigationBar(
-                    currentScreen = currentDestination
-                ) { route ->
-                    navigationActions.navigateTo(route)
-                }
-            }
-        ) {
-            innerPadding ->
-            PaddingProviderScreen {
-                MyNavHost(
-                    navController = navController,
-                    modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
-                    pad = innerPadding
-                )
-            }
-        }
+    LaunchedEffect(Unit) {
+        delay(2000)
+        authState = false
     }
-}
 
-@Composable
-private fun MyNavHost(
-    navController: NavHostController,
-    modifier: Modifier = Modifier,
-    pad: PaddingValues
-) {
-    NavHost(
-        modifier = modifier,
-        navController = navController,
-        startDestination = Route.Home,
-    ) {
-        composable<Route.Home> {
-            HomeRoute()
+    when (authState) {
+        null -> {
+            LoadingScreen()
         }
-        composable<Route.Profile> {
-            UserProfileScreen()
+        false -> {
+            AuthScreen(
+                onSignUpClick = { authState = true }
+            )
+        }
+        true -> {
+            MainScreen()
         }
     }
 }

@@ -16,13 +16,13 @@ import com.sidor.procuts.ui.theme.LocalColorPalette
 fun BottomNavigationBar(
     modifier: Modifier = Modifier,
     currentScreen: NavDestination?,
-    onClick: (Route) -> Unit,
+    onClick: (MainRoute) -> Unit,
 ) {
     NavigationBar(
         modifier = modifier,
         containerColor = LocalColorPalette.current.barColor,
     ) {
-        TOP_LEVEL_DESTINATIONS
+        MAIN_SCREEN_DESTINATIONS
             .onEachIndexed { index, item ->
                 NavigationBarItem(
                     icon = {
@@ -39,7 +39,7 @@ fun BottomNavigationBar(
                             color = LocalColorPalette.current.mainColor
                         )
                     },
-                    selected = TOP_LEVEL_DESTINATIONS.map { item -> item.route.toString() }.indexOf(
+                    selected = MAIN_SCREEN_DESTINATIONS.map { item -> item.route.toString() }.indexOf(
                         currentScreen?.route
                     ) == index,
                     onClick = {

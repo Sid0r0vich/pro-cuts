@@ -251,4 +251,9 @@
     <string name="client_name">Имя клиента</string>
     <string name="empty_client_field_message">Введите имя клиента</string>
     <string name="client_not_found_message">Клиент не найден</string>
+    <string name="register">Зарегистрироваться</string>
+    <string name="password">пароль</string>
+    <string name="email">почта</string>
+    <string name="name">имя</string>
+    <string name="registration">Регистрация</string>
 </resources>

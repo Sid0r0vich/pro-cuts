@@ -74,15 +74,18 @@ fun PaddingScreenWithBottomButtons(
     buttons: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     paddingSpaces: PaddingSpaces,
-    verticalArrangement: Arrangement.Vertical = Arrangement.SpaceBetween,
+    verticalArrangement: Arrangement.Vertical = Arrangement.Top,
+    horizontalAlignment: Alignment.Horizontal = Alignment.Start,
     content: @Composable ColumnScope.() -> Unit = {}
 ) {
     PaddingScreen(
         modifier = modifier,
         paddingSpaces = paddingSpaces,
-        verticalArrangement = verticalArrangement,
     ) {
         Column(
+            verticalArrangement = verticalArrangement,
+            horizontalAlignment = horizontalAlignment,
+            modifier = Modifier.weight(1f),
         ) {
             content()
         }
@@ -158,13 +161,6 @@ fun TopAppBarScreen(
             content()
         }
     }
-}
-
-@Composable
-fun LazyScreen(
-    content: LazyListScope.() -> Unit
-) {
-    LazyColumn { content() }
 }
 
 @Composable

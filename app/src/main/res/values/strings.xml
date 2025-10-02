@@ -250,4 +250,9 @@
     <string name="client_name">Client name</string>
     <string name="empty_client_field_message">Client field is empty!</string>
     <string name="client_not_found_message">Client is not found!</string>
+    <string name="register">Register</string>
+    <string name="password">password</string>
+    <string name="email">email</string>
+    <string name="name">name</string>
+    <string name="registration">Sign up</string>
 </resources>

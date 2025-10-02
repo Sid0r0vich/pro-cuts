@@ -5,8 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.ui.Modifier
 import com.sidor.procuts.ui.MyApp
 import com.sidor.procuts.ui.theme.ProCutsTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,9 +17,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ProCutsTheme {
-                MyApp(
-                    modifier = Modifier.fillMaxWidth()
-                )
+                MyApp()
             }
         }
     }
