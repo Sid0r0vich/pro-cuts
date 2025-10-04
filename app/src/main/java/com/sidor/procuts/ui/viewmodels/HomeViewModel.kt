@@ -3,14 +3,11 @@ package com.sidor.procuts.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sidor.procuts.data.ClientDTO
-import com.sidor.procuts.data.ClientInfoDTO
-import com.sidor.procuts.data.ClientRepository
 import com.sidor.procuts.data.CutDTO
 import com.sidor.procuts.data.CutDateDTO
 import com.sidor.procuts.data.CutDateInfoDTO
 import com.sidor.procuts.data.CutDateRepository
 import com.sidor.procuts.data.CutRepository
-import com.sidor.procuts.data.defaultClientDTO
 import com.sidor.procuts.data.defaultCutDTO
 import com.sidor.procuts.data.defaultCutDateDTO
 import com.sidor.procuts.ui.screens.screentypes.HomeScreenType
@@ -28,7 +25,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 open class HomeViewModel @Inject constructor(
-    val clientRepository: ClientRepository,
     val cutDateRepository: CutDateRepository,
     val cutRepository: CutRepository
 ) : ViewModel() {
@@ -53,12 +49,6 @@ open class HomeViewModel @Inject constructor(
     fun setCut(cut: CutDTO) {
         _uiState.value = _uiState.value.copy(cutDTO = cut)
     }
-
-    fun getClientDTO() =
-        _uiState.value.clientDTO
-
-    fun getCutDateDTO() =
-        _uiState.value.cutDateDTO
 
     fun getCutDTO(cutId: Int): StateFlow<CutDTO> =
         cutRepository
@@ -85,23 +75,6 @@ open class HomeViewModel @Inject constructor(
     fun navigateAddCut() = navigate(HomeScreenType.AddCut)
     fun navigateAddCare() = navigate(HomeScreenType.AddCare)
 
-    fun addClient(clientInfoDTO: ClientInfoDTO) {
-        clientRepository.insertClient(clientInfoDTO)
-    }
-
-    fun editClient(clientDTO: ClientDTO) {
-        clientRepository.updateClient(clientDTO)
-    }
-
-    fun getAllClients(
-        onComplete: () -> Unit = {}
-    ) =
-        clientRepository
-            .getClientStateFlows(viewModelScope, onComplete)
-
-    fun getClientIdOnPhoneNumber(phoneNumber: String): Int? =
-        clientRepository.getClientWithPhoneNumber(phoneNumber)
-
     fun addCutDate(cutDateInfoDTO: CutDateInfoDTO) {
         cutDateRepository.insertCut(cutDateInfoDTO)
     }
@@ -120,24 +93,6 @@ open class HomeViewModel @Inject constructor(
         const val TIMEOUT_MILLIS = 5_000L
     }
 }
-
-fun ClientRepository.getClientStateFlows(
-    scope: CoroutineScope,
-    onComplete: () -> Unit
-): List<StateFlow<ClientDTO>> =
-    this.getStream().map { flow ->
-        flow.distinctUntilChanged()
-            .onEach { value ->
-                if (value != defaultClientDTO) {
-                    onComplete()
-                }
-            }
-            .stateIn(
-                scope = scope,
-                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                initialValue = defaultClientDTO
-            )
-    }
 
 fun CutDateRepository.getClientCutDatesStateFlows(
     clientId: Int,

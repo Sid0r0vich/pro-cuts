@@ -1,6 +1,7 @@
 package com.sidor.procuts.ui.screens.routes
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,6 +25,7 @@ import com.sidor.procuts.ui.screens.VisitScreen
 import com.sidor.procuts.ui.screens.screentypes.HomeCardScreenType
 import com.sidor.procuts.ui.screens.screentypes.HomeScreenType
 import com.sidor.procuts.ui.viewmodels.HomeViewModel
+import kotlinx.coroutines.flow.map
 
 @Composable
 fun HomeRoute(
@@ -43,21 +45,13 @@ fun HomeRoute(
             }
         )
         HomeScreenType.Clients -> {
-            var loadingIsCompleted by rememberSaveable { mutableStateOf(false) }
-
             ClientsScreen(
                 onBack = { viewModel.navigateHome() },
-                clients = viewModel
-                    .getAllClients {
-                        loadingIsCompleted = true
-                    }
-                    .map { clientFlow -> clientFlow.collectAsState().value },
                 onClientClick = { clientDTO: ClientDTO ->
                     viewModel.setClient(clientDTO)
                     viewModel.navigateClient()
                 },
                 onAddClientClick = { viewModel.navigateAddClient() },
-                loadingIsCompleted = loadingIsCompleted
             )
         }
         HomeScreenType.Client -> {
@@ -88,7 +82,6 @@ fun HomeRoute(
         HomeScreenType.AddClient -> AddClientScreen(
             onBack = { viewModel.navigateClients() },
             onAddClient = { clientInfoDTO: ClientInfoDTO ->
-                viewModel.addClient(clientInfoDTO)
                 viewModel.navigateClients()
             }
         )
@@ -99,7 +92,8 @@ fun HomeRoute(
                     onBack = { viewModel.navigateClient() },
                     clientDTO = clientDTO,
                     onEditClient = { clientDTO: ClientDTO ->
-                        viewModel.editClient(clientDTO)
+                        TODO()
+                        //viewModel.editClient(clientDTO)
                         viewModel.setClient(clientDTO)
                         viewModel.navigateClient()
                     }
@@ -112,19 +106,12 @@ fun HomeRoute(
             onAddCutClick = { cutDateInfoDTO: CutDateInfoDTO ->
                 viewModel.addCutDate(cutDateInfoDTO)
             },
-            getClientIdOnPhoneNumber = { phoneNumber: String ->
-                viewModel.getClientIdOnPhoneNumber(phoneNumber)
-            },
             getClientRecentCutIds = { clientId: Int ->
                 viewModel.getClientCutDates(clientId)
                     .map { cutDateStateFlow -> cutDateStateFlow.collectAsState().value }
                     .map { cutDateDTO: CutDateDTO -> cutDateDTO.cutId }
                     .distinct()
             },
-            getAllClients = {
-                viewModel.getAllClients()
-                    .map { clientFlow -> clientFlow.collectAsState().value }
-            }
         )
         HomeScreenType.AddCare -> AddCareScreen(
             onBack = { viewModel.navigateClient() },

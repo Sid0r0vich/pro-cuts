@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sidor.procuts.R
 import com.sidor.procuts.data.ClientDTO
 import com.sidor.procuts.data.ClientInfoDTO
@@ -28,6 +29,7 @@ import com.sidor.procuts.ui.MyStyledTextField
 import com.sidor.procuts.ui.PhoneNumberField
 import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
 import com.sidor.procuts.ui.theme.LocalColorPalette
+import com.sidor.procuts.ui.viewmodels.AddClientViewModel
 import com.sidor.procuts.utils.PhoneNumberParser
 
 data class DefaultClientForm(
@@ -42,7 +44,8 @@ data class DefaultClientForm(
 @Composable
 fun AddClientScreen(
     onBack: () -> Unit,
-    onAddClient: (ClientInfoDTO) -> Unit
+    onAddClient: (ClientInfoDTO) -> Unit,
+    viewModel: AddClientViewModel = hiltViewModel()
 ) {
     ClientFormScreen(
         defaultClientForm = DefaultClientForm(
@@ -56,7 +59,10 @@ fun AddClientScreen(
         topBarTitleText = stringResource(R.string.create_client_tab_app_bar),
         buttonText = stringResource(R.string.create_client),
         onBack = onBack,
-        onClickButton = onAddClient
+        onClickButton = { client ->
+            viewModel.addClient(client)
+            onAddClient(client)
+        }
     )
 }
 

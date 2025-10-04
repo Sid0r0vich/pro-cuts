@@ -6,13 +6,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sidor.procuts.R
 import com.sidor.procuts.data.ClientDTO
 import com.sidor.procuts.ui.LocalBoardPadding
@@ -20,18 +24,21 @@ import com.sidor.procuts.ui.PaddingSpaces
 import com.sidor.procuts.ui.TextWithPlusButton
 import com.sidor.procuts.ui.screens.items.ClientItem
 import com.sidor.procuts.ui.screens.topbars.ClientsTopAppBar
+import com.sidor.procuts.ui.viewmodels.ClientsViewModel
 import com.sidor.procuts.utils.filterClients
 
 
 @Composable
 fun ClientsScreen(
     onBack: () -> Unit,
-    clients: List<ClientDTO>,
     onClientClick: (ClientDTO) -> Unit,
     onAddClientClick: () -> Unit,
-    loadingIsCompleted: Boolean
+    viewModel: ClientsViewModel = hiltViewModel()
 ) {
+    val clients by viewModel.clients.collectAsState()
     var searchText by remember { mutableStateOf("") }
+    var loadingIsCompleted by rememberSaveable { mutableStateOf(true) }
+    val collectedClients = clients.values.map { client -> client.collectAsState(initial = ClientDTO()).value }
 
     TopAppBarScreen(
         topBar = {
@@ -54,7 +61,7 @@ fun ClientsScreen(
         }
 
         val filteredClientNameList = filterClients(
-            clients = clients,
+            clients = collectedClients,
             searchText = searchText
         )
 

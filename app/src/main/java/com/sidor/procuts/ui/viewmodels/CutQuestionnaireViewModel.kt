@@ -8,6 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sidor.procuts.data.ClientDTO
+import com.sidor.procuts.data.ClientRepository
 import com.sidor.procuts.data.CutDTO
 import com.sidor.procuts.data.CutDateInfoDTO
 import com.sidor.procuts.data.CutRepository
@@ -20,9 +21,11 @@ import com.sidor.procuts.ui.viewmodels.HomeViewModel.Companion.TIMEOUT_MILLIS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -48,7 +51,8 @@ sealed interface QuestionnaireUIState {
 
 @HiltViewModel
 open class CutQuestionnaireViewModel @Inject constructor(
-    val cutRepository: CutRepository
+    val cutRepository: CutRepository,
+    val clientRepository: ClientRepository,
 ) : ViewModel() {
     data class UiState(
         var screenType: CutQuestionnaireScreenType,
@@ -60,7 +64,8 @@ open class CutQuestionnaireViewModel @Inject constructor(
         var cutRecommendations: List<StateFlow<CutDTO>>? = null,
         var recentCuts: List<StateFlow<CutDTO>>? = null,
         var questionList: List<QuestionOptions>? = null,
-        var paramsMap: MutableMap<String, String> = mutableMapOf()
+        var paramsMap: MutableMap<String, String> = mutableMapOf(),
+        var clients: StateFlow<Map<Int, StateFlow<ClientDTO>>>
     )
 
     var recommendationsUIState: RecommendationsUIState by mutableStateOf(RecommendationsUIState.Loading)
@@ -69,9 +74,17 @@ open class CutQuestionnaireViewModel @Inject constructor(
     var questionnaireUIState: QuestionnaireUIState by mutableStateOf(QuestionnaireUIState.Loading)
         private set
 
-    init { requestForm() }
+    init {
+        requestForm()
+        viewModelScope.launch {
+            clientRepository.loadClients()
+        }
+    }
 
-    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState(CutQuestionnaireScreenType.entries.first()))
+    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState(
+        screenType = CutQuestionnaireScreenType.entries.first(),
+        clients = clientRepository.getClientsStateFlow()
+    ))
     val uiState: StateFlow<UiState> get() = _uiState
 
     fun setDate(date: Date) {

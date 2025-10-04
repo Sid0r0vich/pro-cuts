@@ -1,8 +1,6 @@
 package com.sidor.procuts.di
 
-import com.example.wellness.auth.Auth
-import com.example.wellness.auth.FirebaseAuth
-import com.sidor.procuts.data.ClientMockRepository
+import com.sidor.procuts.data.ClientDBRepository
 import com.sidor.procuts.data.ClientRepository
 import com.sidor.procuts.data.CutDateMockRepository
 import com.sidor.procuts.data.CutDateRepository
@@ -16,10 +14,10 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class ViewModelModule {
+abstract class RepositoryModule {
     @Binds
     @Singleton
-    abstract fun bindClientRepository(impl: ClientMockRepository): ClientRepository
+    abstract fun bindClientRepository(impl: ClientDBRepository): ClientRepository
 
     @Binds
     @Singleton
@@ -28,8 +26,4 @@ abstract class ViewModelModule {
     @Binds
     @Singleton
     abstract fun bindCutRepository(impl: CutMockRepository): CutRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindAuth(impl: FirebaseAuth): Auth
 }

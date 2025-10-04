@@ -6,6 +6,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,10 +36,8 @@ import com.sidor.procuts.ui.viewmodels.QuestionnaireUIState
 fun CutQuestionnaireRoute(
     onBack: () -> Unit,
     onAddCutClick: (CutDateInfoDTO) -> Unit,
-    getClientIdOnPhoneNumber: (String) -> Int?,
     viewModel: CutQuestionnaireViewModel = hiltViewModel(),
-    getAllClients: @Composable () -> List<ClientDTO>,
-    getClientRecentCutIds: @Composable (Int) -> List<Int>
+    getClientRecentCutIds: @Composable (Int) -> List<Int>,
 ) {
     val uiState = viewModel.uiState.collectAsState().value
     var isNavigatingForward by rememberSaveable { mutableStateOf(true) }
@@ -141,7 +140,8 @@ fun CutQuestionnaireRoute(
                         viewModel.requestCutRecommendations()
                         onNextScreenType(CutQuestionnaireScreenType.Client)()
                     },
-                    clients = getAllClients()
+                    clients = uiState.clients.collectAsState(mapOf()).value.values.toList()
+                        .map { client -> client.value }
                 )
             }
 
