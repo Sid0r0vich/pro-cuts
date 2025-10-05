@@ -2,6 +2,8 @@ package com.sidor.procuts.data
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 @Serializable
 class ClientDTO(
@@ -12,18 +14,20 @@ class ClientDTO(
     val lastName: String = "",
     @SerialName("middle_name")
     val middleName: String? = null,
-    val photo: ByteArray? = null,
+    @SerialName("photo")
+    val photo: String? = null,
     @SerialName("phone_number")
     val phoneNumber: String? = null
 ) {
     fun getFullName(): String = toPersonDTO().getFullName()
 
+    @OptIn(ExperimentalEncodingApi::class)
     fun toPersonDTO(): PersonDTO =
         PersonDTO(
             firstName = firstName,
             lastName = lastName,
             middleName = middleName,
-            photo = photo
+            photo = Base64.decode(photo ?: "")
         )
 
     fun toClientInfoDTO(): ClientInfoDTO =
@@ -44,8 +48,8 @@ class ClientInfoDTO(
     val lastName: String = "",
     @SerialName("middle_name")
     val middleName: String? = null,
-    @Transient
-    val photo: ByteArray? = null,
+    @SerialName("photo")
+    val photo: String? = null,
     @SerialName("phone_number")
     val phoneNumber: String? = null
 ) {

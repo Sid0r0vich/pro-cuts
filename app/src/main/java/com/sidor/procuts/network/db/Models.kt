@@ -25,8 +25,8 @@ class ClientInfoWithUserIdDTO(
     val lastName: String = "",
     @SerialName("middle_name")
     val middleName: String? = null,
-    @Transient
-    val photo: ByteArray? = null,
+    @SerialName("photo")
+    val photo: String? = null,
     @SerialName("phone_number")
     val phoneNumber: String? = null,
     @SerialName("user_id")

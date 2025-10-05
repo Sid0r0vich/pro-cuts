@@ -24,14 +24,16 @@ import com.sidor.procuts.R
 import com.sidor.procuts.data.ClientDTO
 import com.sidor.procuts.data.ClientInfoDTO
 import com.sidor.procuts.ui.components.ImagePicker
-import com.sidor.procuts.ui.components.PaddingSpaces
 import com.sidor.procuts.ui.components.MyStyledTextField
+import com.sidor.procuts.ui.components.PaddingSpaces
 import com.sidor.procuts.ui.components.PhoneNumberField
 import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
 import com.sidor.procuts.ui.theme.LocalColorPalette
 import com.sidor.procuts.ui.viewmodels.AddClientViewModel
 import com.sidor.procuts.ui.viewmodels.EditClientViewModel
 import com.sidor.procuts.utils.PhoneNumberParser
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 data class DefaultClientForm(
     val lastName: String,
@@ -67,7 +69,7 @@ fun AddClientScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalEncodingApi::class)
 @Composable
 fun EditClientScreen(
     onBack: () -> Unit,
@@ -81,7 +83,7 @@ fun EditClientScreen(
             firstName = clientDTO.firstName,
             middleName = clientDTO.middleName,
             noMiddleName = clientDTO.middleName == null,
-            clientPhoto = clientDTO.photo,
+            clientPhoto = clientDTO.photo?.let { Base64.decode(it) },
             clientPhoneNumber = clientDTO.phoneNumber
         ),
         topBarTitleText = stringResource(R.string.edit_client_tab_app_bar),
@@ -95,6 +97,7 @@ fun EditClientScreen(
     )
 }
 
+@OptIn(ExperimentalEncodingApi::class)
 @Composable
 fun ClientFormScreen(
     defaultClientForm: DefaultClientForm,
@@ -122,15 +125,17 @@ fun ClientFormScreen(
         PaddingScreenWithBottomButtons(
             buttons = {
                 Button(
-                    onClick = { onClickButton(
-                        ClientInfoDTO(
-                            firstName = firstName,
-                            lastName = lastName,
-                            middleName = middleName,
-                            photo = clientPhoto,
-                            phoneNumber = phoneNumber.toString()
+                    onClick = {
+                        onClickButton(
+                            ClientInfoDTO(
+                                firstName = firstName,
+                                lastName = lastName,
+                                middleName = middleName,
+                                photo = clientPhoto?.let { Base64.encode(it) },
+                                phoneNumber = phoneNumber.toString()
+                            )
                         )
-                    ) },
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     enabled = lastName.isNotBlank() && firstName.isNotBlank() && (noMiddleName || !middleName.isNullOrEmpty()),
                     shape = RectangleShape,
@@ -148,11 +153,7 @@ fun ClientFormScreen(
                 onPhoneNumberChange = { number ->
                     phoneNumber = number
                     val parsedNumber = PhoneNumberParser.parsePhoneNumber(number)
-                    if (parsedNumber != null) {
-                        phoneNumberIsValid = true
-                    } else {
-                        phoneNumberIsValid = false
-                    }
+                    phoneNumberIsValid = parsedNumber != null
                 },
             )
 
@@ -198,7 +199,7 @@ fun ClientFormScreen(
             DefaultSpacer()
             ImagePicker(
                 clientImage = clientPhoto,
-                onImageLoad =  { clientPhoto = it }
+                onImageLoad = { clientPhoto = it }
             )
         }
     }
