@@ -2,7 +2,7 @@ package com.sidor.procuts.di
 
 import com.sidor.procuts.data.ClientDBRepository
 import com.sidor.procuts.data.ClientRepository
-import com.sidor.procuts.data.CutDateMockRepository
+import com.sidor.procuts.data.CutDateDBRepository
 import com.sidor.procuts.data.CutDateRepository
 import com.sidor.procuts.data.CutMockRepository
 import com.sidor.procuts.data.CutRepository
@@ -21,7 +21,7 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindCutDateRepository(impl: CutDateMockRepository): CutDateRepository
+    abstract fun bindCutDateRepository(impl: CutDateDBRepository): CutDateRepository
 
     @Binds
     @Singleton

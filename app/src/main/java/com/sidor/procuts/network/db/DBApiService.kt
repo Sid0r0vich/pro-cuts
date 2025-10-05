@@ -3,6 +3,7 @@ package com.sidor.procuts.network.db
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.sidor.procuts.data.ClientDTO
 import com.sidor.procuts.data.ClientInfoDTO
+import com.sidor.procuts.data.CutDateDTO
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
@@ -50,6 +51,6 @@ interface GinApiService {
     suspend fun createHaircut(@Body haircut: Haircut): Haircut
 
     // GET /clients/{id}/haircuts
-    @GET("/clients/{id}/haircuts")
-    suspend fun getHaircuts(@Path("id") clientId: Int): List<Haircut>
+    @GET("/haircuts")
+    suspend fun getHaircuts(@Query("user_id") userId: String): List<CutDateDTO>
 }

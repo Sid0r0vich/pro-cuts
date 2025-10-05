@@ -2,6 +2,8 @@ package com.sidor.procuts.data
 
 import android.net.Uri
 import com.sidor.procuts.R
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import java.util.Date
 
 data class CutDTO(
@@ -25,21 +27,32 @@ class CutInfoDTO(
         )
 }
 
+@Serializable
 data class CutDateDTO(
     val id: Int,
+    @SerialName("type_code")
     val cutId: Int,
+    @SerialName("client_id")
     val clientId: Int,
+    @Serializable(with = DateSerializer::class)
     val date: Date,
-    val cutPhoto: Uri?,
+    @SerialName("cut_photo")
+    val cutPhoto: String?,
+    @SerialName("cut_params")
     val cutParams: Map<String, String> = mutableMapOf()
 )
 
 class CutDateInfoDTO(
+    @SerialName("type_code")
     val cutId: Int,
+    @SerialName("client_id")
     val clientId: Int,
+    @Serializable(with = DateSerializer::class)
     val date: Date,
-    val cutPhoto: Uri?,
-    val cutParams: Map<String, String>,
+    @SerialName("cut_photo")
+    val cutPhoto: String?,
+    @SerialName("cut_params")
+    val cutParams: Map<String, String> = mutableMapOf()
 ) {
     fun withId(id: Int): CutDateDTO =
         CutDateDTO(

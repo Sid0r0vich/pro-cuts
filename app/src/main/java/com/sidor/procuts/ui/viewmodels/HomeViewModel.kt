@@ -2,6 +2,7 @@ package com.sidor.procuts.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sidor.procuts.data.ClientDTO
 import com.sidor.procuts.data.CutDTO
 import com.sidor.procuts.data.CutDateDTO
@@ -21,6 +22,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,6 +36,12 @@ open class HomeViewModel @Inject constructor(
         val cutDateDTO: CutDateDTO? = null,
         val cutDTO: CutDTO? = null,
     )
+
+    init {
+        viewModelScope.launch {
+            cutDateRepository.loadCuts()
+        }
+    }
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState(HomeScreenType.Home))
     val uiState: StateFlow<UiState> get() = _uiState

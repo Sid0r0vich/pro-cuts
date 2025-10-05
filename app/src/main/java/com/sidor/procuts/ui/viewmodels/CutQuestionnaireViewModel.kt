@@ -30,6 +30,8 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.Date
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 enum class AddResult {
     SUCCESS,
@@ -59,7 +61,7 @@ open class CutQuestionnaireViewModel @Inject constructor(
         var questionInd: Int = 0,
         var clientDTO: ClientDTO? = null,
         var date: Date = Date(),
-        var photoUri: Uri? = null,
+        var photo: ByteArray? = null,
         var cutId: Int? = null,
         var cutRecommendations: List<StateFlow<CutDTO>>? = null,
         var recentCuts: List<StateFlow<CutDTO>>? = null,
@@ -114,9 +116,6 @@ open class CutQuestionnaireViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(cutId = cutId)
     }
 
-    fun setPhotoUri(photoUri: Uri) {
-        _uiState.value = _uiState.value.copy(photoUri = photoUri)
-    }
 
     fun setQuestionInd(questionInd: Int) {
         _uiState.value = _uiState.value.copy(questionInd = questionInd)
@@ -154,6 +153,7 @@ open class CutQuestionnaireViewModel @Inject constructor(
         return CutQuestionnaireScreenType.entries[next]
     }
 
+    @OptIn(ExperimentalEncodingApi::class)
     fun tryAddCut(
         onAddClick: (CutDateInfoDTO) -> Unit
     ): AddResult {
@@ -169,7 +169,7 @@ open class CutQuestionnaireViewModel @Inject constructor(
                 cutId = cutId,
                 clientId = clientId,
                 date = _uiState.value.date,
-                cutPhoto = _uiState.value.photoUri,
+                cutPhoto = _uiState.value.photo?.let { Base64.encode(it) },
                 cutParams = _uiState.value.paramsMap
             )
         )
