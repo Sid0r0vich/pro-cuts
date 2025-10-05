@@ -52,5 +52,11 @@ class ClientDBRepository @Inject constructor(
         clientsStateFlow.value = updatedMap
     }
 
-    override suspend fun deleteClient(clientId: Int) { TODO() }
+    override suspend fun deleteClient(clientId: Int) {
+        apiService.deleteClient(clientId)
+        val updatedMap = clientsStateFlow.value.toMutableMap()
+        updatedMap.remove(clientId)
+        clientsStateFlow.value = updatedMap
+
+    }
 }

@@ -27,7 +27,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.SwitchCamera
-import androidx.compose.material.icons.filled.TaskAlt
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -64,7 +63,7 @@ import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.sidor.procuts.ui.ToastNotifier
+import com.sidor.procuts.ui.components.ToastNotifier
 import com.sidor.procuts.ui.theme.LocalColorPalette
 import com.sidor.procuts.ui.viewmodels.CameraViewModel
 import java.util.concurrent.Executor

@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.sidor.procuts.R
-import com.sidor.procuts.ui.LocalBoardPadding
-import com.sidor.procuts.ui.PaddingSpaces
+import com.sidor.procuts.ui.components.LocalBoardPadding
+import com.sidor.procuts.ui.components.PaddingSpaces
 import com.sidor.procuts.ui.screens.cards.HomeCard
 import com.sidor.procuts.ui.screens.screentypes.HomeCardScreenType
 import com.sidor.procuts.ui.screens.topbars.UserTopAppBar

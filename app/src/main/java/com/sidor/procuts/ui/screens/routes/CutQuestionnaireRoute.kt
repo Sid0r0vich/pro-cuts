@@ -6,7 +6,6 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,9 +15,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sidor.procuts.R
-import com.sidor.procuts.data.ClientDTO
 import com.sidor.procuts.data.CutDateInfoDTO
-import com.sidor.procuts.ui.ToastNotifier
+import com.sidor.procuts.ui.components.ToastNotifier
 import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireClientChoiceScreen
 import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireConfirmScreen
 import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireCutChoiceScreen

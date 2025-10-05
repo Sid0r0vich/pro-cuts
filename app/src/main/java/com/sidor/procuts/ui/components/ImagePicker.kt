@@ -1,4 +1,4 @@
-package com.sidor.procuts.ui
+package com.sidor.procuts.ui.components
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult

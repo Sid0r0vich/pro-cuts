@@ -26,8 +26,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sidor.procuts.R
 import com.sidor.procuts.data.ClientDTO
-import com.sidor.procuts.ui.PaddingSpaces
-import com.sidor.procuts.ui.ToastNotifier
+import com.sidor.procuts.ui.components.PaddingSpaces
+import com.sidor.procuts.ui.components.ToastNotifier
 import com.sidor.procuts.ui.screens.DefaultPaddingScreenWithQuestionnaireButtons
 import com.sidor.procuts.ui.screens.DefaultSpacer
 import com.sidor.procuts.ui.screens.DpSpacer

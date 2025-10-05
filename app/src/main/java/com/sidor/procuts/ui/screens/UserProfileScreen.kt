@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sidor.procuts.R
 import com.sidor.procuts.data.defaultPersonDTO
-import com.sidor.procuts.ui.PaddingSpaces
+import com.sidor.procuts.ui.components.PaddingSpaces
 import com.sidor.procuts.ui.screens.cards.PersonCard
 import com.sidor.procuts.ui.screens.topbars.UserTopAppBar
 import com.sidor.procuts.ui.theme.LocalColorPalette

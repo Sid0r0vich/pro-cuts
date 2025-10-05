@@ -21,7 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.sidor.procuts.R
 import com.sidor.procuts.data.CutDTO
-import com.sidor.procuts.ui.PaddingSpaces
+import com.sidor.procuts.ui.components.PaddingSpaces
 import com.sidor.procuts.ui.screens.LazyPaddingScreenWithBottomButtons
 import com.sidor.procuts.ui.screens.TopAppBarScreen
 import com.sidor.procuts.ui.screens.cards.CutCard

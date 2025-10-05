@@ -23,10 +23,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.sidor.procuts.R
 import com.sidor.procuts.data.ClientDTO
 import com.sidor.procuts.data.ClientInfoDTO
-import com.sidor.procuts.ui.ImagePicker
-import com.sidor.procuts.ui.PaddingSpaces
-import com.sidor.procuts.ui.MyStyledTextField
-import com.sidor.procuts.ui.PhoneNumberField
+import com.sidor.procuts.ui.components.ImagePicker
+import com.sidor.procuts.ui.components.PaddingSpaces
+import com.sidor.procuts.ui.components.MyStyledTextField
+import com.sidor.procuts.ui.components.PhoneNumberField
 import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
 import com.sidor.procuts.ui.theme.LocalColorPalette
 import com.sidor.procuts.ui.viewmodels.AddClientViewModel

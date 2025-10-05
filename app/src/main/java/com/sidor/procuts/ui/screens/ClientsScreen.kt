@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,9 +18,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sidor.procuts.R
 import com.sidor.procuts.data.ClientDTO
-import com.sidor.procuts.ui.LocalBoardPadding
-import com.sidor.procuts.ui.PaddingSpaces
-import com.sidor.procuts.ui.TextWithPlusButton
+import com.sidor.procuts.ui.components.LocalBoardPadding
+import com.sidor.procuts.ui.components.PaddingSpaces
+import com.sidor.procuts.ui.components.TextWithPlusButton
 import com.sidor.procuts.ui.screens.items.ClientItem
 import com.sidor.procuts.ui.screens.topbars.ClientsTopAppBar
 import com.sidor.procuts.ui.viewmodels.ClientsViewModel

@@ -1,7 +1,6 @@
 package com.sidor.procuts.ui.screens.routes
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,7 +12,7 @@ import com.sidor.procuts.data.ClientInfoDTO
 import com.sidor.procuts.data.CutDTO
 import com.sidor.procuts.data.CutDateDTO
 import com.sidor.procuts.data.CutDateInfoDTO
-import com.sidor.procuts.ui.CareForm
+import com.sidor.procuts.ui.components.CareForm
 import com.sidor.procuts.ui.screens.AddCareScreen
 import com.sidor.procuts.ui.screens.AddClientScreen
 import com.sidor.procuts.ui.screens.ClientScreen
@@ -25,7 +24,6 @@ import com.sidor.procuts.ui.screens.VisitScreen
 import com.sidor.procuts.ui.screens.screentypes.HomeCardScreenType
 import com.sidor.procuts.ui.screens.screentypes.HomeScreenType
 import com.sidor.procuts.ui.viewmodels.HomeViewModel
-import kotlinx.coroutines.flow.map
 
 @Composable
 fun HomeRoute(

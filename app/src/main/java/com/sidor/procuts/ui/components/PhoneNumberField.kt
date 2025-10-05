@@ -1,4 +1,4 @@
-package com.sidor.procuts.ui
+package com.sidor.procuts.ui.components
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable

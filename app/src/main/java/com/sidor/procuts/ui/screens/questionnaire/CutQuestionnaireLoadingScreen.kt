@@ -2,7 +2,7 @@ package com.sidor.procuts.ui.screens.questionnaire
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import com.sidor.procuts.ui.PaddingSpaces
+import com.sidor.procuts.ui.components.PaddingSpaces
 import com.sidor.procuts.ui.screens.PaddingScreen
 import com.sidor.procuts.ui.screens.TopAppBarScreen
 import com.sidor.procuts.ui.screens.state.LoadingScreen

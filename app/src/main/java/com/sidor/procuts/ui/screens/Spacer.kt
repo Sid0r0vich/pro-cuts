@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.sidor.procuts.ui.LocalBoardPadding
+import com.sidor.procuts.ui.components.LocalBoardPadding
 
 @Composable
 fun DefaultSpacer(spaceCount: Int = 1) {

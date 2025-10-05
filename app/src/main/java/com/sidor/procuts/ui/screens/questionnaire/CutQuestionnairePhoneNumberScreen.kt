@@ -13,8 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sidor.procuts.R
-import com.sidor.procuts.ui.PaddingSpaces
-import com.sidor.procuts.ui.PhoneNumberField
+import com.sidor.procuts.ui.components.PaddingSpaces
+import com.sidor.procuts.ui.components.PhoneNumberField
 import com.sidor.procuts.ui.screens.DefaultPaddingScreenWithQuestionnaireButtons
 import com.sidor.procuts.ui.screens.DefaultSpacer
 import com.sidor.procuts.ui.screens.TopAppBarScreen

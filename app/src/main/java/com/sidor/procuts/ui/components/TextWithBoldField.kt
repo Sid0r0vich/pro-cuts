@@ -1,4 +1,4 @@
-package com.sidor.procuts.ui
+package com.sidor.procuts.ui.components
 
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text

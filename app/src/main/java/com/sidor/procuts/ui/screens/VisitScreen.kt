@@ -15,8 +15,8 @@ import com.sidor.procuts.R
 import com.sidor.procuts.data.CutDTO
 import com.sidor.procuts.data.CutDateDTO
 import com.sidor.procuts.data.readableDMYDateFormat
-import com.sidor.procuts.ui.PaddingSpaces
-import com.sidor.procuts.ui.TextWithBoldField
+import com.sidor.procuts.ui.components.PaddingSpaces
+import com.sidor.procuts.ui.components.TextWithBoldField
 import com.sidor.procuts.ui.screens.items.CutItem
 import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
 

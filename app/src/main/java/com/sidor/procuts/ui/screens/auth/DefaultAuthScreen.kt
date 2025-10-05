@@ -16,7 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
-import com.sidor.procuts.ui.PaddingSpaces
+import com.sidor.procuts.ui.components.PaddingSpaces
 import com.sidor.procuts.ui.screens.PaddingProviderScreen
 import com.sidor.procuts.ui.screens.PaddingScreenWithBottomButtons
 import com.sidor.procuts.ui.theme.LocalColorPalette

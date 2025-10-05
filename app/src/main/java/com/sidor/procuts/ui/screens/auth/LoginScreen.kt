@@ -14,10 +14,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import com.example.wellness.auth.AuthData
 import com.example.wellness.auth.AuthMessageNotifier
-import com.example.wellness.auth.AuthStatus
 import com.example.wellness.auth.AuthUiState
 import com.sidor.procuts.R
-import com.sidor.procuts.ui.MyStyledTextField
+import com.sidor.procuts.ui.components.MyStyledTextField
 import com.sidor.procuts.ui.screens.DefaultSpacer
 import com.sidor.procuts.ui.viewmodels.AuthViewModel
 

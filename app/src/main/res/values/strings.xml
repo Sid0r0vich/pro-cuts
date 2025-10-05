@@ -269,4 +269,5 @@
     <string name="have_not_account">Don`t have account, sign up</string>
     <string name="have_account">Already have account, login</string>
     <string name="sign_out">Sign out</string>
+    <string name="button_delete">delete</string>
 </resources>
