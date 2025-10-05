@@ -10,14 +10,6 @@ data class User(
 )
 
 @Serializable
-data class Haircut(
-    val id: Int = 0,
-    val client_id: Int,
-    val type_code: Int,
-    val date: String
-)
-
-@Serializable
 class ClientInfoWithUserIdDTO(
     @SerialName("first_name")
     val firstName: String = "",

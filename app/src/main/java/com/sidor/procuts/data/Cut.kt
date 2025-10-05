@@ -42,6 +42,7 @@ data class CutDateDTO(
     val cutParams: Map<String, String> = mutableMapOf()
 )
 
+@Serializable
 class CutDateInfoDTO(
     @SerialName("type_code")
     val cutId: Int,

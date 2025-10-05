@@ -4,6 +4,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.sidor.procuts.data.ClientDTO
 import com.sidor.procuts.data.ClientInfoDTO
 import com.sidor.procuts.data.CutDateDTO
+import com.sidor.procuts.data.CutDateInfoDTO
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
@@ -48,7 +49,7 @@ interface GinApiService {
 
     // POST /haircuts
     @POST("/haircuts")
-    suspend fun createHaircut(@Body haircut: Haircut): Haircut
+    suspend fun createHaircut(@Body haircut: CutDateInfoDTO): CutDateDTO
 
     // GET /clients/{id}/haircuts
     @GET("/haircuts")

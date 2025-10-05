@@ -84,7 +84,9 @@ open class HomeViewModel @Inject constructor(
     fun navigateAddCare() = navigate(HomeScreenType.AddCare)
 
     fun addCutDate(cutDateInfoDTO: CutDateInfoDTO) {
-        cutDateRepository.insertCut(cutDateInfoDTO)
+        viewModelScope.launch {
+            cutDateRepository.insertCut(cutDateInfoDTO)
+        }
     }
 
     fun getClientCutDates(

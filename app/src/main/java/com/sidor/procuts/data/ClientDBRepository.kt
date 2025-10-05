@@ -1,5 +1,6 @@
 package com.sidor.procuts.data
 
+import android.util.Log
 import com.example.wellness.auth.Auth
 import com.sidor.procuts.network.db.ClientInfoWithUserIdDTO
 import com.sidor.procuts.network.db.GinApiService
@@ -29,34 +30,51 @@ class ClientDBRepository @Inject constructor(
         return clientsStateFlow
     }
 
-    override suspend fun insertClient(clientInfoDTO: ClientInfoDTO) {
-        val clientDto = apiService.createClient(
-            ClientInfoWithUserIdDTO(
-                firstName = clientInfoDTO.firstName,
-                lastName = clientInfoDTO.lastName,
-                middleName = clientInfoDTO.middleName,
-                photo = clientInfoDTO.photo,
-                phoneNumber = clientInfoDTO.phoneNumber,
-                userId = auth.userId.value ?: ""
+    override suspend fun insertClient(clientInfoDTO: ClientInfoDTO): Boolean {
+        return try {
+            val clientDto = apiService.createClient(
+                ClientInfoWithUserIdDTO(
+                    firstName = clientInfoDTO.firstName,
+                    lastName = clientInfoDTO.lastName,
+                    middleName = clientInfoDTO.middleName,
+                    photo = clientInfoDTO.photo,
+                    phoneNumber = clientInfoDTO.phoneNumber,
+                    userId = auth.userId.value ?: ""
+                )
             )
-        )
-        val updatedMap = clientsStateFlow.value.toMutableMap()
-        updatedMap[clientDto.id] = MutableStateFlow(clientDto)
-        clientsStateFlow.value = updatedMap
+            val updatedMap = clientsStateFlow.value.toMutableMap()
+            updatedMap[clientDto.id] = MutableStateFlow(clientDto)
+            clientsStateFlow.value = updatedMap
+            true
+        } catch (e: Exception) {
+            Log.e("ERROR", e.toString())
+            false
+        }
     }
 
-    override suspend fun updateClient(clientDTO: ClientDTO) {
-        val clientInfoDTO = apiService.editClient(clientDTO.id, clientDTO.toClientInfoDTO())
-        val updatedMap = clientsStateFlow.value.toMutableMap()
-        updatedMap[clientInfoDTO.id] = MutableStateFlow(clientInfoDTO)
-        clientsStateFlow.value = updatedMap
+    override suspend fun updateClient(clientDTO: ClientDTO): Boolean {
+        return try {
+            val clientInfoDTO = apiService.editClient(clientDTO.id, clientDTO.toClientInfoDTO())
+            val updatedMap = clientsStateFlow.value.toMutableMap()
+            updatedMap[clientInfoDTO.id] = MutableStateFlow(clientInfoDTO)
+            clientsStateFlow.value = updatedMap
+            true
+        } catch (e: Exception) {
+            Log.e("ERROR", e.toString())
+            false
+        }
     }
 
-    override suspend fun deleteClient(clientId: Int) {
-        apiService.deleteClient(clientId)
-        val updatedMap = clientsStateFlow.value.toMutableMap()
-        updatedMap.remove(clientId)
-        clientsStateFlow.value = updatedMap
-
+    override suspend fun deleteClient(clientId: Int): Boolean {
+        return try {
+            apiService.deleteClient(clientId)
+            val updatedMap = clientsStateFlow.value.toMutableMap()
+            updatedMap.remove(clientId)
+            clientsStateFlow.value = updatedMap
+            true
+        } catch (e: Exception) {
+            Log.e("ERROR", e.toString())
+            false
+        }
     }
 }
