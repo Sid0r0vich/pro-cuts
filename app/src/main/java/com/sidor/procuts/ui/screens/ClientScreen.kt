@@ -10,6 +10,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -29,16 +31,20 @@ import com.sidor.procuts.ui.viewmodels.ClientViewModel
 @Composable
 fun ClientScreen(
     clientDTO: ClientDTO?,
-    cutDates: List<CutDateDTO>,
-    caresDates: List<CutDateDTO> = listOf(), // TODO
     onBack: () -> Unit,
     onVisitClick: (CutDateDTO) -> Unit,
     onAddCutClick: () -> Unit,
-    onAddCareClick: () -> Unit,
     onEditClientClick: () -> Unit,
-    loadingIsCompleted: Boolean,
     viewModel: ClientViewModel = hiltViewModel()
 ) {
+    LaunchedEffect(Unit) {
+        clientDTO?.id.let {
+            viewModel.getClientCutDates(it)
+        }
+    }
+    val cutDates = viewModel.cuts.collectAsState().value
+        .values.toList().map { cutDateStateFlow -> cutDateStateFlow.collectAsState().value }
+
     TopAppBarScreen(
         topBar = {
             TitleTopAppBar(
@@ -98,25 +104,7 @@ fun ClientScreen(
                         DefaultSpacer(1)
                         VisitItem(
                             date = cutDate.date, onClick = { onVisitClick(cutDate) },
-                            loadingIsCompleted = loadingIsCompleted
-                        )
-                    }
-                }
-                item {
-                    DefaultSpacer(2)
-                    TextWithPlusButton(
-                        text = stringResource(R.string.cares),
-                        onClick = onAddCareClick
-                    )
-                }
-                if (caresDates.isEmpty()) {
-                    item {
-                        DefaultSpacer(2)
-                        Text(
-                            text = stringResource(R.string.no_client_cares),
-                            style = MaterialTheme.typography.titleLarge,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth()
+                            loadingIsCompleted = true
                         )
                     }
                 }

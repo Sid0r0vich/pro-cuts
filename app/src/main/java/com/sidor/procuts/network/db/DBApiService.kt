@@ -47,11 +47,15 @@ interface GinApiService {
     @DELETE("/clients/{id}")
     suspend fun deleteClient(@Path("id") id: Int): Map<String, String>
 
+    // GET /clients/{id}/haircuts
+    @GET("/haircuts")
+    suspend fun getHaircuts(@Query("user_id") userId: String): List<CutDateDTO>
+
     // POST /haircuts
     @POST("/haircuts")
     suspend fun createHaircut(@Body haircut: CutDateInfoDTO): CutDateDTO
 
-    // GET /clients/{id}/haircuts
-    @GET("/haircuts")
-    suspend fun getHaircuts(@Query("user_id") userId: String): List<CutDateDTO>
+    // DELETE /haircuts/{id}
+    @DELETE("/haircuts/{id}")
+    suspend fun deleteCutDate(@Path("id") id: Int): Map<String, String>
 }

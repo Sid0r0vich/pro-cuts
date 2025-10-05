@@ -2,10 +2,6 @@ package com.sidor.procuts.ui.screens.routes
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sidor.procuts.data.ClientDTO
 import com.sidor.procuts.data.ClientInfoDTO
@@ -53,13 +49,8 @@ fun HomeRoute(
             )
         }
         HomeScreenType.Client -> {
-            var loadingIsCompleted by rememberSaveable { mutableStateOf(false) }
-
             ClientScreen(
                 clientDTO = uiState.clientDTO,
-                cutDates = viewModel
-                    .getClientCutDates { loadingIsCompleted = true }
-                    .map { cutDateStateFlow -> cutDateStateFlow.collectAsState().value },
                 onBack = { viewModel.navigateClients() },
                 onVisitClick = { cutDateDTO: CutDateDTO ->
                     viewModel.setVisit(cutDateDTO)
@@ -68,13 +59,9 @@ fun HomeRoute(
                 onAddCutClick = {
                     viewModel.navigateAddCut()
                 },
-                onAddCareClick = {
-                    viewModel.navigateAddCare()
-                },
                 onEditClientClick = {
                     viewModel.navigateEditClient()
                 },
-                loadingIsCompleted = loadingIsCompleted
             )
         }
         HomeScreenType.AddClient -> AddClientScreen(
@@ -102,12 +89,7 @@ fun HomeRoute(
             onAddCutClick = { cutDateInfoDTO: CutDateInfoDTO ->
                 viewModel.addCutDate(cutDateInfoDTO)
             },
-            getClientRecentCutIds = { clientId: Int ->
-                viewModel.getClientCutDates(clientId)
-                    .map { cutDateStateFlow -> cutDateStateFlow.collectAsState().value }
-                    .map { cutDateDTO: CutDateDTO -> cutDateDTO.cutId }
-                    .distinct()
-            },
+            clientId = uiState.clientDTO?.id
         )
         HomeScreenType.AddCare -> AddCareScreen(
             onBack = { viewModel.navigateClient() },
@@ -123,7 +105,8 @@ fun HomeRoute(
                 viewModel.navigateCut()
             },
             cutParams = uiState.cutDateDTO?.cutParams ?: mapOf(),
-            cut = uiState.cutDateDTO?.let { viewModel.getCutDTO(it.cutId) }?.collectAsState()?.value
+            cut = uiState.cutDateDTO?.let { viewModel.getCutDTO(it.cutId) }
+                ?.collectAsState()?.value,
         )
         HomeScreenType.Cut -> CutScreen(
             cut = uiState.cutDTO!!,

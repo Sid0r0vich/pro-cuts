@@ -1,8 +1,7 @@
-package com.sidor.procuts.ui.viewmodels
+package com.sidor.procuts.ui.components
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.reflect.KProperty
-
 
 class MutableStateFlowDelegate<T>(
     private val flow: MutableStateFlow<T>

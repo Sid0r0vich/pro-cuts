@@ -1,6 +1,5 @@
 package com.sidor.procuts.ui.viewmodels
 
-import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -10,7 +9,9 @@ import androidx.lifecycle.viewModelScope
 import com.sidor.procuts.data.ClientDTO
 import com.sidor.procuts.data.ClientRepository
 import com.sidor.procuts.data.CutDTO
+import com.sidor.procuts.data.CutDateDTO
 import com.sidor.procuts.data.CutDateInfoDTO
+import com.sidor.procuts.data.CutDateRepository
 import com.sidor.procuts.data.CutRepository
 import com.sidor.procuts.data.defaultCutDTO
 import com.sidor.procuts.network.googleforms.QuestionOptions
@@ -21,11 +22,9 @@ import com.sidor.procuts.ui.viewmodels.HomeViewModel.Companion.TIMEOUT_MILLIS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -40,21 +39,22 @@ enum class AddResult {
 }
 
 sealed interface RecommendationsUIState {
-    data class Success(val recommendations: List<CutRecommendation>): RecommendationsUIState
-    data class Error(val message: String): RecommendationsUIState
-    object Loading: RecommendationsUIState
+    data class Success(val recommendations: List<CutRecommendation>) : RecommendationsUIState
+    data class Error(val message: String) : RecommendationsUIState
+    object Loading : RecommendationsUIState
 }
 
 sealed interface QuestionnaireUIState {
-    data class Success(val questions: List<QuestionOptions>): QuestionnaireUIState
-    data class Error(val message: String): QuestionnaireUIState
-    object Loading: QuestionnaireUIState
+    data class Success(val questions: List<QuestionOptions>) : QuestionnaireUIState
+    data class Error(val message: String) : QuestionnaireUIState
+    object Loading : QuestionnaireUIState
 }
 
 @HiltViewModel
 open class CutQuestionnaireViewModel @Inject constructor(
     val cutRepository: CutRepository,
     val clientRepository: ClientRepository,
+    val cutDateRepository: CutDateRepository
 ) : ViewModel() {
     data class UiState(
         var screenType: CutQuestionnaireScreenType,
@@ -83,10 +83,12 @@ open class CutQuestionnaireViewModel @Inject constructor(
         }
     }
 
-    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState(
-        screenType = CutQuestionnaireScreenType.entries.first(),
-        clients = clientRepository.getClientsStateFlow()
-    ))
+    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(
+        UiState(
+            screenType = CutQuestionnaireScreenType.entries.first(),
+            clients = clientRepository.getClientsStateFlow()
+        )
+    )
     val uiState: StateFlow<UiState> get() = _uiState
 
     fun setDate(date: Date) {
@@ -143,7 +145,8 @@ open class CutQuestionnaireViewModel @Inject constructor(
     }
 
     fun getNextScreen(cutQuestionnaireScreenType: CutQuestionnaireScreenType): CutQuestionnaireScreenType {
-        val next = (cutQuestionnaireScreenType.ordinal + 1) % CutQuestionnaireScreenType.entries.size
+        val next =
+            (cutQuestionnaireScreenType.ordinal + 1) % CutQuestionnaireScreenType.entries.size
         return CutQuestionnaireScreenType.entries[next]
     }
 
@@ -204,7 +207,8 @@ open class CutQuestionnaireViewModel @Inject constructor(
         viewModelScope.launch {
             questionnaireUIState = QuestionnaireUIState.Loading
             questionnaireUIState = try {
-                val questionList = InferCutRecommendationsApi.retrofitService.getOptions().toQuestionList()
+                val questionList =
+                    InferCutRecommendationsApi.retrofitService.getOptions().toQuestionList()
                 if (questionList.size >= 2) QuestionnaireUIState.Success(questionList.drop(1))
                 else QuestionnaireUIState.Error(message = "empty question list!")
             } catch (e: Exception) {
@@ -213,6 +217,12 @@ open class CutQuestionnaireViewModel @Inject constructor(
             }
         }
     }
+
+    fun getClientCutDates(
+        clientId: Int?,
+    ): List<StateFlow<CutDateDTO>> = clientId?.let {
+        cutDateRepository.getAllCutsWithClientId(it)
+    } ?: listOf()
 }
 
 fun CutRepository.getCutsStateFlowsByIds(
