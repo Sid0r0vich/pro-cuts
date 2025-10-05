@@ -10,6 +10,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -36,6 +37,9 @@ interface GinApiService {
     // POST /clients
     @POST("/clients")
     suspend fun createClient(@Body client: ClientInfoWithUserIdDTO): ClientDTO
+
+    @PUT("/clients/{id}")
+    suspend fun editClient(@Path("id") id: Int, @Body client: ClientInfoDTO): ClientDTO
 
     // DELETE /clients/{id}
     @DELETE("/clients/{id}")

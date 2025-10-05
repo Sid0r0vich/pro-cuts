@@ -5,19 +5,16 @@ import androidx.lifecycle.viewModelScope
 import com.sidor.procuts.data.ClientDTO
 import com.sidor.procuts.data.ClientRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-open class ClientsViewModel @Inject constructor(
+open class EditClientViewModel @Inject constructor(
     val clientRepository: ClientRepository,
 ) : ViewModel() {
-    val clients: StateFlow<Map<Int, StateFlow<ClientDTO>>> = clientRepository.getClientsStateFlow()
-
-    init {
+    fun editClient(clientDTO: ClientDTO) {
         viewModelScope.launch {
-            clientRepository.loadClients()
+            clientRepository.updateClient(clientDTO)
         }
     }
 }

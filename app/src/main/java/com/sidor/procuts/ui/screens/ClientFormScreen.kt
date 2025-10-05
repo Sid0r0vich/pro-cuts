@@ -30,6 +30,7 @@ import com.sidor.procuts.ui.PhoneNumberField
 import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
 import com.sidor.procuts.ui.theme.LocalColorPalette
 import com.sidor.procuts.ui.viewmodels.AddClientViewModel
+import com.sidor.procuts.ui.viewmodels.EditClientViewModel
 import com.sidor.procuts.utils.PhoneNumberParser
 
 data class DefaultClientForm(
@@ -71,7 +72,8 @@ fun AddClientScreen(
 fun EditClientScreen(
     onBack: () -> Unit,
     clientDTO: ClientDTO,
-    onEditClient: (ClientDTO) -> Unit
+    onEditClient: (ClientDTO) -> Unit,
+    viewModel: EditClientViewModel = hiltViewModel()
 ) {
     ClientFormScreen(
         defaultClientForm = DefaultClientForm(
@@ -85,7 +87,11 @@ fun EditClientScreen(
         topBarTitleText = stringResource(R.string.edit_client_tab_app_bar),
         buttonText = stringResource(R.string.edit_client),
         onBack = onBack,
-        onClickButton = { clientInfoDTO -> onEditClient(clientInfoDTO.withId(clientDTO.id)) }
+        onClickButton = { clientInfoDTO ->
+            val clientDTO = clientInfoDTO.withId(clientDTO.id)
+            viewModel.editClient(clientDTO)
+            onEditClient(clientDTO)
+        }
     )
 }
 

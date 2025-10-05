@@ -45,9 +45,12 @@ class ClientDBRepository @Inject constructor(
         clientsStateFlow.value = updatedMap
     }
 
-    override fun updateClient(clientDTO: ClientDTO): Boolean {
-        TODO()
+    override suspend fun updateClient(clientDTO: ClientDTO) {
+        val clientInfoDTO = apiService.editClient(clientDTO.id, clientDTO.toClientInfoDTO())
+        val updatedMap = clientsStateFlow.value.toMutableMap()
+        updatedMap[clientInfoDTO.id] = MutableStateFlow(clientInfoDTO)
+        clientsStateFlow.value = updatedMap
     }
 
-    override fun deleteClient(clientId: Int) { TODO() }
+    override suspend fun deleteClient(clientId: Int) { TODO() }
 }

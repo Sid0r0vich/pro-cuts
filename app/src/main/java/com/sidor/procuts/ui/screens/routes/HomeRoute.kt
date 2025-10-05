@@ -92,8 +92,6 @@ fun HomeRoute(
                     onBack = { viewModel.navigateClient() },
                     clientDTO = clientDTO,
                     onEditClient = { clientDTO: ClientDTO ->
-                        TODO()
-                        //viewModel.editClient(clientDTO)
                         viewModel.setClient(clientDTO)
                         viewModel.navigateClient()
                     }

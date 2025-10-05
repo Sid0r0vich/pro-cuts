@@ -25,6 +25,15 @@ class ClientDTO(
             middleName = middleName,
             photo = photo
         )
+
+    fun toClientInfoDTO(): ClientInfoDTO =
+        ClientInfoDTO(
+            firstName = firstName,
+            lastName = lastName,
+            middleName = middleName,
+            photo = photo,
+            phoneNumber = phoneNumber
+        )
 }
 
 @Serializable

@@ -8,6 +8,6 @@ interface ClientRepository {
     suspend fun loadClients()
     fun getClientsStateFlow(): StateFlow<Map<Int, MutableStateFlow<ClientDTO>>>
     suspend fun insertClient(clientInfoDTO: ClientInfoDTO)
-    fun updateClient(clientDTO: ClientDTO): Boolean
-    fun deleteClient(clientId: Int)
+    suspend fun updateClient(clientDTO: ClientDTO)
+    suspend fun deleteClient(clientId: Int)
 }
