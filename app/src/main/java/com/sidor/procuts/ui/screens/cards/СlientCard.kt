@@ -5,7 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.sidor.procuts.R
-import com.sidor.procuts.data.ClientDTO
+import com.sidor.procuts.data.models.ClientDTO
 import com.sidor.procuts.ui.components.TextWithBoldField
 import com.sidor.procuts.ui.screens.DefaultSpacer
 

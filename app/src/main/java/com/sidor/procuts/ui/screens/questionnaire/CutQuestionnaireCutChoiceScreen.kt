@@ -11,7 +11,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sidor.procuts.R
-import com.sidor.procuts.data.CutDTO
+import com.sidor.procuts.data.models.CutDTO
 import com.sidor.procuts.ui.components.PaddingSpaces
 import com.sidor.procuts.ui.screens.DefaultSpacer
 import com.sidor.procuts.ui.screens.LazyPaddingScreen

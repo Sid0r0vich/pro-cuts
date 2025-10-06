@@ -1,5 +1,7 @@
 package com.sidor.procuts.data
 
+import com.sidor.procuts.data.models.ClientDTO
+import com.sidor.procuts.data.models.ClientInfoDTO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 

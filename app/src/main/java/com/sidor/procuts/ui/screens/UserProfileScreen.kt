@@ -10,6 +10,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
@@ -17,7 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sidor.procuts.R
-import com.sidor.procuts.data.defaultPersonDTO
+import com.sidor.procuts.data.models.defaultPerson
+import com.sidor.procuts.data.models.defaultUser
 import com.sidor.procuts.ui.components.PaddingSpaces
 import com.sidor.procuts.ui.screens.cards.PersonCard
 import com.sidor.procuts.ui.screens.topbars.UserTopAppBar
@@ -28,8 +30,10 @@ import com.sidor.procuts.ui.viewmodels.UserProfileViewModel
 fun UserProfileScreen(
     viewModel: UserProfileViewModel = hiltViewModel()
 ) {
+    val userName = (viewModel.getUser().collectAsState().value ?: defaultUser).name
+
     TopAppBarScreen(
-        topBar = { UserTopAppBar() },
+        topBar = { UserTopAppBar(userName) },
     ) {
         PaddingScreenWithBottomButtons(
             paddingSpaces = PaddingSpaces(2),
@@ -54,7 +58,9 @@ fun UserProfileScreen(
                 }
             }
         ) {
-            PersonCard(defaultPersonDTO)
+            PersonCard(
+                viewModel.getUser().collectAsState().value?.toPersonDTO() ?: defaultPerson
+            )
         }
     }
 }

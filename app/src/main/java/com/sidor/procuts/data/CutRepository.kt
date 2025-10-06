@@ -1,5 +1,6 @@
 package com.sidor.procuts.data
 
+import com.sidor.procuts.data.models.CutDTO
 import kotlinx.coroutines.flow.Flow
 
 interface CutRepository {

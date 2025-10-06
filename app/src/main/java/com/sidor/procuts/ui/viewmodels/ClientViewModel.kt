@@ -3,7 +3,7 @@ package com.sidor.procuts.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sidor.procuts.data.ClientRepository
-import com.sidor.procuts.data.CutDateDTO
+import com.sidor.procuts.data.models.CutDateDTO
 import com.sidor.procuts.data.CutDateRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

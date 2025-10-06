@@ -3,11 +3,12 @@ package com.sidor.procuts.ui.screens.routes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.sidor.procuts.data.ClientDTO
-import com.sidor.procuts.data.ClientInfoDTO
-import com.sidor.procuts.data.CutDTO
-import com.sidor.procuts.data.CutDateDTO
-import com.sidor.procuts.data.CutDateInfoDTO
+import com.sidor.procuts.data.models.ClientDTO
+import com.sidor.procuts.data.models.ClientInfoDTO
+import com.sidor.procuts.data.models.CutDTO
+import com.sidor.procuts.data.models.CutDateDTO
+import com.sidor.procuts.data.models.CutDateInfoDTO
+import com.sidor.procuts.data.models.defaultUser
 import com.sidor.procuts.ui.components.CareForm
 import com.sidor.procuts.ui.screens.AddCareScreen
 import com.sidor.procuts.ui.screens.AddClientScreen
@@ -26,17 +27,19 @@ fun HomeRoute(
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsState().value
+    val userName = (viewModel.getUser().collectAsState().value ?: defaultUser).name
 
     when (uiState.screenType) {
         HomeScreenType.Home -> HomeScreen(
             onCardClick = { homeCardScreenType: HomeCardScreenType ->
-                when(homeCardScreenType) {
+                when (homeCardScreenType) {
                     HomeCardScreenType.StudyCut -> {}
                     HomeCardScreenType.Clients -> viewModel.navigateClients()
                     HomeCardScreenType.MyCuts -> {}
                     HomeCardScreenType.StartCutting -> viewModel.navigateAddCut()
                 }
-            }
+            },
+            userName = userName
         )
         HomeScreenType.Clients -> {
             ClientsScreen(

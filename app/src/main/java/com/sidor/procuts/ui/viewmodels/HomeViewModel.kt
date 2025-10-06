@@ -2,13 +2,15 @@ package com.sidor.procuts.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sidor.procuts.data.ClientDTO
-import com.sidor.procuts.data.CutDTO
-import com.sidor.procuts.data.CutDateDTO
-import com.sidor.procuts.data.CutDateInfoDTO
+import com.sidor.procuts.data.models.ClientDTO
+import com.sidor.procuts.data.models.CutDTO
+import com.sidor.procuts.data.models.CutDateDTO
+import com.sidor.procuts.data.models.CutDateInfoDTO
 import com.sidor.procuts.data.CutDateRepository
 import com.sidor.procuts.data.CutRepository
-import com.sidor.procuts.data.defaultCutDTO
+import com.sidor.procuts.data.UserRepository
+import com.sidor.procuts.data.models.UserDTO
+import com.sidor.procuts.data.models.defaultCutDTO
 import com.sidor.procuts.ui.screens.screentypes.HomeScreenType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +24,8 @@ import javax.inject.Inject
 @HiltViewModel
 open class HomeViewModel @Inject constructor(
     val cutDateRepository: CutDateRepository,
-    val cutRepository: CutRepository
+    val cutRepository: CutRepository,
+    val userRepository: UserRepository
 ) : ViewModel() {
     data class UiState(
         val screenType: HomeScreenType,
@@ -34,6 +37,7 @@ open class HomeViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             cutDateRepository.loadCuts()
+            userRepository.loadUser()
         }
     }
 
@@ -81,6 +85,8 @@ open class HomeViewModel @Inject constructor(
             cutDateRepository.insertCut(cutDateInfoDTO)
         }
     }
+
+    fun getUser(): StateFlow<UserDTO?> = userRepository.getUserStateFlow()
 
     companion object {
         const val TIMEOUT_MILLIS = 5_000L

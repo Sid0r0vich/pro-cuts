@@ -27,7 +27,6 @@ import com.sidor.procuts.ui.theme.LocalColorPalette
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserTopAppBar(
-    modifier: Modifier = Modifier,
     userName: String = stringResource(R.string.default_user_name),
 ) {
     DefaultTopAppBar(

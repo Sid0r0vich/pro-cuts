@@ -17,8 +17,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sidor.procuts.R
-import com.sidor.procuts.data.ClientDTO
-import com.sidor.procuts.data.CutDateDTO
+import com.sidor.procuts.data.models.ClientDTO
+import com.sidor.procuts.data.models.CutDateDTO
 import com.sidor.procuts.ui.components.PaddingSpaces
 import com.sidor.procuts.ui.components.TextWithPlusButton
 import com.sidor.procuts.ui.screens.cards.ClientCard

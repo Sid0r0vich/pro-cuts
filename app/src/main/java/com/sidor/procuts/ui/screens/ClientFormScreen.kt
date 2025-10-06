@@ -21,8 +21,8 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sidor.procuts.R
-import com.sidor.procuts.data.ClientDTO
-import com.sidor.procuts.data.ClientInfoDTO
+import com.sidor.procuts.data.models.ClientDTO
+import com.sidor.procuts.data.models.ClientInfoDTO
 import com.sidor.procuts.ui.components.ImagePicker
 import com.sidor.procuts.ui.components.MyStyledTextField
 import com.sidor.procuts.ui.components.PaddingSpaces

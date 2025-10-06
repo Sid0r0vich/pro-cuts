@@ -2,7 +2,7 @@ package com.sidor.procuts.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sidor.procuts.data.ClientDTO
+import com.sidor.procuts.data.models.ClientDTO
 import com.sidor.procuts.data.ClientRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow

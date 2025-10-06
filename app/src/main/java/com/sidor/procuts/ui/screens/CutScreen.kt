@@ -4,7 +4,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.sidor.procuts.R
-import com.sidor.procuts.data.CutDTO
+import com.sidor.procuts.data.models.CutDTO
 import com.sidor.procuts.ui.components.PaddingSpaces
 import com.sidor.procuts.ui.screens.cards.CutCard
 import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar

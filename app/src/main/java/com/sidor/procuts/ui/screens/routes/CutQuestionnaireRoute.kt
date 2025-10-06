@@ -15,8 +15,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sidor.procuts.R
-import com.sidor.procuts.data.CutDateDTO
-import com.sidor.procuts.data.CutDateInfoDTO
+import com.sidor.procuts.data.models.CutDateDTO
+import com.sidor.procuts.data.models.CutDateInfoDTO
 import com.sidor.procuts.ui.components.ToastNotifier
 import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireClientChoiceScreen
 import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireConfirmScreen

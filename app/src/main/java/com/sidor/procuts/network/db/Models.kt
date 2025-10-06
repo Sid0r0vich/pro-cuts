@@ -4,12 +4,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class User(
-    val id: String,
-    val name: String
-)
-
-@Serializable
 class ClientInfoWithUserIdDTO(
     @SerialName("first_name")
     val firstName: String = "",

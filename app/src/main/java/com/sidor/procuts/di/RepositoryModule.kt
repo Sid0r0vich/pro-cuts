@@ -6,6 +6,8 @@ import com.sidor.procuts.data.CutDateDBRepository
 import com.sidor.procuts.data.CutDateRepository
 import com.sidor.procuts.data.CutMockRepository
 import com.sidor.procuts.data.CutRepository
+import com.sidor.procuts.data.UserDBRepository
+import com.sidor.procuts.data.UserRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -26,4 +28,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindCutRepository(impl: CutMockRepository): CutRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindUserRepository(impl: UserDBRepository): UserRepository
 }

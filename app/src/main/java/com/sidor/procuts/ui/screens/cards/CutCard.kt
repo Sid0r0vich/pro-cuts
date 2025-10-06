@@ -12,7 +12,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sidor.procuts.R
-import com.sidor.procuts.data.CutDTO
+import com.sidor.procuts.data.models.CutDTO
 import com.sidor.procuts.ui.components.TextWithBoldField
 import com.sidor.procuts.ui.screens.DefaultSpacer
 

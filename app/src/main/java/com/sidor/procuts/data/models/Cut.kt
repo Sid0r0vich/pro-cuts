@@ -1,7 +1,7 @@
-package com.sidor.procuts.data
+package com.sidor.procuts.data.models
 
-import android.net.Uri
 import com.sidor.procuts.R
+import com.sidor.procuts.data.DateSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.util.Date

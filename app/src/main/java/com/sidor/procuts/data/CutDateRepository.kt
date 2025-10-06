@@ -1,5 +1,7 @@
 package com.sidor.procuts.data
 
+import com.sidor.procuts.data.models.CutDateDTO
+import com.sidor.procuts.data.models.CutDateInfoDTO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 

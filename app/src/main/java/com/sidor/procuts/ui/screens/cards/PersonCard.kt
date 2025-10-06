@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,14 +18,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.sidor.procuts.R
-import com.sidor.procuts.data.PersonDTO
+import com.sidor.procuts.data.models.PersonDTO
 import com.sidor.procuts.utils.getPainterFromByteArray
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
+@OptIn(ExperimentalEncodingApi::class)
 @Composable
 fun PersonCard(
     personDTO: PersonDTO
 ) {
-    val personPhoto: Painter = getPainterFromByteArray(personDTO.photo) ?: painterResource(R.drawable.default_user_photo)
+    val personPhoto: Painter = personDTO.photo?.let {getPainterFromByteArray(
+        personDTO.photo
+    )} ?: painterResource(R.drawable.default_user_photo)
 
     DefaultCard {
         Row(
@@ -42,7 +46,7 @@ fun PersonCard(
             )
             Spacer(modifier = Modifier.width(10.dp))
             Text(
-                text = personDTO.getFullName(),
+                text = personDTO.name,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.titleLarge,
                 textAlign = TextAlign.Center,

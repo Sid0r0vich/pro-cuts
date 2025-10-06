@@ -1,4 +1,4 @@
-package com.sidor.procuts.data
+package com.sidor.procuts.data.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -19,14 +19,14 @@ class ClientDTO(
     @SerialName("phone_number")
     val phoneNumber: String? = null
 ) {
-    fun getFullName(): String = toPersonDTO().getFullName()
+    fun getFullName(): String {
+        return "$firstName ${middleName ?: ""} $lastName"
+    }
 
     @OptIn(ExperimentalEncodingApi::class)
     fun toPersonDTO(): PersonDTO =
         PersonDTO(
-            firstName = firstName,
-            lastName = lastName,
-            middleName = middleName,
+            name = "$firstName ${middleName ?: ""} $lastName",
             photo = Base64.decode(photo ?: "")
         )
 

@@ -1,6 +1,6 @@
 package com.sidor.procuts.utils
 
-import com.sidor.procuts.data.ClientDTO
+import com.sidor.procuts.data.models.ClientDTO
 import kotlin.collections.filter
 
 fun filterClients(

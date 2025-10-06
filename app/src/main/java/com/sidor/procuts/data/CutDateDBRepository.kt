@@ -2,6 +2,8 @@ package com.sidor.procuts.data
 
 import android.util.Log
 import com.example.wellness.auth.Auth
+import com.sidor.procuts.data.models.CutDateDTO
+import com.sidor.procuts.data.models.CutDateInfoDTO
 import com.sidor.procuts.network.db.GinApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,10 +1,11 @@
 package com.sidor.procuts.network.db
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.sidor.procuts.data.ClientDTO
-import com.sidor.procuts.data.ClientInfoDTO
-import com.sidor.procuts.data.CutDateDTO
-import com.sidor.procuts.data.CutDateInfoDTO
+import com.sidor.procuts.data.models.ClientDTO
+import com.sidor.procuts.data.models.ClientInfoDTO
+import com.sidor.procuts.data.models.CutDateDTO
+import com.sidor.procuts.data.models.CutDateInfoDTO
+import com.sidor.procuts.data.models.UserDTO
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
@@ -28,11 +29,19 @@ val DBRetrofit = Retrofit.Builder()
 
 interface GinApiService {
 
+    // GET /users?user_id={userId}
+    @GET("/users")
+    suspend fun getUser(@Query("user_id") userId: String): UserDTO
+
     // POST /users
     @POST("/users")
-    suspend fun createUser(@Body user: User): User
+    suspend fun createUser(@Body user: UserDTO): UserDTO
 
-    // GET /clients?user_id=1
+    // PUT /users
+    @PUT("/users")
+    suspend fun updateUser(@Body user: UserDTO): UserDTO
+
+    // GET /clients?user_id={userId}
     @GET("/clients")
     suspend fun getClients(@Query("user_id") userId: String): List<ClientDTO>
 
