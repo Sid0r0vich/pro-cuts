@@ -17,24 +17,22 @@ fun AuthScreen(
 ) {
     var route by remember { mutableStateOf<AuthRoute>(AuthRoute.SignIn) }
 
-    Surface {
-        PaddingProviderScreen {
-            when (route) {
-                AuthRoute.SignIn -> {
-                    LoginScreen(
-                        onSignUpClick = {
-                            route = AuthRoute.SignUp
-                        },
-                        viewModel = viewModel
-                    )
-                }
+    PaddingProviderScreen {
+        when (route) {
+            AuthRoute.SignIn -> {
+                LoginScreen(
+                    onSignUpClick = {
+                        route = AuthRoute.SignUp
+                    },
+                    viewModel = viewModel
+                )
+            }
 
-                AuthRoute.SignUp -> {
-                    RegistrationScreen(
-                        onSignInClick = { route = AuthRoute.SignIn },
-                        viewModel = viewModel
-                    )
-                }
+            AuthRoute.SignUp -> {
+                RegistrationScreen(
+                    onSignInClick = { route = AuthRoute.SignIn },
+                    viewModel = viewModel
+                )
             }
         }
     }

@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface ClientRepository {
     fun getClientStream(clientId: Int): StateFlow<ClientDTO>?
-    suspend fun loadClients()
+    suspend fun loadClients(): Boolean
     fun getClientsStateFlow(): StateFlow<Map<Int, MutableStateFlow<ClientDTO>>>
     suspend fun insertClient(clientInfoDTO: ClientInfoDTO): Boolean
     suspend fun updateClient(clientDTO: ClientDTO): Boolean

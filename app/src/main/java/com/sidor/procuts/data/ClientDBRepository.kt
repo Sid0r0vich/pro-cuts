@@ -19,11 +19,17 @@ class ClientDBRepository @Inject constructor(
 
     override fun getClientStream(clientId: Int): StateFlow<ClientDTO>? = clientsStateFlow.value[clientId]
 
-    override suspend fun loadClients() {
-        val userId = auth.userId.value ?: ""
-        clientsStateFlow.value = apiService.getClients(userId).associate {
-            client -> client.id to MutableStateFlow(client)
-        }.toMutableMap()
+    override suspend fun loadClients(): Boolean {
+        return try {
+            val userId = auth.userId.value ?: ""
+            clientsStateFlow.value = apiService.getClients(userId).associate { client ->
+                client.id to MutableStateFlow(client)
+            }.toMutableMap()
+            true
+        } catch (e: Exception) {
+            Log.e("ERROR", e.toString())
+            return false
+        }
     }
 
     override fun getClientsStateFlow(): MutableStateFlow<MutableMap<Int, MutableStateFlow<ClientDTO>>> {
