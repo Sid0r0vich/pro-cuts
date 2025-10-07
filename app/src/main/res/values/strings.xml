@@ -270,4 +270,5 @@
     <string name="have_account">Already have account, login</string>
     <string name="sign_out">Sign out</string>
     <string name="button_delete">delete</string>
+    <string name="edit_user_profile_tab_app_bar">Edit user</string>
 </resources>

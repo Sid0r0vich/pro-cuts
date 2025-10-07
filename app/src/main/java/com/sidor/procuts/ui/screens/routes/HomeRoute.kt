@@ -94,12 +94,6 @@ fun HomeRoute(
             },
             clientId = uiState.clientDTO?.id
         )
-        HomeScreenType.AddCare -> AddCareScreen(
-            onBack = { viewModel.navigateClient() },
-            onAddCare = { careForm: CareForm ->
-                // TODO
-            }
-        )
         HomeScreenType.Visit -> VisitScreen(
             visit = uiState.cutDateDTO,
             onBack = { viewModel.navigateClient() },

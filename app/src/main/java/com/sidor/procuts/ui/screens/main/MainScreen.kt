@@ -16,8 +16,8 @@ import com.sidor.procuts.ui.navigation.BottomNavigationBar
 import com.sidor.procuts.ui.navigation.MainNavigationActions
 import com.sidor.procuts.ui.navigation.MainRoute
 import com.sidor.procuts.ui.screens.PaddingProviderScreen
-import com.sidor.procuts.ui.screens.UserProfileScreen
 import com.sidor.procuts.ui.screens.routes.HomeRoute
+import com.sidor.procuts.ui.screens.routes.UserProfileRoute
 
 @Composable
 fun MainScreen(
@@ -63,7 +63,7 @@ private fun MainNavHost(
             HomeRoute()
         }
         composable<MainRoute.Profile> {
-            UserProfileScreen()
+            UserProfileRoute()
         }
     }
 }

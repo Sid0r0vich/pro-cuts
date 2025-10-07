@@ -8,6 +8,5 @@ enum class HomeScreenType {
     EditClient,
     Cut,
     AddCut,
-    AddCare,
     Visit,
 }
