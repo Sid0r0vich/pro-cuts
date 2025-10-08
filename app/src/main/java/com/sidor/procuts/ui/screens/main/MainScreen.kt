@@ -29,22 +29,20 @@ fun MainScreen(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    Surface {
-        Scaffold(
-            bottomBar = {
-                BottomNavigationBar(
-                    currentScreen = currentDestination
-                ) { route ->
-                    navigationActions.navigateTo(route)
-                }
+    Scaffold(
+        bottomBar = {
+            BottomNavigationBar(
+                currentScreen = currentDestination
+            ) { route ->
+                navigationActions.navigateTo(route)
             }
-        ) { innerPadding ->
-            PaddingProviderScreen {
-                MainNavHost(
-                    navController = navController,
-                    modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
-                )
-            }
+        }
+    ) { innerPadding ->
+        PaddingProviderScreen {
+            MainNavHost(
+                navController = navController,
+                modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
+            )
         }
     }
 }

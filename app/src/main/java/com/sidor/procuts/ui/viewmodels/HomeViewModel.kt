@@ -11,6 +11,7 @@ import com.sidor.procuts.data.CutRepository
 import com.sidor.procuts.data.UserRepository
 import com.sidor.procuts.data.models.UserDTO
 import com.sidor.procuts.data.models.defaultCutDTO
+import com.sidor.procuts.ui.HomeRouteScreenStack
 import com.sidor.procuts.ui.screens.screentypes.HomeScreenType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -78,6 +79,7 @@ open class HomeViewModel @Inject constructor(
     fun navigateAddClient() = navigate(HomeScreenType.AddClient)
     fun navigateVisit() = navigate(HomeScreenType.Visit)
     fun navigateCut() = navigate(HomeScreenType.Cut)
+    fun navigateCuts() = navigate(HomeScreenType.MyCuts)
     fun navigateAddCut() = navigate(HomeScreenType.AddCut)
 
     fun addCutDate(cutDateInfoDTO: CutDateInfoDTO) {

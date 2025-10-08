@@ -20,12 +20,12 @@ class CutDateDBRepository @Inject constructor(
     private val cutsStateFlow =
         MutableStateFlow<MutableMap<Int, MutableStateFlow<CutDateDTO>>>(mutableMapOf<Int, MutableStateFlow<CutDateDTO>>())
 
-    override fun getCutStream(cutId: Int): Flow<CutDateDTO?> {
-        return cutsStateFlow.value[cutId] ?: flow { emit(null) }
+    override fun getCutStream(cutId: Int): StateFlow<CutDateDTO>? {
+        return cutsStateFlow.value[cutId]
     }
 
-    override fun getStream(): List<Flow<CutDateDTO>> {
-        return cutsStateFlow.value.values.toList()
+    override fun getStream(): MutableStateFlow<MutableMap<Int, MutableStateFlow<CutDateDTO>>> {
+        return cutsStateFlow
     }
 
     override suspend fun loadCuts(): Boolean {

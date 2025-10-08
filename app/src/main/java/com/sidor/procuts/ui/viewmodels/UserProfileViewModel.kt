@@ -38,6 +38,12 @@ class UserProfileViewModel @Inject constructor(
 
     fun getUser(): StateFlow<UserDTO?> = userRepository.getUserStateFlow()
 
+    fun editUser(userDTO: UserDTO) {
+        viewModelScope.launch {
+            userRepository.editUser(userDTO)
+        }
+    }
+
     fun signOut() = auth.signOut()
 
     fun navigate(screenType: UserProfileScreenType) {

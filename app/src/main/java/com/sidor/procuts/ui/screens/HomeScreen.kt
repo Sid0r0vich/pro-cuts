@@ -1,13 +1,18 @@
 package com.sidor.procuts.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sidor.procuts.R
 import com.sidor.procuts.data.models.defaultPerson
@@ -37,19 +42,26 @@ fun HomeScreen(
             paddingSpaces = PaddingSpaces(2)
         ) {
             item {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceAround,
-                ) {
+                Column {
                     HomeCard(
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.clients),
-                        onClick = { onCardClick(HomeCardScreenType.Clients) }
+                        onClick = { onCardClick(HomeCardScreenType.Clients) },
+                        image = painterResource(R.drawable.clients)
                     )
-                    Spacer(modifier = Modifier.width(LocalBoardPadding.current * 2))
+                    DefaultSpacer(2)
                     HomeCard(
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.start_cutting),
-                        onClick = { onCardClick(HomeCardScreenType.StartCutting) }
+                        onClick = { onCardClick(HomeCardScreenType.StartCutting) },
+                        image = painterResource(R.drawable.go_cut)
+                    )
+                    DefaultSpacer(2)
+                    HomeCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.my_cuts),
+                        onClick = { onCardClick(HomeCardScreenType.MyCuts) },
+                        image = painterResource(R.drawable.archive)
                     )
                 }
             }

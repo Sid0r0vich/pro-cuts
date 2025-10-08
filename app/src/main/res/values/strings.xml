@@ -271,4 +271,7 @@
     <string name="sign_out">Sign out</string>
     <string name="button_delete">delete</string>
     <string name="edit_user_profile_tab_app_bar">Edit user</string>
+    <string name="save_profile">Save profile</string>
+    <string name="cuts_no_found">Cuts no found</string>
+    <string name="my_cuts_tab_app_bar">My cuts</string>
 </resources>

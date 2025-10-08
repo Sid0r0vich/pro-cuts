@@ -36,4 +36,15 @@ class UserDBRepository @Inject constructor(
             false
         }
     }
+
+    override suspend fun editUser(userDTO: UserDTO): Boolean {
+        return try {
+            apiService.updateUser(userDTO)
+            loadUser()
+            true
+        } catch (e: Exception) {
+            Log.e("ERROR", e.toString())
+            false
+        }
+    }
 }

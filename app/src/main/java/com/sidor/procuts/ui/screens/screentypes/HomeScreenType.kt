@@ -9,4 +9,5 @@ enum class HomeScreenType {
     Cut,
     AddCut,
     Visit,
+    MyCuts
 }
