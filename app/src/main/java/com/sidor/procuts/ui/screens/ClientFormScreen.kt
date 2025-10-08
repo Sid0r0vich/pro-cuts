@@ -47,7 +47,6 @@ data class DefaultClientForm(
 @Composable
 fun AddClientScreen(
     onBack: () -> Unit,
-    onAddClient: (ClientInfoDTO) -> Unit,
     viewModel: AddClientViewModel = hiltViewModel()
 ) {
     ClientFormScreen(
@@ -64,7 +63,7 @@ fun AddClientScreen(
         onBack = onBack,
         onClickButton = { client ->
             viewModel.addClient(client)
-            onAddClient(client)
+            onBack()
         }
     )
 }

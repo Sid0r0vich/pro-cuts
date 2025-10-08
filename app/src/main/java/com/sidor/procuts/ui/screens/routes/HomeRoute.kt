@@ -43,7 +43,7 @@ fun HomeRoute(
         )
         HomeScreenType.Clients -> {
             ClientsScreen(
-                onBack = { viewModel.navigateHome() },
+                onBack = viewModel::navigateBack,
                 onClientClick = { clientDTO: ClientDTO ->
                     viewModel.setClient(clientDTO)
                     viewModel.navigateClient()
@@ -54,7 +54,7 @@ fun HomeRoute(
         HomeScreenType.Client -> {
             ClientScreen(
                 clientDTO = uiState.clientDTO,
-                onBack = { viewModel.navigateClients() },
+                onBack = viewModel::navigateBack,
                 onVisitClick = { cutDateDTO: CutDateDTO ->
                     viewModel.setVisit(cutDateDTO)
                     viewModel.navigateVisit()
@@ -68,27 +68,24 @@ fun HomeRoute(
             )
         }
         HomeScreenType.AddClient -> AddClientScreen(
-            onBack = { viewModel.navigateClients() },
-            onAddClient = { clientInfoDTO: ClientInfoDTO ->
-                viewModel.navigateClients()
-            }
+            onBack = viewModel::navigateBack,
         )
         HomeScreenType.EditClient -> {
             val clientDTO = uiState.clientDTO
             if (clientDTO != null) {
                 EditClientScreen(
-                    onBack = { viewModel.navigateClient() },
+                    onBack = viewModel::navigateBack,
                     clientDTO = clientDTO,
                     onEditClient = { clientDTO: ClientDTO ->
                         viewModel.setClient(clientDTO)
-                        viewModel.navigateClient()
+                        viewModel.navigateBack()
                     }
                 )
             }
             else viewModel.navigateAddClient()
         }
         HomeScreenType.AddCut -> CutQuestionnaireRoute(
-            onBack = { viewModel.navigateHome() },
+            onBack = viewModel::navigateBack,
             onAddCutClick = { cutDateInfoDTO: CutDateInfoDTO ->
                 viewModel.addCutDate(cutDateInfoDTO)
             },
@@ -96,7 +93,7 @@ fun HomeRoute(
         )
         HomeScreenType.Visit -> VisitScreen(
             visit = uiState.cutDateDTO,
-            onBack = { viewModel.navigateHome() },
+            onBack = viewModel::navigateBack,
             onCutClick = { cut: CutDTO ->
                 viewModel.setCut(cut)
                 viewModel.navigateCut()
@@ -107,11 +104,11 @@ fun HomeRoute(
         )
         HomeScreenType.Cut -> CutScreen(
             cut = uiState.cutDTO!!,
-            onBack = viewModel::navigateVisit
+            onBack = viewModel::navigateBack,
         )
 
         HomeScreenType.MyCuts -> MyCutsScreen(
-            onBack = viewModel::navigateHome,
+            onBack = viewModel::navigateBack,
             onVisitClick = { cutDateDTO: CutDateDTO ->
                 viewModel.setVisit(cutDateDTO)
                 viewModel.navigateVisit()

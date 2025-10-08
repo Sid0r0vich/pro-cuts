@@ -1,5 +1,6 @@
 package com.sidor.procuts.ui.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sidor.procuts.data.models.ClientDTO
@@ -67,20 +68,31 @@ open class HomeViewModel @Inject constructor(
                 initialValue = defaultCutDTO
             )
 
-
-    fun navigate(screenType: HomeScreenType) {
+    private fun navigate(screenType: HomeScreenType) {
+        Log.d("STACK", HomeRouteScreenStack.stack.toString())
         _uiState.value = _uiState.value.copy(screenType = screenType)
     }
 
-    fun navigateHome() = navigate(HomeScreenType.Home)
-    fun navigateClients() = navigate(HomeScreenType.Clients)
-    fun navigateClient() = navigate(HomeScreenType.Client)
-    fun navigateEditClient() = navigate(HomeScreenType.EditClient)
-    fun navigateAddClient() = navigate(HomeScreenType.AddClient)
-    fun navigateVisit() = navigate(HomeScreenType.Visit)
-    fun navigateCut() = navigate(HomeScreenType.Cut)
-    fun navigateCuts() = navigate(HomeScreenType.MyCuts)
-    fun navigateAddCut() = navigate(HomeScreenType.AddCut)
+    fun navigateForward(screenType: HomeScreenType) {
+        when (screenType) {
+            HomeScreenType.Home -> {
+                HomeRouteScreenStack.clean()
+            }
+            else -> HomeRouteScreenStack.add(screenType)
+        }
+        navigate(screenType)
+    }
+    fun navigateBack() = navigate(HomeRouteScreenStack.back())
+
+    fun navigateHome() = navigateForward(HomeScreenType.Home)
+    fun navigateClients() = navigateForward(HomeScreenType.Clients)
+    fun navigateClient() = navigateForward(HomeScreenType.Client)
+    fun navigateEditClient() = navigateForward(HomeScreenType.EditClient)
+    fun navigateAddClient() = navigateForward(HomeScreenType.AddClient)
+    fun navigateVisit() = navigateForward(HomeScreenType.Visit)
+    fun navigateCut() = navigateForward(HomeScreenType.Cut)
+    fun navigateCuts() = navigateForward(HomeScreenType.MyCuts)
+    fun navigateAddCut() = navigateForward(HomeScreenType.AddCut)
 
     fun addCutDate(cutDateInfoDTO: CutDateInfoDTO) {
         viewModelScope.launch {
