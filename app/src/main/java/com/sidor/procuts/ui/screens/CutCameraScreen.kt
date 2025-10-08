@@ -2,6 +2,7 @@ package com.sidor.procuts.ui.screens
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.util.Log
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout
@@ -63,11 +64,11 @@ import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.sidor.procuts.R
 import com.sidor.procuts.ui.components.ToastNotifier
 import com.sidor.procuts.ui.theme.LocalColorPalette
 import com.sidor.procuts.ui.viewmodels.CameraViewModel
 import java.util.concurrent.Executor
-import com.sidor.procuts.R
 
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -265,8 +266,9 @@ private fun capturePhoto(
 
     cameraController.takePicture(mainExecutor, object : ImageCapture.OnImageCapturedCallback() {
         override fun onCaptureSuccess(image: ImageProxy) {
-            val correctedBitmap: Bitmap = image
-                .toBitmap()
+            val bitmap = image.toBitmap()
+            val rotationDegrees = image.imageInfo.rotationDegrees.toFloat()
+            val correctedBitmap = bitmap.rotate(rotationDegrees)
 
             onPhotoCaptured(correctedBitmap)
             image.close()
@@ -276,4 +278,11 @@ private fun capturePhoto(
             Log.e("CameraContent", "Error capturing image", exception)
         }
     })
+}
+
+fun Bitmap.rotate(degrees: Float): Bitmap {
+    val matrix = Matrix().apply {
+        postRotate(degrees)
+    }
+    return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
 }

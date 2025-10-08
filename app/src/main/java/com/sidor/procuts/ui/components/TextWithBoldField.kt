@@ -26,6 +26,7 @@ fun TextWithBoldField(
         style = style
     )
 }
+
 @Composable
 fun BlurTextWithBoldField(
     loadingIsCompleted: Boolean,

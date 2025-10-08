@@ -1,18 +1,20 @@
 package com.sidor.procuts.ui.viewmodels
 
+import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sidor.procuts.data.models.ClientDTO
 import com.sidor.procuts.data.ClientRepository
+import com.sidor.procuts.data.CutDateRepository
+import com.sidor.procuts.data.CutRepository
+import com.sidor.procuts.data.models.ClientDTO
 import com.sidor.procuts.data.models.CutDTO
 import com.sidor.procuts.data.models.CutDateDTO
 import com.sidor.procuts.data.models.CutDateInfoDTO
-import com.sidor.procuts.data.CutDateRepository
-import com.sidor.procuts.data.CutRepository
 import com.sidor.procuts.data.models.defaultCutDTO
 import com.sidor.procuts.network.googleforms.QuestionOptions
 import com.sidor.procuts.network.infer.CutRecommendation
@@ -27,10 +29,12 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.io.File
 import java.io.IOException
 import java.util.Date
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
+
 
 enum class AddResult {
     SUCCESS,
@@ -61,13 +65,13 @@ open class CutQuestionnaireViewModel @Inject constructor(
         var questionInd: Int = 0,
         var clientDTO: ClientDTO? = null,
         var date: Date = Date(),
-        var photo: ByteArray? = null,
         var cutId: Int? = null,
         var cutRecommendations: List<StateFlow<CutDTO>>? = null,
         var recentCuts: List<StateFlow<CutDTO>>? = null,
         var questionList: List<QuestionOptions>? = null,
         var paramsMap: MutableMap<String, String> = mutableMapOf(),
-        var clients: StateFlow<Map<Int, StateFlow<ClientDTO>>>
+        var clients: StateFlow<Map<Int, StateFlow<ClientDTO>>>,
+        val photoUri: Uri? = null
     )
 
     var recommendationsUIState: RecommendationsUIState by mutableStateOf(RecommendationsUIState.Loading)
@@ -123,6 +127,10 @@ open class CutQuestionnaireViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(questionInd = questionInd)
     }
 
+    fun setPhotoUri(photoUri: Uri) {
+        _uiState.value = _uiState.value.copy(photoUri = photoUri)
+    }
+
     fun resetQuestionInd() {
         _uiState.value = _uiState.value.copy(questionInd = 0)
     }
@@ -158,6 +166,7 @@ open class CutQuestionnaireViewModel @Inject constructor(
 
     @OptIn(ExperimentalEncodingApi::class)
     fun tryAddCut(
+        context: Context,
         onAddClick: (CutDateInfoDTO) -> Unit
     ): AddResult {
         val cutId = _uiState.value.cutId
@@ -167,12 +176,18 @@ open class CutQuestionnaireViewModel @Inject constructor(
         if (cutId == null || !allCutIds.contains(cutId)) return AddResult.CUT_NAME_IS_NOT_FOUND
         if (clientId == null) return AddResult.CLIENT_IS_NOT_FOUND
 
+        val photo = _uiState.value.photoUri?.path?.let { path ->
+            File(path).readBytes()
+        }
+        Log.d("URI", _uiState.value.photoUri.toString())
+        Log.d("PHOTO", photo.toString())
+
         onAddClick(
             CutDateInfoDTO(
                 cutId = cutId,
                 clientId = clientId,
                 date = _uiState.value.date,
-                cutPhoto = _uiState.value.photo?.let { Base64.encode(it) },
+                cutPhoto = photo?.let { Base64.encode(it) },
                 cutParams = _uiState.value.paramsMap
             )
         )

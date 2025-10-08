@@ -4,8 +4,7 @@ enum class CutQuestionnaireScreenType {
     DateName,
     Question,
     Client,
-//    PhoneNumber,
-//    Camera,
+    Camera,
     Choice,
     Confirm
 }

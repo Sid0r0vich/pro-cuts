@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -64,12 +64,12 @@ fun UserTopAppBar(
         actions = {
             IconButton(onClick = { }) {
                 Icon(
-                    imageVector = Icons.Outlined.Notifications,
+                    imageVector = Icons.Outlined.Settings,
                     tint = LocalColorPalette.current.mainColor,
                     modifier = Modifier
                         .clip(CircleShape)
                         .size(24.dp),
-                    contentDescription = stringResource(id = R.string.icon_notifications),
+                    contentDescription = stringResource(id = R.string.icon_settings),
                 )
             }
         }

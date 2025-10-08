@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
 import java.io.ByteArrayOutputStream
 
+
 fun loadImageAsByteArray(contentResolver: ContentResolver, uri: Uri): ByteArray? {
     val bitmap = contentResolver.openInputStream(uri)?.use { inputStream ->
         BitmapFactory.decodeStream(inputStream)

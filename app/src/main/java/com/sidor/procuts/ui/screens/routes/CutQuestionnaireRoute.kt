@@ -1,5 +1,9 @@
 package com.sidor.procuts.ui.screens.routes
 
+import android.app.Activity
+import android.content.Intent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.slideInHorizontally
@@ -13,12 +17,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.sidor.procuts.CameraActivity
 import com.sidor.procuts.R
 import com.sidor.procuts.data.models.ClientDTO
 import com.sidor.procuts.data.models.CutDateDTO
 import com.sidor.procuts.data.models.CutDateInfoDTO
 import com.sidor.procuts.ui.components.ToastNotifier
+import com.sidor.procuts.ui.screens.questionnaire.CameraClaimScreen
 import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireClientChoiceScreen
 import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireConfirmScreen
 import com.sidor.procuts.ui.screens.questionnaire.CutQuestionnaireCutChoiceScreen
@@ -151,58 +158,25 @@ fun CutQuestionnaireRoute(
                 )
             }
 
-//            CutQuestionnaireScreenType.PhoneNumber -> {
-//                val clientRecentCuts = uiState.clientId?.let { getClientRecentCutIds(it) }
-//
-//                CutQuestionnairePhoneNumberScreen(
-//                    onBack = onPrevScreenType(CutQuestionnaireScreenType.PhoneNumber),
-//                    onNext = { phoneNumber: String ->
-//                        viewModel.setPhoneNumber(phoneNumber)
-//                        val clientId = getClientIdOnPhoneNumber(phoneNumber)
-//                        viewModel.setClientId(clientId)
-//
-//                        if (clientId != null) {
-//                            viewModel.requestCutRecommendations()
-//                            clientRecentCuts?.let { viewModel.setRecentCuts(it) }
-//                            onNextScreenType(CutQuestionnaireScreenType.PhoneNumber)()
-//                        }
-//                        else {
-//                            phoneNumberIsExists = false
-//                        }
-//                    },
-//                    phoneNumber = uiState.clientPhoneNumber ?: "",
-//                    phoneNumberIsExists = phoneNumberIsExists,
-//                    onSetPhoneNumber = { phoneNumber: String ->
-//                        viewModel.setPhoneNumber(phoneNumber)
-//                        phoneNumberIsExists = true
-//                    },
-//                )
-//            }
-
-//            CutQuestionnaireScreenType.Camera -> {
-//                val onNext = {
-//                    viewModel.getCutRecommendations(defaultFeatures)
-//                    clientRecentCuts?.let { viewModel.setRecentCuts(it) }
-//                    onNextScreenType(CutQuestionnaireScreenType.Camera)()
-//                }
-//                val ctx = LocalContext.current
-//                val textWrongUri = stringResource(R.string.wrong_uri)
-//                val launcher = rememberLauncherForActivityResult(
-//                    ActivityResultContracts.StartActivityForResult()
-//                ) { result ->
-//                    if (result.resultCode == Activity.RESULT_OK) {
-//                        val photoUri = result.data?.getStringExtra("photoUri")
-//                        photoUri?.let {
-//                            viewModel.setPhotoUri(it.toUri())
-//                            onNext()
-//                        } ?: ToastNotifier(ctx).show(message = textWrongUri)
-//                    }
-//                }
-//                CameraClaimScreen(
-//                    onBack = onPrevScreenType(CutQuestionnaireScreenType.Camera),
-//                    onNext = { launcher.launch(Intent(ctx, CameraActivity::class.java)) },
-//                )
-//            }
+            CutQuestionnaireScreenType.Camera -> {
+                val ctx = LocalContext.current
+                val textWrongUri = stringResource(R.string.wrong_uri)
+                val launcher = rememberLauncherForActivityResult(
+                    ActivityResultContracts.StartActivityForResult()
+                ) { result ->
+                    if (result.resultCode == Activity.RESULT_OK) {
+                        val photoUri = result.data?.getStringExtra("photoUri")
+                        photoUri?.let {
+                            viewModel.setPhotoUri(it.toUri())
+                            onNextScreenType(CutQuestionnaireScreenType.Camera)()
+                        } ?: ToastNotifier(ctx).show(message = textWrongUri)
+                    }
+                }
+                CameraClaimScreen(
+                    onBack = onPrevScreenType(CutQuestionnaireScreenType.Camera),
+                    onNext = { launcher.launch(Intent(ctx, CameraActivity::class.java)) },
+                )
+            }
 
             CutQuestionnaireScreenType.Choice -> {
                 viewModel.setRecentCuts(clientRecentCutIds)
@@ -228,6 +202,7 @@ fun CutQuestionnaireRoute(
                     onBack = onPrevScreenType(CutQuestionnaireScreenType.Confirm),
                     onNext = {
                         val addResult = viewModel.tryAddCut(
+                            context = ctx,
                             onAddClick = onAddCutClick,
                         )
 
