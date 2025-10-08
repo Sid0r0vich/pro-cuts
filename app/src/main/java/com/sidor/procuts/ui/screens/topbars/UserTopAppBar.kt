@@ -17,18 +17,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sidor.procuts.R
+import com.sidor.procuts.data.models.UserDTO
 import com.sidor.procuts.ui.screens.DpSpacer
 import com.sidor.procuts.ui.theme.LocalColorPalette
+import com.sidor.procuts.utils.getPainterFromByteArray
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalEncodingApi::class)
 @Composable
 fun UserTopAppBar(
-    userName: String = stringResource(R.string.default_user_name),
+    userDTO: UserDTO,
 ) {
+    val userPhoto: Painter = userDTO.photo?.let {getPainterFromByteArray(
+        Base64.decode(it)
+    )} ?: painterResource(R.drawable.default_user_photo)
+
     DefaultTopAppBar(
         title = {
             Row(
@@ -37,7 +46,7 @@ fun UserTopAppBar(
             ) {
                 DpSpacer(13)
                 Image(
-                    painter = painterResource(R.drawable.default_user_avatar),
+                    painter = userPhoto,
                     contentDescription = null,
                     modifier = Modifier
                         .size(40.dp)
@@ -46,7 +55,7 @@ fun UserTopAppBar(
                 )
                 DpSpacer(17)
                 Text(
-                    text = "Hello, $userName!",
+                    text = "Hello, ${userDTO.name}!",
                     style = MaterialTheme.typography.titleLarge,
                     color = LocalColorPalette.current.mainColor
                 )

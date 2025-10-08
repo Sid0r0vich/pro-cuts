@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sidor.procuts.R
+import com.sidor.procuts.data.models.UserDTO
 import com.sidor.procuts.data.models.defaultPerson
 import com.sidor.procuts.data.models.defaultUser
 import com.sidor.procuts.ui.components.LocalBoardPadding
@@ -28,14 +29,12 @@ import com.sidor.procuts.ui.viewmodels.UserProfileViewModel
 
 @Composable
 fun HomeScreen(
-    userName: String,
+    userDTO: UserDTO,
     onCardClick: (HomeCardScreenType) -> Unit,
 ) {
     TopAppBarScreen(
         topBar = {
-            UserTopAppBar(
-                userName = userName
-            )
+            UserTopAppBar(userDTO)
         },
     ) {
         LazyPaddingScreen(

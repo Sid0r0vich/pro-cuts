@@ -28,7 +28,7 @@ fun HomeRoute(
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsState().value
-    val userName = (viewModel.getUser().collectAsState().value ?: defaultUser).name
+    val userDTO = (viewModel.getUser().collectAsState().value ?: defaultUser)
 
     when (uiState.screenType) {
         HomeScreenType.Home -> HomeScreen(
@@ -39,7 +39,7 @@ fun HomeRoute(
                     HomeCardScreenType.MyCuts -> viewModel.navigateCuts()
                 }
             },
-            userName = userName
+            userDTO = userDTO
         )
         HomeScreenType.Clients -> {
             ClientsScreen(
