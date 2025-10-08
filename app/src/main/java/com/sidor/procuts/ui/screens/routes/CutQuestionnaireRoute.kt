@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sidor.procuts.R
+import com.sidor.procuts.data.models.ClientDTO
 import com.sidor.procuts.data.models.CutDateDTO
 import com.sidor.procuts.data.models.CutDateInfoDTO
 import com.sidor.procuts.ui.components.ToastNotifier
@@ -35,13 +36,13 @@ import com.sidor.procuts.ui.viewmodels.QuestionnaireUIState
 fun CutQuestionnaireRoute(
     onBack: () -> Unit,
     onAddCutClick: (CutDateInfoDTO) -> Unit,
-    clientId: Int?,
+    clientDTO: ClientDTO?,
     viewModel: CutQuestionnaireViewModel = hiltViewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsState().value
     var isNavigatingForward by rememberSaveable { mutableStateOf(true) }
     val clientRecentCutIds =
-        viewModel.getClientCutDates(clientId)
+        viewModel.getClientCutDates(clientDTO?.id)
             .map { cutDateStateFlow -> cutDateStateFlow.collectAsState().value }
             .map { cutDateDTO: CutDateDTO -> cutDateDTO.cutId }
             .distinct()
@@ -138,7 +139,7 @@ fun CutQuestionnaireRoute(
 
             CutQuestionnaireScreenType.Client -> {
                 CutQuestionnaireClientChoiceScreen(
-                    defaultValue = uiState.clientDTO?.getFullName()?:"",
+                    defaultValue = uiState.clientDTO?.getFullName()?:clientDTO?.getFullName()?:"",
                     onBack = onPrevScreenType(CutQuestionnaireScreenType.Client),
                     onNext = { clientDTO ->
                         viewModel.setClientDTO(clientDTO)

@@ -4,13 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sidor.procuts.data.models.ClientDTO
-import com.sidor.procuts.data.models.ClientInfoDTO
 import com.sidor.procuts.data.models.CutDTO
 import com.sidor.procuts.data.models.CutDateDTO
 import com.sidor.procuts.data.models.CutDateInfoDTO
 import com.sidor.procuts.data.models.defaultUser
-import com.sidor.procuts.ui.components.CareForm
-import com.sidor.procuts.ui.screens.AddCareScreen
 import com.sidor.procuts.ui.screens.AddClientScreen
 import com.sidor.procuts.ui.screens.ClientScreen
 import com.sidor.procuts.ui.screens.ClientsScreen
@@ -89,7 +86,7 @@ fun HomeRoute(
             onAddCutClick = { cutDateInfoDTO: CutDateInfoDTO ->
                 viewModel.addCutDate(cutDateInfoDTO)
             },
-            clientId = uiState.clientDTO?.id
+            clientDTO = uiState.clientDTO
         )
         HomeScreenType.Visit -> VisitScreen(
             visit = uiState.cutDateDTO,
