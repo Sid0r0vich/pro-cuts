@@ -9,7 +9,11 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +38,7 @@ import com.sidor.procuts.ui.theme.LocalColorPalette
 fun DefaultCutQuestionnaireScreen(
     onBack: () -> Unit,
     onNext: () -> Unit,
+    onCancel: () -> Unit,
     enabled: Boolean = true,
     content: @Composable (ColumnScope.() -> Unit) = {}
 ) {
@@ -41,7 +46,16 @@ fun DefaultCutQuestionnaireScreen(
         topBar = {
             TitleTopAppBar(
                 title = stringResource(R.string.add_haircut_tab_app_bar),
-                onBack = onBack
+                onBack = onBack,
+                actions = {
+                    IconButton(onClick = onCancel) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = stringResource(R.string.button_close),
+                            tint = LocalColorPalette.current.mainColor
+                        )
+                    }
+                },
             )
         },
     ) {
@@ -59,6 +73,7 @@ fun DefaultCutQuestionnaireScreen(
 fun CutQuestionnaireScreenWithSeveralAnswerOption(
     onBack: () -> Unit,
     onNext: () -> Unit,
+    onCancel: () -> Unit,
     text: String,
     defaultValue: String,
     valuesList: List<String>,
@@ -70,7 +85,8 @@ fun CutQuestionnaireScreenWithSeveralAnswerOption(
     DefaultCutQuestionnaireScreen(
         onBack = onBack,
         onNext = onNext,
-        enabled = value != ""
+        enabled = value != "",
+        onCancel = onCancel
     ) {
         Text(
             text = text,

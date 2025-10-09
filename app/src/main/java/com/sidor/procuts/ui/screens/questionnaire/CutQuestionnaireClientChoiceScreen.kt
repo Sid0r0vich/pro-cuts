@@ -32,7 +32,7 @@ import com.sidor.procuts.ui.screens.DefaultPaddingScreenWithQuestionnaireButtons
 import com.sidor.procuts.ui.screens.DefaultSpacer
 import com.sidor.procuts.ui.screens.DpSpacer
 import com.sidor.procuts.ui.screens.TopAppBarScreen
-import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
+import com.sidor.procuts.ui.screens.topbars.CancelTitleTopAppBar
 import com.sidor.procuts.ui.theme.LocalColorPalette
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,6 +40,7 @@ import com.sidor.procuts.ui.theme.LocalColorPalette
 fun CutQuestionnaireClientChoiceScreen(
     onBack: () -> Unit,
     onNext: (ClientDTO) -> Unit,
+    onCancel: () -> Unit,
     clients: List<ClientDTO>,
     defaultValue: String,
     canChange: Boolean = true
@@ -52,9 +53,10 @@ fun CutQuestionnaireClientChoiceScreen(
 
     TopAppBarScreen(
         topBar = {
-            TitleTopAppBar(
+            CancelTitleTopAppBar(
                 title = stringResource(R.string.add_haircut_tab_app_bar),
-                onBack = onBack
+                onBack = onBack,
+                onCancel = onCancel
             )
         },
     ) {

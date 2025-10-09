@@ -3,6 +3,7 @@ package com.sidor.procuts.ui.screens.topbars
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -59,5 +60,26 @@ fun TitleTopAppBar(
             }
         },
         actions = actions
+    )
+}
+
+@Composable
+fun CancelTitleTopAppBar(
+    title: String,
+    onBack: () -> Unit,
+    onCancel: () -> Unit
+) {
+    TitleTopAppBar(
+        title = title,
+        onBack = onBack,
+        actions = {
+            IconButton(onClick = onCancel) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = stringResource(R.string.button_close),
+                    tint = LocalColorPalette.current.mainColor
+                )
+            }
+        },
     )
 }

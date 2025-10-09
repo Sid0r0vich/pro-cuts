@@ -25,7 +25,7 @@ import com.sidor.procuts.ui.components.PaddingSpaces
 import com.sidor.procuts.ui.screens.LazyPaddingScreenWithBottomButtons
 import com.sidor.procuts.ui.screens.TopAppBarScreen
 import com.sidor.procuts.ui.screens.cards.CutCard
-import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
+import com.sidor.procuts.ui.screens.topbars.CancelTitleTopAppBar
 import com.sidor.procuts.ui.theme.LocalColorPalette
 
 
@@ -33,13 +33,15 @@ import com.sidor.procuts.ui.theme.LocalColorPalette
 fun CutQuestionnaireConfirmScreen(
     onBack: () -> Unit,
     onNext: () -> Unit,
+    onCancel: () -> Unit,
     cutDTO: CutDTO?
 ) {
     TopAppBarScreen(
         topBar = {
-            TitleTopAppBar(
+            CancelTitleTopAppBar(
                 title = stringResource(R.string.confirm_haircut_tab_app_bar),
-                onBack = onBack
+                onBack = onBack,
+                onCancel = onCancel
             )
         },
     ) {

@@ -14,6 +14,7 @@ import java.util.Date
 fun CutQuestionnaireDateScreen(
     onBack: () -> Unit,
     onNext: () -> Unit,
+    onCancel: () -> Unit,
     onDateChange: (Date) -> Unit,
     date: Date
 ) {
@@ -23,7 +24,8 @@ fun CutQuestionnaireDateScreen(
     DefaultCutQuestionnaireScreen(
         onBack = onBack,
         onNext = onNext,
-        enabled = true
+        enabled = true,
+        onCancel = onCancel
     ) {
         DatePickerDocked(
             selectedDate = date

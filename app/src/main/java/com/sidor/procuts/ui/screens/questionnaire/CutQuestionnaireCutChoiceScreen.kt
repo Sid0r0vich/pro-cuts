@@ -9,7 +9,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.sidor.procuts.R
 import com.sidor.procuts.data.models.CutDTO
 import com.sidor.procuts.ui.components.PaddingSpaces
@@ -17,8 +16,7 @@ import com.sidor.procuts.ui.screens.DefaultSpacer
 import com.sidor.procuts.ui.screens.LazyPaddingScreen
 import com.sidor.procuts.ui.screens.TopAppBarScreen
 import com.sidor.procuts.ui.screens.cards.CutOptionCard
-import com.sidor.procuts.ui.screens.topbars.TitleTopAppBar
-import com.sidor.procuts.ui.viewmodels.CutQuestionnaireViewModel
+import com.sidor.procuts.ui.screens.topbars.CancelTitleTopAppBar
 import com.sidor.procuts.ui.viewmodels.RecommendationsUIState
 import kotlinx.coroutines.flow.StateFlow
 
@@ -27,11 +25,11 @@ import kotlinx.coroutines.flow.StateFlow
 fun CutQuestionnaireCutChoiceScreen(
     onBack: () -> Unit,
     onCutChoice: (Int) -> Unit,
+    onCancel: () -> Unit,
+    onRetry: () -> Unit,
     recommendationsUiState: RecommendationsUIState,
     cutRecommendations: List<StateFlow<CutDTO>>,
     recentCuts: List<StateFlow<CutDTO>>,
-    onRetry: () -> Unit,
-    viewModel: CutQuestionnaireViewModel = hiltViewModel()
 ) {
     val topAppBarBarTitle = stringResource(R.string.cut_choice_tab_app_bar)
 
@@ -39,9 +37,10 @@ fun CutQuestionnaireCutChoiceScreen(
         is RecommendationsUIState.Success ->
             TopAppBarScreen(
                 topBar = {
-                    TitleTopAppBar(
+                    CancelTitleTopAppBar(
                         title = topAppBarBarTitle,
-                        onBack = onBack
+                        onBack = onBack,
+                        onCancel = onCancel
                     )
                 },
             ) {

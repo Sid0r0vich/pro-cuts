@@ -95,6 +95,14 @@ open class CutQuestionnaireViewModel @Inject constructor(
     )
     val uiState: StateFlow<UiState> get() = _uiState
 
+    fun resetUIState() {
+        _uiState.value =
+            UiState(
+                screenType = CutQuestionnaireScreenType.entries.first(),
+                clients = clientRepository.getClientsStateFlow()
+            )
+    }
+
     fun setDate(date: Date) {
         _uiState.value = _uiState.value.copy(date = date)
     }

@@ -275,4 +275,5 @@
     <string name="cuts_no_found">Cuts no found</string>
     <string name="my_cuts_tab_app_bar">My cuts</string>
     <string name="icon_settings">settings</string>
+    <string name="button_close">close</string>
 </resources>

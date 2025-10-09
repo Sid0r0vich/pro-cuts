@@ -53,6 +53,10 @@ fun CutQuestionnaireRoute(
             .map { cutDateStateFlow -> cutDateStateFlow.collectAsState().value }
             .map { cutDateDTO: CutDateDTO -> cutDateDTO.cutId }
             .distinct()
+    val onCancel = {
+        onBack()
+        viewModel.resetUIState()
+    }
 
 
     AnimatedContent(
@@ -115,6 +119,7 @@ fun CutQuestionnaireRoute(
                                 viewModel.setParam(question.question, value)
                             },
                             valuesList = question.options,
+                            onCancel = onCancel,
                         )
                     }
                 }
@@ -124,7 +129,8 @@ fun CutQuestionnaireRoute(
                 onNext = onNextScreenType(CutQuestionnaireScreenType.DateName),
                 onBack = onBack,
                 onDateChange = { date -> viewModel.setDate(date) },
-                date = uiState.date
+                date = uiState.date,
+                onCancel = onCancel
             )
 
             CutQuestionnaireScreenType.Question -> {
@@ -146,7 +152,8 @@ fun CutQuestionnaireRoute(
 
             CutQuestionnaireScreenType.Client -> {
                 CutQuestionnaireClientChoiceScreen(
-                    defaultValue = clientDTO?.getFullName()?:uiState.clientDTO?.getFullName()?:"",
+                    defaultValue = clientDTO?.getFullName() ?: uiState.clientDTO?.getFullName()
+                    ?: "",
                     onBack = onPrevScreenType(CutQuestionnaireScreenType.Client),
                     onNext = { clientDTO ->
                         viewModel.setClientDTO(clientDTO)
@@ -155,7 +162,8 @@ fun CutQuestionnaireRoute(
                     },
                     clients = uiState.clients.collectAsState(mapOf()).value.values.toList()
                         .map { client -> client.value },
-                    canChange = clientDTO == null
+                    canChange = clientDTO == null,
+                    onCancel = onCancel
                 )
             }
 
@@ -176,6 +184,7 @@ fun CutQuestionnaireRoute(
                 CameraClaimScreen(
                     onBack = onPrevScreenType(CutQuestionnaireScreenType.Camera),
                     onNext = { launcher.launch(Intent(ctx, CameraActivity::class.java)) },
+                    onCancel = onCancel,
                 )
             }
 
@@ -191,7 +200,8 @@ fun CutQuestionnaireRoute(
                     recentCuts = uiState.recentCuts ?: listOf(),
                     recommendationsUiState = viewModel.recommendationsUIState,
                     cutRecommendations = uiState.cutRecommendations ?: listOf(),
-                    onRetry = viewModel::requestCutRecommendations
+                    onRetry = viewModel::requestCutRecommendations,
+                    onCancel = onCancel
                 )
             }
 
@@ -216,7 +226,8 @@ fun CutQuestionnaireRoute(
                             ToastNotifier(context = ctx).show(message = addResult.toString())
                         }
                     },
-                    cutDTO = viewModel.getCut()?.collectAsState()?.value
+                    cutDTO = viewModel.getCut()?.collectAsState()?.value,
+                    onCancel = onCancel
                 )
             }
         }

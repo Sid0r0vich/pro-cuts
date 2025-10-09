@@ -23,10 +23,12 @@ import com.sidor.procuts.ui.screens.DefaultSpacer
 fun CameraClaimScreen(
     onBack: () -> Unit,
     onNext: () -> Unit,
+    onCancel: () -> Unit,
 ) {
     DefaultCutQuestionnaireScreen(
         onBack = onBack,
         onNext = onNext,
+        onCancel = onCancel,
     ) {
         Text(
             text = stringResource(R.string.camera_claim),
