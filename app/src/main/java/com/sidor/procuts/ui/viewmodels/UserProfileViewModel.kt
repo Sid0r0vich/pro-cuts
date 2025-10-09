@@ -4,14 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.wellness.auth.Auth
 import com.sidor.procuts.data.UserRepository
-import com.sidor.procuts.data.models.ClientDTO
-import com.sidor.procuts.data.models.CutDTO
-import com.sidor.procuts.data.models.CutDateDTO
 import com.sidor.procuts.data.models.UserDTO
-import com.sidor.procuts.ui.screens.UserProfileScreen
-import com.sidor.procuts.ui.screens.screentypes.HomeScreenType
 import com.sidor.procuts.ui.screens.screentypes.UserProfileScreenType
-import com.sidor.procuts.ui.viewmodels.HomeViewModel.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -45,6 +39,10 @@ class UserProfileViewModel @Inject constructor(
     }
 
     fun signOut() = auth.signOut()
+
+    fun deleteAccount() {
+        auth.deleteAccount()
+    }
 
     fun navigate(screenType: UserProfileScreenType) {
         _uiState.value = _uiState.value.copy(screenType = screenType)

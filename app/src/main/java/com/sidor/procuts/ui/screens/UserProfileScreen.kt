@@ -1,13 +1,19 @@
 package com.sidor.procuts.ui.screens
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -15,8 +21,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.sidor.procuts.R
 import com.sidor.procuts.data.models.PersonDTO
@@ -29,6 +37,7 @@ import com.sidor.procuts.ui.theme.LocalColorPalette
 fun UserProfileScreen(
     onEditClick: () -> Unit,
     onSignOut: () -> Unit,
+    onDeleteClick: () -> Unit,
     personDTO: PersonDTO
 ) {
     TopAppBarScreen(
@@ -77,6 +86,29 @@ fun UserProfileScreen(
             }
         ) {
             PersonCard(personDTO)
+            DefaultSpacer(2)
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onDeleteClick() },
+                shape = RoundedCornerShape(12.dp),
+                border = BorderStroke(2.dp, Color.Red),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+            ) {
+                Box(
+                    modifier = Modifier
+                        .padding(vertical = 20.dp, horizontal = 16.dp)
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = stringResource(R.string.delete_account),
+                        color = Color.Red,
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
         }
     }
 }

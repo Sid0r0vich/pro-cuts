@@ -41,6 +41,10 @@ private class Firebase {
 
     fun signOut() = firebaseAuth.signOut()
 
+    fun deleteAccount() {
+        firebaseAuth.currentUser?.delete()
+    }
+
     private fun Task<AuthResult>.addAuthenticateListener(
         onAuthenticate: (AuthStatus) -> Unit = {},
     ) {
@@ -73,6 +77,7 @@ interface Auth {
     fun signIn(authData: AuthData, onSignIn: (AuthStatus) -> Unit = {})
     fun signUp(authData: AuthData, onSignUp: (AuthStatus) -> Unit = {})
     fun signOut()
+    fun deleteAccount()
 }
 
 class FirebaseAuth @Inject constructor() : Auth {
@@ -119,6 +124,11 @@ class FirebaseAuth @Inject constructor() : Auth {
     override fun signOut() {
         authState = AuthState.Unauthenticated
         firebase.signOut()
+    }
+
+    override fun deleteAccount() {
+        authState = AuthState.Unauthenticated
+        firebase.deleteAccount()
     }
 
     private val onAuth = { onComplete: (AuthStatus) -> Unit ->

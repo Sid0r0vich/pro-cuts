@@ -21,7 +21,10 @@ fun UserProfileRoute(
             UserProfileScreen(
                 onSignOut = viewModel::signOut,
                 personDTO = userDTO.toPersonDTO(),
-                onEditClick = viewModel::navigateEdit
+                onEditClick = viewModel::navigateEdit,
+                onDeleteClick = {
+                    viewModel.deleteAccount()
+                }
             )
 
         UserProfileScreenType.Edit ->
