@@ -32,7 +32,10 @@ fun HomeRoute(
             onCardClick = { homeCardScreenType: HomeCardScreenType ->
                 when (homeCardScreenType) {
                     HomeCardScreenType.Clients -> viewModel.navigateClients()
-                    HomeCardScreenType.StartCutting -> viewModel.navigateAddCut()
+                    HomeCardScreenType.StartCutting -> {
+                        viewModel.setClient(null)
+                        viewModel.navigateAddCut()
+                    }
                     HomeCardScreenType.MyCuts -> viewModel.navigateCuts()
                 }
             },
@@ -86,7 +89,7 @@ fun HomeRoute(
             onAddCutClick = { cutDateInfoDTO: CutDateInfoDTO ->
                 viewModel.addCutDate(cutDateInfoDTO)
             },
-            clientDTO = uiState.clientDTO
+            clientDTO = uiState.clientDTO,
         )
         HomeScreenType.Visit -> VisitScreen(
             visit = uiState.cutDateDTO,

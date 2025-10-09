@@ -146,7 +146,7 @@ fun CutQuestionnaireRoute(
 
             CutQuestionnaireScreenType.Client -> {
                 CutQuestionnaireClientChoiceScreen(
-                    defaultValue = uiState.clientDTO?.getFullName()?:clientDTO?.getFullName()?:"",
+                    defaultValue = clientDTO?.getFullName()?:uiState.clientDTO?.getFullName()?:"",
                     onBack = onPrevScreenType(CutQuestionnaireScreenType.Client),
                     onNext = { clientDTO ->
                         viewModel.setClientDTO(clientDTO)
@@ -154,7 +154,8 @@ fun CutQuestionnaireRoute(
                         onNextScreenType(CutQuestionnaireScreenType.Client)()
                     },
                     clients = uiState.clients.collectAsState(mapOf()).value.values.toList()
-                        .map { client -> client.value }
+                        .map { client -> client.value },
+                    canChange = clientDTO == null
                 )
             }
 

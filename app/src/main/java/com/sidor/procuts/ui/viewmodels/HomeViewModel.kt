@@ -3,13 +3,13 @@ package com.sidor.procuts.ui.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sidor.procuts.data.CutDateRepository
+import com.sidor.procuts.data.CutRepository
+import com.sidor.procuts.data.UserRepository
 import com.sidor.procuts.data.models.ClientDTO
 import com.sidor.procuts.data.models.CutDTO
 import com.sidor.procuts.data.models.CutDateDTO
 import com.sidor.procuts.data.models.CutDateInfoDTO
-import com.sidor.procuts.data.CutDateRepository
-import com.sidor.procuts.data.CutRepository
-import com.sidor.procuts.data.UserRepository
 import com.sidor.procuts.data.models.UserDTO
 import com.sidor.procuts.data.models.defaultCutDTO
 import com.sidor.procuts.ui.HomeRouteScreenStack
@@ -46,7 +46,7 @@ open class HomeViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState(HomeScreenType.Home))
     val uiState: StateFlow<UiState> get() = _uiState
 
-    fun setClient(clientDTO: ClientDTO) {
+    fun setClient(clientDTO: ClientDTO?) {
         _uiState.value = _uiState.value.copy(clientDTO = clientDTO)
     }
 

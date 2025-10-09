@@ -41,7 +41,8 @@ fun CutQuestionnaireClientChoiceScreen(
     onBack: () -> Unit,
     onNext: (ClientDTO) -> Unit,
     clients: List<ClientDTO>,
-    defaultValue: String
+    defaultValue: String,
+    canChange: Boolean = true
 ) {
     var textValue by rememberSaveable { mutableStateOf(defaultValue) }
     val clientNames = clients.map { client -> client.getFullName() }
@@ -88,7 +89,8 @@ fun CutQuestionnaireClientChoiceScreen(
                             .contains(textValue.lowercase())
                     } else true
                 },
-                onValueChanged = { name -> textValue = name }
+                onValueChanged = { name -> textValue = name },
+                enabled = canChange
             )
         }
     }
@@ -99,7 +101,8 @@ fun CutQuestionnaireClientChoiceScreen(
 fun ClientSelectionField(
     value: String,
     clients: List<String>,
-    onValueChanged: (String) -> Unit
+    enabled: Boolean = true,
+    onValueChanged: (String) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -109,10 +112,12 @@ fun ClientSelectionField(
             onValueChanged(value)
             expanded = true
         },
+        enabled = enabled,
         colors = ExposedDropdownMenuDefaults.textFieldColors(
             focusedIndicatorColor = LocalColorPalette.current.darkFontColor,
             focusedContainerColor = LocalColorPalette.current.mainColor,
-            unfocusedContainerColor = LocalColorPalette.current.mainColor
+            unfocusedContainerColor = LocalColorPalette.current.mainColor,
+            disabledContainerColor = LocalColorPalette.current.mainColor
         ),
         modifier = Modifier.fillMaxWidth()
             .onFocusChanged { focusState ->
