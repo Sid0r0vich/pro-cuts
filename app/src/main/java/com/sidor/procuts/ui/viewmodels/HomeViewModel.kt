@@ -94,9 +94,10 @@ open class HomeViewModel @Inject constructor(
     fun navigateCuts() = navigateForward(HomeScreenType.MyCuts)
     fun navigateAddCut() = navigateForward(HomeScreenType.AddCut)
 
-    fun addCutDate(cutDateInfoDTO: CutDateInfoDTO) {
+    fun addCutDate(cutDateInfoDTO: CutDateInfoDTO, onComplete: () -> Unit) {
         viewModelScope.launch {
             cutDateRepository.insertCut(cutDateInfoDTO)
+            onComplete()
         }
     }
 

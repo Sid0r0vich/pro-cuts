@@ -18,6 +18,7 @@ import com.sidor.procuts.ui.screens.MyCutsScreen
 import com.sidor.procuts.ui.screens.VisitScreen
 import com.sidor.procuts.ui.screens.screentypes.HomeCardScreenType
 import com.sidor.procuts.ui.screens.screentypes.HomeScreenType
+import com.sidor.procuts.ui.viewmodels.ClientViewModel
 import com.sidor.procuts.ui.viewmodels.HomeViewModel
 
 @Composable
@@ -67,9 +68,10 @@ fun HomeRoute(
                 },
             )
         }
-        HomeScreenType.AddClient -> AddClientScreen(
-            onBack = viewModel::navigateBack,
-        )
+        HomeScreenType.AddClient ->
+            AddClientScreen(
+                onBack = viewModel::navigateBack,
+            )
         HomeScreenType.EditClient -> {
             val clientDTO = uiState.clientDTO
             if (clientDTO != null) {
@@ -84,13 +86,20 @@ fun HomeRoute(
             }
             else viewModel.navigateAddClient()
         }
-        HomeScreenType.AddCut -> CutQuestionnaireRoute(
-            onBack = viewModel::navigateBack,
-            onAddCutClick = { cutDateInfoDTO: CutDateInfoDTO ->
-                viewModel.addCutDate(cutDateInfoDTO)
-            },
-            clientDTO = uiState.clientDTO,
-        )
+        HomeScreenType.AddCut -> {
+            // TODO fix this
+            val clientViewModel: ClientViewModel = hiltViewModel()
+            CutQuestionnaireRoute(
+                onBack = viewModel::navigateBack,
+                onAddCutClick = { cutDateInfoDTO: CutDateInfoDTO ->
+                    viewModel.addCutDate(
+                        cutDateInfoDTO,
+                        onComplete = { clientViewModel.getClientCutDates(uiState.clientDTO?.id) }
+                    )
+                },
+                clientDTO = uiState.clientDTO,
+            )
+        }
         HomeScreenType.Visit -> VisitScreen(
             visit = uiState.cutDateDTO,
             onBack = viewModel::navigateBack,
