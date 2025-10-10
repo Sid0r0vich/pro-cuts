@@ -8,4 +8,5 @@ interface UserRepository {
     fun getUserStateFlow(): StateFlow<UserDTO?>
     suspend fun insertUser(userDTO: UserDTO): Boolean
     suspend fun editUser(userDTO: UserDTO): Boolean
+    suspend fun deleteUser(userId: String): Boolean
 }

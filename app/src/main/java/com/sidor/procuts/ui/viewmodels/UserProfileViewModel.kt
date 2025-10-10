@@ -42,6 +42,11 @@ class UserProfileViewModel @Inject constructor(
 
     fun deleteAccount() {
         auth.deleteAccount()
+        auth.userId.value?.let {
+            viewModelScope.launch {
+                userRepository.deleteUser(it)
+            }
+        }
     }
 
     fun navigate(screenType: UserProfileScreenType) {

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.sp
 import com.sidor.procuts.R
 import com.sidor.procuts.data.models.ClientDTO
 import com.sidor.procuts.ui.components.TextWithBoldField
@@ -33,7 +34,7 @@ fun ClientCard(
                 TextWithBoldField(
                     field = stringResource(R.string.client_phone_number),
                     value = formatDefault(clientDTO.phoneNumber),
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleLarge.copy(fontSize = 21.sp)
                 )
             }
         }

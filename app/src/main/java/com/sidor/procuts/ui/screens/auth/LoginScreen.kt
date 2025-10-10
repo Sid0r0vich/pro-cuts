@@ -18,6 +18,7 @@ import com.example.wellness.auth.AuthUiState
 import com.sidor.procuts.R
 import com.sidor.procuts.ui.components.MyStyledTextField
 import com.sidor.procuts.ui.screens.DefaultSpacer
+import com.sidor.procuts.ui.theme.LocalColorPalette
 import com.sidor.procuts.ui.viewmodels.AuthViewModel
 
 @Composable
@@ -74,7 +75,9 @@ fun LoginScreen(
             onClick = onSignUpClick,
         ) {
             Text(
-                text = stringResource(R.string.have_not_account)
+                text = stringResource(R.string.have_not_account),
+                style = MaterialTheme.typography.bodyMedium,
+                color = LocalColorPalette.current.darkFontColor
             )
         }
     }

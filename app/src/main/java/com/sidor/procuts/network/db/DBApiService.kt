@@ -41,6 +41,10 @@ interface GinApiService {
     @PUT("/users")
     suspend fun updateUser(@Body user: UserDTO): UserDTO
 
+    // POST /users
+    @DELETE("/users")
+    suspend fun deleteUser(@Query("user_id") userId: String): UserDTO
+
     // GET /clients?user_id={userId}
     @GET("/clients")
     suspend fun getClients(@Query("user_id") userId: String): List<ClientDTO>

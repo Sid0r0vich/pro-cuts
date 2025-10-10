@@ -47,4 +47,15 @@ class UserDBRepository @Inject constructor(
             false
         }
     }
+
+    override suspend fun deleteUser(userId: String): Boolean {
+        return try {
+            apiService.deleteUser(userId)
+            loadUser()
+            true
+        } catch (e: Exception) {
+            Log.e("ERROR", e.toString())
+            false
+        }
+    }
 }

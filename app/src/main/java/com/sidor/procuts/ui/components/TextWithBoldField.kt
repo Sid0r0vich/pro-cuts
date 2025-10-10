@@ -23,7 +23,7 @@ fun TextWithBoldField(
     }
     Text(
         text = text,
-        style = style
+        style = style,
     )
 }
 

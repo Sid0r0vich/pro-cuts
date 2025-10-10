@@ -18,6 +18,7 @@ import com.sidor.procuts.R
 import com.sidor.procuts.auth.UserInfo
 import com.sidor.procuts.ui.components.MyStyledTextField
 import com.sidor.procuts.ui.screens.DefaultSpacer
+import com.sidor.procuts.ui.theme.LocalColorPalette
 import com.sidor.procuts.ui.viewmodels.AuthViewModel
 
 @Composable
@@ -84,7 +85,11 @@ fun RegistrationScreen(
         TextButton(
             onClick = onSignInClick,
         ) {
-            Text(text = stringResource(R.string.have_account))
+            Text(
+                text = stringResource(R.string.have_account),
+                style = MaterialTheme.typography.bodyMedium,
+                color = LocalColorPalette.current.darkFontColor
+            )
         }
     }
 }
