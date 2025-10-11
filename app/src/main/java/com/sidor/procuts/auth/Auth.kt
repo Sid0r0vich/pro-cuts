@@ -78,6 +78,7 @@ interface Auth {
     fun signUp(authData: AuthData, onSignUp: (AuthStatus) -> Unit = {})
     fun signOut()
     fun deleteAccount()
+    fun retry()
 }
 
 class FirebaseAuth @Inject constructor() : Auth {
@@ -129,6 +130,10 @@ class FirebaseAuth @Inject constructor() : Auth {
     override fun deleteAccount() {
         authState = AuthState.Unauthenticated
         firebase.deleteAccount()
+    }
+
+    override fun retry() {
+        authState = AuthState.Unauthenticated
     }
 
     private val onAuth = { onComplete: (AuthStatus) -> Unit ->

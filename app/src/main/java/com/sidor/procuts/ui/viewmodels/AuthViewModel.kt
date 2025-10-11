@@ -21,6 +21,8 @@ class AuthViewModel @Inject constructor(
 ): ViewModel() {
     val uiState = auth.authStateFlow
 
+    fun retry() = auth.retry()
+
     fun signUp(userInfo: UserInfo, onComplete: (AuthStatus) -> Unit = {}) {
         val authData = AuthData(userInfo.email, userInfo.password)
         DataValidator.validateLoginDataWithStatus(authData)

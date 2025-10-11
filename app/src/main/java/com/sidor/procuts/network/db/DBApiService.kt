@@ -17,7 +17,7 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-val BASE_URL = "http://10.0.2.2:1345"
+val BASE_URL = "http://66.151.42.211:1345"
 
 val json = Json { ignoreUnknownKeys = true }
 val contentType = "application/json".toMediaType()

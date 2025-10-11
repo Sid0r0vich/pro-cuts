@@ -2,6 +2,7 @@ package com.sidor.procuts.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.wellness.auth.AuthState
 import com.sidor.procuts.ui.screens.auth.AuthScreen
@@ -9,7 +10,6 @@ import com.sidor.procuts.ui.screens.main.MainScreen
 import com.sidor.procuts.ui.screens.state.ErrorScreen
 import com.sidor.procuts.ui.screens.state.LoadingScreen
 import com.sidor.procuts.ui.viewmodels.AuthViewModel
-import androidx.compose.runtime.getValue
 
 @Composable
 fun MyApp(
@@ -33,7 +33,7 @@ fun MyApp(
         is AuthState.Error -> {
             ErrorScreen(
                 errorMessage = "Unknown error",
-                onRetry = { }
+                onRetry = viewModel::retry
             )
         }
     }
