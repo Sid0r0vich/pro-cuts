@@ -79,7 +79,7 @@ fun SearchBar(
                 Row(modifier = Modifier.fillMaxWidth()) {
                     if (searchText.isEmpty()) {
                         Text(
-                            text = "search",
+                            text = stringResource(R.string.search),
                             style = MaterialTheme.typography.bodyLarge
                         )
                     }

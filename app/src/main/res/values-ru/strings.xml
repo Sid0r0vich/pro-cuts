@@ -278,4 +278,6 @@
     <string name="icon_settings">Настройки</string>
     <string name="button_close">Закрыть</string>
     <string name="delete_account">Удалить аккаунт</string>
+    <string name="hello">Привет</string>
+    <string name="search">поиск</string>
 </resources>

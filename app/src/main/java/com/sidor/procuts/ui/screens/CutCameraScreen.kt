@@ -2,7 +2,6 @@ package com.sidor.procuts.ui.screens
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Matrix
 import android.util.Log
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout
@@ -68,6 +67,9 @@ import com.sidor.procuts.R
 import com.sidor.procuts.ui.components.ToastNotifier
 import com.sidor.procuts.ui.theme.LocalColorPalette
 import com.sidor.procuts.ui.viewmodels.CameraViewModel
+import com.sidor.procuts.utils.cropCenterSquare
+import com.sidor.procuts.utils.resizeMax1024
+import com.sidor.procuts.utils.rotate
 import java.util.concurrent.Executor
 
 
@@ -268,9 +270,11 @@ private fun capturePhoto(
         override fun onCaptureSuccess(image: ImageProxy) {
             val bitmap = image.toBitmap()
             val rotationDegrees = image.imageInfo.rotationDegrees.toFloat()
-            val correctedBitmap = bitmap.rotate(rotationDegrees)
+            val correctBitmap = bitmap.rotate(rotationDegrees)
+                .cropCenterSquare()
+                .resizeMax1024()
 
-            onPhotoCaptured(correctedBitmap)
+            onPhotoCaptured(correctBitmap)
             image.close()
         }
 
@@ -278,11 +282,4 @@ private fun capturePhoto(
             Log.e("CameraContent", "Error capturing image", exception)
         }
     })
-}
-
-fun Bitmap.rotate(degrees: Float): Bitmap {
-    val matrix = Matrix().apply {
-        postRotate(degrees)
-    }
-    return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
 }

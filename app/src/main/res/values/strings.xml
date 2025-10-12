@@ -277,4 +277,6 @@
     <string name="icon_settings">settings</string>
     <string name="button_close">close</string>
     <string name="delete_account">Delete account</string>
+    <string name="hello">Hello</string>
+    <string name="search">search</string>
 </resources>

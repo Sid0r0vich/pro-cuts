@@ -55,7 +55,7 @@ fun UserTopAppBar(
                 )
                 DpSpacer(17)
                 Text(
-                    text = "Hello, ${userDTO.name}!",
+                    text = "${stringResource(R.string.hello)}, ${userDTO.name}!",
                     style = MaterialTheme.typography.titleLarge,
                     color = LocalColorPalette.current.mainColor
                 )

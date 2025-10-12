@@ -41,7 +41,9 @@ fun ImagePicker(
         onResult = { uri: Uri? ->
             uri?.let {
                 imageUri = uri
-                loadImageAsByteArray(context.contentResolver, uri)?.let { onImageLoad(it) }
+                loadImageAsByteArray(context.contentResolver, uri)?.let {
+                    onImageLoad(it)
+                }
             }
         }
     )
