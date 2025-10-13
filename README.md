@@ -5,8 +5,12 @@
 
 Мобильное приложение для подбора стрижек B2B для барбершопов
 
+<img src="https://github.com/user-attachments/assets/61ab401f-c127-4720-80c7-a60bdf7aabc3" width="200"/>
+<img src="https://github.com/user-attachments/assets/cf2ada49-354f-449a-82da-0c3ca3148468" width="200"/>
+<img src="https://github.com/user-attachments/assets/64eb2f75-5392-43e0-9eb4-eceefd64e65d" width="200"/>
+
 ## Пример использования
-https://github.com/user-attachments/assets/01a97712-2994-41f3-9727-70e70cbc0ea3
+https://github.com/user-attachments/assets/5b337603-5bea-4466-b203-1fcebb5d02f6
 
 ## Содержание
 - [Технологии](#технологии)
